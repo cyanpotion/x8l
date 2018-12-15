@@ -5,6 +5,9 @@ public class TextNode extends TreeNode {
 
     public TextNode(ContentNode parent, String textContent) {
         super(parent);
+        if (textContent == null) {
+            textContent = "";
+        }
         this.textContent = textContent;
     }
 
