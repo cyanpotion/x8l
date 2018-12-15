@@ -12,6 +12,11 @@ public class X8lTree {
         X8lTree res = new X8lTree(reader);
         res.parse();
         res.trim();
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return res;
     }
 
