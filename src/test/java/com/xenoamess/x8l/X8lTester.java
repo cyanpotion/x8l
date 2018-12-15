@@ -9,7 +9,7 @@ public class X8lTester {
     public static void main(String args[]) {
         FileReader reader = null;
         try {
-            reader = new FileReader(X8lTester.class.getResource("/RpgModuleSettings.x8l").getFile());
+            reader = new FileReader(X8lTester.class.getResource("/README.md").getFile());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
