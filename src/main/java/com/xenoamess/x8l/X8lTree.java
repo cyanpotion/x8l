@@ -2,6 +2,7 @@ package com.xenoamess.x8l;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 
 public class X8lTree {
     public boolean debug;
@@ -89,7 +90,7 @@ public class X8lTree {
                 }
             } else if (nowChar == '<') {
                 if (inAttributeArea) {
-                    if (!nowNode.attributes.isEmpty()) {
+                    if (!nowNode.attributes.isEmpty() || stringBuilder.length() != 0) {
                         throw new X8lGrammarException();
                     } else {
                         ContentNode nowParent = nowNode.parent;
@@ -150,5 +151,26 @@ public class X8lTree {
      */
     public void trim() {
         this.root.trim();
+    }
+
+    public void output(Writer writer) {
+        this.root.output(writer);
+        try {
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String Transcode(String originalString) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < originalString.length(); i++) {
+            char chr = originalString.charAt(i);
+            if (chr == '<' || chr == '>' || chr == '%') {
+                stringBuilder.append('%');
+            }
+            stringBuilder.append(chr);
+        }
+        return stringBuilder.toString();
     }
 }

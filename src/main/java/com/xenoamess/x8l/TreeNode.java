@@ -1,5 +1,7 @@
 package com.xenoamess.x8l;
 
+import java.io.Writer;
+
 public abstract class TreeNode {
     public static boolean DEBUG = false;
     public ContentNode parent;
@@ -27,4 +29,6 @@ public abstract class TreeNode {
         }
         this.parent = null;
     }
+
+    public abstract void output(Writer writer);
 }
