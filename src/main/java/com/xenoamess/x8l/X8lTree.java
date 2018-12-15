@@ -51,7 +51,9 @@ public class X8lTree {
         int nowInt;
         ContentNode nowNode = this.root;
         boolean inAttributeArea = false;
+        boolean inCommentArea = false;
         boolean lastCharIsModulus = false;
+
         StringBuilder stringBuilder = new StringBuilder();
         char nowChar;
         while (true) {
@@ -63,10 +65,10 @@ public class X8lTree {
             }
             nowChar = (char) nowInt;
             if (nowInt == -1) {
-                if (nowNode == this.root) {
+                if (nowNode == this.root && !inAttributeArea && !inCommentArea) {
                     if (stringBuilder.length() != 0) {
                         new TextNode(nowNode, stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
+//                        stringBuilder = new StringBuilder();
                     }
                     break;
                 } else {
@@ -77,9 +79,25 @@ public class X8lTree {
                 lastCharIsModulus = false;
             } else if (nowChar == '%') {
                 lastCharIsModulus = true;
+            } else if (inCommentArea) {
+                if (nowChar == '>') {
+                    new CommentNode(nowNode, stringBuilder.toString());
+                    stringBuilder = new StringBuilder();
+                    inCommentArea = false;
+                } else {
+                    stringBuilder.append((char) nowChar);
+                }
             } else if (nowChar == '<') {
                 if (inAttributeArea) {
-                    throw new X8lGrammarException();
+                    if (!nowNode.attributes.isEmpty()) {
+                        throw new X8lGrammarException();
+                    } else {
+                        ContentNode nowParent = nowNode.parent;
+                        nowNode.destroy();
+                        nowNode = nowParent;
+                        inAttributeArea = false;
+                        inCommentArea = true;
+                    }
                 } else {
                     if (stringBuilder.length() != 0) {
                         new TextNode(nowNode, stringBuilder.toString());
