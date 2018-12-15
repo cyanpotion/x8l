@@ -1,5 +1,8 @@
 package com.xenoamess.x8l;
 
+import java.io.IOException;
+import java.io.Writer;
+
 public class CommentNode extends TreeNode {
     public String textContent;
 
@@ -21,5 +24,17 @@ public class CommentNode extends TreeNode {
     public void destroy() {
         super.destroy();
         this.textContent = null;
+    }
+
+    @Override
+    public void output(Writer writer) {
+        try {
+            writer.append('<');
+            writer.append('<');
+            writer.append(X8lTree.Transcode(textContent));
+            writer.append('>');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

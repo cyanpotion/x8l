@@ -1,5 +1,8 @@
 package com.xenoamess.x8l;
 
+import java.io.IOException;
+import java.io.Writer;
+
 public class TextNode extends TreeNode {
     public String textContent;
 
@@ -21,5 +24,14 @@ public class TextNode extends TreeNode {
     public void destroy() {
         super.destroy();
         this.textContent = null;
+    }
+
+    @Override
+    public void output(Writer writer) {
+        try {
+            writer.append(X8lTree.Transcode(textContent));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

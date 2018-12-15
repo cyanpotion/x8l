@@ -11,10 +11,10 @@ Make a new markup language named x8l which can completely replace xml but always
 <<the order of attributes is important, and node with different order of same attributes are different.>
 <<attribute can have = in it.if so, it will be departed into key and value.>
 <<key is the part left than the first =,and value is the rest content.>
-<a=b<>
+<a=b>>
 <<for example, in the upper node, "a" is a key and "b" is a value>
 <<remember, the first =.>
-<a=b=c<>
+<a=b=c>>
 <<that means this node's key is "a" and value is "b=c">
 <<if there is no "=" in a attribute then the whole string is the key,and "" is the value>
 <<spaces between attributes are treated as nothing, so does '\r' '\n' '\t'>

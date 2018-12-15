@@ -2,6 +2,8 @@ package com.xenoamess.x8l;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,5 +78,40 @@ public class ContentNode extends TreeNode {
         }
         this.children.clear();
         this.children = newChildren;
+    }
+
+    @Override
+    public void output(Writer writer) {
+        try {
+
+            if (this.parent == null) {
+                for (TreeNode treeNode : this.children) {
+                    treeNode.output(writer);
+                }
+            } else {
+                writer.append('<');
+                boolean firstAttribute = true;
+                for (String key : attributesKeyList) {
+                    if (firstAttribute) {
+                        firstAttribute = false;
+                    } else {
+                        writer.append(' ');
+                    }
+                    writer.append(X8lTree.Transcode(key));
+                    String value = attributes.get(key);
+                    if (!value.equals("")) {
+                        writer.append("=");
+                        writer.append(X8lTree.Transcode(value));
+                    }
+                }
+                writer.append('>');
+                for (TreeNode treeNode : this.children) {
+                    treeNode.output(writer);
+                }
+                writer.append('>');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
