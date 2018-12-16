@@ -147,7 +147,7 @@ public class ContentNode extends TreeNode {
             treeNode.format(space + 1);
         }
 
-        if (this.children.size() > 1) {
+        if (this.children.size() > 1 || (this.children.size() == 1 && !(this.children.get(0) instanceof TextNode))) {
             List<TreeNode> newChildren = new ArrayList<TreeNode>();
 //        newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
 //            newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
