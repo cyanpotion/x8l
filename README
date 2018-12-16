@@ -46,3 +46,62 @@ you can now run the demo and see the output of the tree of this readme.
 that should be helpful/
 thanks.
             --XenoAmess
+            
+and here goes some reallife x8l files:
+
+<commonSettings
+    titleText=GamepadMassage
+    gameWindowClassName=com.xenoamess.gamepad_massage.FalseGameWindow
+    logoClassName=com.xenoamess.gamepad_massage.FalseWorld
+    titleClassName=com.xenoamess.cyan_potion.gameWindowComponents.Title
+    worldClassName=com.xenoamess.gamepad_massage.FalseWorld
+>>
+<views
+    windowWidth=1280
+    windowHeight=1024
+    scale=2.0
+    fullScreen=0
+>>
+<specialSettings
+    autoShowGameWindowAfterInit=0
+    noConsoleThread=1
+>>
+<debug>>
+<keymap using>
+    <GLFW_KEY_W>XENOAMESS_KEY_UP>
+    <GLFW_KEY_A>XENOAMESS_KEY_LEFT>
+    <GLFW_KEY_S>XENOAMESS_KEY_DOWN>
+    <GLFW_KEY_D>XENOAMESS_KEY_RIGHT>
+    <GLFW_KEY_UP>XENOAMESS_KEY_UP>
+    <GLFW_KEY_LEFT>XENOAMESS_KEY_LEFT>
+    <GLFW_KEY_DOWN>XENOAMESS_KEY_DOWN>
+    <GLFW_KEY_RIGHT>XENOAMESS_KEY_RIGHT>
+    <GLFW_KEY_ESCAPE>XENOAMESS_KEY_ESCAPE>
+    <GLFW_KEY_ENTER>XENOAMESS_KEY_ENTER>
+    <GLFW_KEY_SPACE>XENOAMESS_KEY_SPACE>
+    <GLFW_KEY_LEFT_SHIFT>XENOAMESS_KEY_LEFT_SHIFT>
+    <GLFW_KEY_RIGHT_SHIFT>XENOAMESS_KEY_RIGHT_SHIFT>
+    <GLFW_MOUSE_BUTTON_LEFT>XENOAMESS_MOUSE_BUTTON_LEFT>
+    <GLFW_MOUSE_BUTTON_RIGHT>XENOAMESS_MOUSE_BUTTON_RIGHT>
+    <GLFW_MOUSE_BUTTON_MIDDLE>XENOAMESS_MOUSE_BUTTON_MIDDLE>
+>
+<backup worldClassName=com.xenoamess.rpg_module.world.World>>
+<backup worldClassName=com.xenoamess.modern_alchemy.scene.ProgramScene>>
+<backup worldClassName=com.xenoamess.gamepad_massage.FalseWorld>>
+<backup gameWindowClassName=com.xenoamess.cyan_potion.GameWindow>>
+
+
+
+<merge version=1.0>
+    <0001>
+        <en>Thanks!>
+        <<just comment>
+<ch>谢谢!>
+    >
+    <<just comment>
+    <0002>
+        <en>Hello?>
+<<just comment>
+<ch>您好？>
+    >
+>
