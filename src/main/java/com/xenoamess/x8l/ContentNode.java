@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContentNode extends TreeNode {
@@ -24,8 +25,10 @@ public class ContentNode extends TreeNode {
         if (value == null) {
             value = "";
         }
+        if (!this.attributes.containsKey(key)) {
+            attributesKeyList.add(key);
+        }
         attributes.put(key, value);
-        attributesKeyList.add(key);
     }
 
 
@@ -114,4 +117,58 @@ public class ContentNode extends TreeNode {
             e.printStackTrace();
         }
     }
+
+    public List<TextNode> getTextNodesFromChildren() {
+        return this.getTextNodesFromChildren(0);
+    }
+
+    public List<TextNode> getTextNodesFromChildren(int maxSize) {
+        List<TextNode> res = new ArrayList<TextNode>();
+        for (TreeNode au : this.children) {
+            if (au instanceof TextNode) {
+                res.add((TextNode) au);
+                if (res.size() == maxSize) {
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
+
+    public List<ContentNode> getContentNodesFromChildren() {
+        return this.getContentNodesFromChildren(0);
+    }
+
+    public List<ContentNode> getContentNodesFromChildren(int maxSize) {
+        List<ContentNode> res = new ArrayList<ContentNode>();
+        for (TreeNode au : this.children) {
+            if (au instanceof ContentNode) {
+                res.add((ContentNode) au);
+                if (res.size() == maxSize) {
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
+
+
+    public List<CommentNode> getCommentNodesFromChildren() {
+        return this.getCommentNodesFromChildren(0);
+    }
+
+    public List<CommentNode> getCommentNodesFromChildren(int maxSize) {
+        List<CommentNode> res = new ArrayList<CommentNode>();
+        for (TreeNode au : this.children) {
+            if (au instanceof CommentNode) {
+                res.add((CommentNode) au);
+                if (res.size() == maxSize) {
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
+
+
 }
