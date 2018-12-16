@@ -12,7 +12,6 @@ public class X8lTree {
     public static X8lTree getX8lTree(Reader reader) {
         X8lTree res = new X8lTree(reader);
         res.parse();
-        res.trim();
         try {
             reader.close();
         } catch (IOException e) {
@@ -149,8 +148,9 @@ public class X8lTree {
     /*
      * delete TextNode that only have \s in their textContent.
      */
-    public void trim() {
+    public X8lTree trim() {
         this.root.trim();
+        return this;
     }
 
     public void output(Writer writer) {

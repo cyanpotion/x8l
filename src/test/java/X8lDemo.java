@@ -1,4 +1,4 @@
-package com.xenoamess.x8l;
+import com.xenoamess.x8l.X8lTree;
 
 import java.io.*;
 
