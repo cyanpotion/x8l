@@ -216,5 +216,29 @@ public class ContentNode extends TreeNode {
         return res;
     }
 
+    public String getName() {
+        if (!this.attributesKeyList.isEmpty()) {
+            return this.attributesKeyList.get(0);
+        } else {
+            return "";
+        }
+    }
+
+    public List<ContentNode> getContentNodesFromChildrenThatNameIs(String name) {
+        return this.getContentNodesFromChildrenThatNameIs(name, 0);
+    }
+
+    public List<ContentNode> getContentNodesFromChildrenThatNameIs(String name, int maxSize) {
+        List<ContentNode> res = new ArrayList<ContentNode>();
+        for (TreeNode au : this.children) {
+            if (au instanceof CommentNode && ((ContentNode) au).getName().equals(name)) {
+                res.add((ContentNode) au);
+                if (res.size() == maxSize) {
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
 
 }
