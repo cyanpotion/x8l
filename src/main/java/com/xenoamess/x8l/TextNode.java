@@ -14,6 +14,15 @@ public class TextNode extends TreeNode {
         this.textContent = textContent;
     }
 
+    public TextNode(ContentNode parent, int index, String textContent) {
+        super(parent, index);
+        if (textContent == null) {
+            textContent = "";
+        }
+        this.textContent = textContent;
+    }
+
+
     @Override
     public void show() {
         super.show();
@@ -33,5 +42,10 @@ public class TextNode extends TreeNode {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void format(int space) {
+        this.textContent = this.textContent.trim();
     }
 }

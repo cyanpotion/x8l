@@ -14,6 +14,14 @@ public class CommentNode extends TreeNode {
         this.textContent = textContent;
     }
 
+    public CommentNode(ContentNode parent, int index, String textContent) {
+        super(parent, index);
+        if (textContent == null) {
+            textContent = "";
+        }
+        this.textContent = textContent;
+    }
+
     @Override
     public void show() {
         super.show();
@@ -36,5 +44,10 @@ public class CommentNode extends TreeNode {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void format(int space) {
+        this.textContent = this.textContent.trim();
     }
 }

@@ -153,6 +153,20 @@ public class X8lTree {
         return this;
     }
 
+    /*
+     * format the tree.
+     * notice that format will trim every text content in text nodes and comment nodes.
+     * that is designed to do so, in order to notice the user that, when you format the tree,
+     * do not forget that text nodes with only space chars have the same right than "normal" text nodes,
+     * and you are sure that you be aware the "format" operation changed them ,thus it already changed the whole tree's data.
+     * that is important.
+     */
+    public X8lTree format() {
+        this.trim();
+        this.root.format(-1);
+        return this;
+    }
+
     public void output(Writer writer) {
         this.root.output(writer);
         try {
@@ -170,6 +184,23 @@ public class X8lTree {
                 stringBuilder.append('%');
             }
             stringBuilder.append(chr);
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String Untranscode(String transcodedString) {
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean lastCharIsModulus = false;
+        for (int i = 0; i < transcodedString.length(); i++) {
+            char chr = transcodedString.charAt(i);
+            if (lastCharIsModulus) {
+                stringBuilder.append(chr);
+                lastCharIsModulus = false;
+            } else if (chr == '%') {
+                lastCharIsModulus = true;
+            } else {
+                stringBuilder.append(chr);
+            }
         }
         return stringBuilder.toString();
     }

@@ -7,7 +7,7 @@ public class X8lDemo {
     public static void main(String args[]) {
         FileReader reader = null;
         try {
-            reader = new FileReader(new File("README.md"));
+            reader = new FileReader(new File("README"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -28,6 +28,12 @@ public class X8lDemo {
         tree.trim();
         try {
             tree.output(new FileWriter("out/outputTrim.x8l"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tree.format();
+        try {
+            tree.output(new FileWriter("out/outputFormat.x8l"));
         } catch (IOException e) {
             e.printStackTrace();
         }

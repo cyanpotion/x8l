@@ -13,6 +13,13 @@ public abstract class TreeNode {
         }
     }
 
+    public TreeNode(ContentNode parent, int index) {
+        this.parent = parent;
+        if (this.parent != null) {
+            this.parent.children.add(index, this);
+        }
+    }
+
 
     public void show() {
         System.out.println();
@@ -30,5 +37,27 @@ public abstract class TreeNode {
         this.parent = null;
     }
 
+    public TreeNode removeParent() {
+        if (this.parent != null) {
+            this.parent.children.remove(this);
+            this.parent = null;
+        }
+        return this;
+    }
+
+    public TreeNode changeParent(ContentNode contentNode) {
+        this.removeParent();
+        this.parent = contentNode;
+        return this;
+    }
+
+    public TreeNode changeParent(ContentNode contentNode, int index) {
+        this.changeParent(contentNode);
+        this.parent.children.add(index, this);
+        return this;
+    }
+
     public abstract void output(Writer writer);
+
+    public abstract void format(int space);
 }

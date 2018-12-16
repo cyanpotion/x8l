@@ -10,12 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 public class ContentNode extends TreeNode {
-    public ArrayList<TreeNode> children = null;
+    public List<TreeNode> children = null;
     public Map<String, String> attributes = null;
-    public ArrayList<String> attributesKeyList = null;
+    public List<String> attributesKeyList = null;
 
     public ContentNode(ContentNode parent) {
         super(parent);
+        this.children = new ArrayList<TreeNode>();
+        this.attributes = new HashMap<String, String>();
+        this.attributesKeyList = new ArrayList<String>();
+    }
+
+    public ContentNode(ContentNode parent, int index) {
+        super(parent, index);
         this.children = new ArrayList<TreeNode>();
         this.attributes = new HashMap<String, String>();
         this.attributesKeyList = new ArrayList<String>();
@@ -65,7 +72,7 @@ public class ContentNode extends TreeNode {
     }
 
     public void trim() {
-        ArrayList<TreeNode> newChildren = new ArrayList<TreeNode>();
+        List<TreeNode> newChildren = new ArrayList<TreeNode>();
         for (TreeNode au : this.children) {
             //it is done in this way to make sure that:
             //  if you extend this library,and make a class extended ContentNode, it will be call trim() here.
@@ -77,16 +84,18 @@ public class ContentNode extends TreeNode {
                 if (!((TextNode) au).textContent.trim().equals("")) {
                     newChildren.add(au);
                 }
+            } else {
+                newChildren.add(au);
             }
         }
         this.children.clear();
         this.children = newChildren;
     }
 
+
     @Override
     public void output(Writer writer) {
         try {
-
             if (this.parent == null) {
                 for (TreeNode treeNode : this.children) {
                     treeNode.output(writer);
@@ -117,6 +126,41 @@ public class ContentNode extends TreeNode {
             e.printStackTrace();
         }
     }
+
+    public void format(int space) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < space; i++) {
+            stringBuilder.append("    ");
+        }
+        String spaceString = stringBuilder.toString();
+        String spaceString2 = stringBuilder.toString() + "    ";
+        if (space < 0) {
+            spaceString2 = "";
+        }
+
+//        if (this.parent == null) {
+//            for (TreeNode treeNode : this.children) {
+//                treeNode.format(0);
+//            }
+//        } else {
+        for (TreeNode treeNode : this.children) {
+            treeNode.format(space + 1);
+        }
+
+        if (this.children.size() > 1) {
+            List<TreeNode> newChildren = new ArrayList<TreeNode>();
+//        newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
+//            newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
+            for (TreeNode treeNode : this.children) {
+//            newChildren.add(new TextNode(null, "\n" + spaceString + "    ").changeParent(this));
+                newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
+                newChildren.add(treeNode);
+                this.children = newChildren;
+            }
+            newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
+        }
+    }
+
 
     public List<TextNode> getTextNodesFromChildren() {
         return this.getTextNodesFromChildren(0);
