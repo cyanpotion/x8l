@@ -40,6 +40,16 @@ public class ContentNode extends TreeNode {
         }
     }
 
+    public void removeAttribute(String attributeString) {
+        int index = attributeString.indexOf("=");
+        if (index == -1) {
+        } else {
+            attributeString = attributeString.substring(0, index);
+        }
+        this.attributes.remove(attributeString);
+        this.attributesKeyList.remove(attributeString);
+    }
+
     @Override
     public void show() {
         super.show();
