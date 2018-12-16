@@ -51,10 +51,14 @@ public abstract class TreeNode {
         return this;
     }
 
-    public TreeNode changeParent(ContentNode contentNode, int index) {
+    public TreeNode changeParentAndRegister(ContentNode contentNode, int index) {
         this.changeParent(contentNode);
         this.parent.children.add(index, this);
         return this;
+    }
+
+    public TreeNode changeParentAndRegister(ContentNode contentNode) {
+        return this.changeParentAndRegister(contentNode, this.parent.children.size());
     }
 
     public abstract void output(Writer writer);

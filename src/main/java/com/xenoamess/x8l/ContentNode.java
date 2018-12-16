@@ -10,22 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ContentNode extends TreeNode {
-    public List<TreeNode> children = null;
-    public Map<String, String> attributes = null;
-    public List<String> attributesKeyList = null;
+    public List<TreeNode> children = new ArrayList<TreeNode>();
+    public Map<String, String> attributes = new HashMap<String, String>();
+    public List<String> attributesKeyList = new ArrayList<String>();
 
     public ContentNode(ContentNode parent) {
         super(parent);
-        this.children = new ArrayList<TreeNode>();
-        this.attributes = new HashMap<String, String>();
-        this.attributesKeyList = new ArrayList<String>();
     }
 
     public ContentNode(ContentNode parent, int index) {
         super(parent, index);
-        this.children = new ArrayList<TreeNode>();
-        this.attributes = new HashMap<String, String>();
-        this.attributesKeyList = new ArrayList<String>();
     }
 
     public void addAttribute(String key, String value) {
