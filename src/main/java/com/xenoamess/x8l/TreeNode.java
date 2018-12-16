@@ -53,12 +53,16 @@ public abstract class TreeNode {
 
     public TreeNode changeParentAndRegister(ContentNode contentNode, int index) {
         this.changeParent(contentNode);
-        this.parent.children.add(index, this);
+        if (index == -1) {
+            this.parent.children.add(this);
+        } else {
+            this.parent.children.add(index, this);
+        }
         return this;
     }
 
     public TreeNode changeParentAndRegister(ContentNode contentNode) {
-        return this.changeParentAndRegister(contentNode, this.parent.children.size());
+        return this.changeParentAndRegister(contentNode, -1);
     }
 
     public abstract void output(Writer writer);
