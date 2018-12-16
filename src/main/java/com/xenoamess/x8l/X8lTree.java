@@ -9,7 +9,7 @@ public class X8lTree {
     public ContentNode root = null;
     public Reader reader;
 
-    public static X8lTree getX8lTree(Reader reader) {
+    public static X8lTree GetX8lTree(Reader reader) {
         X8lTree res = new X8lTree(reader);
         res.parse();
         try {
