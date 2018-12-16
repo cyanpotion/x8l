@@ -16,8 +16,6 @@ public class X8lTree {
             res.parse();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             try {
                 if (fileReader != null) {
