@@ -49,6 +49,42 @@ public class X8lTree {
         }
     }
 
+    public static X8lTree LoadFromString(String string) {
+        X8lTree res = null;
+        StringReader stringReader = null;
+        try {
+            stringReader = new StringReader(string);
+            res = new X8lTree(stringReader);
+            res.parse();
+        } finally {
+            if (stringReader != null) {
+                stringReader.close();
+            }
+        }
+        return res;
+    }
+
+    public static String SaveToString(X8lTree x8lTree) {
+        StringWriter stringWriter = null;
+        try {
+            stringWriter = new StringWriter();
+            x8lTree.output(stringWriter);
+            stringWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stringWriter != null) {
+                    stringWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringWriter.toString();
+    }
 
     public X8lTree(Reader reader) {
         this.reader = reader;
