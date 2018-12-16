@@ -1,24 +1,56 @@
 package com.xenoamess.x8l;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 
 public class X8lTree {
     public boolean debug;
     public ContentNode root = null;
     public Reader reader;
 
-    public static X8lTree GetX8lTree(Reader reader) {
-        X8lTree res = new X8lTree(reader);
-        res.parse();
+    public static X8lTree LoadFromFile(File file) {
+        X8lTree res = null;
+        FileReader fileReader = null;
         try {
-            reader.close();
+            fileReader = new FileReader(file);
+            res = new X8lTree(fileReader);
+            res.parse();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (fileReader != null) {
+                    fileReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return res;
     }
+
+    public static void SaveToFile(File file, X8lTree x8lTree) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file);
+            x8lTree.output(fileWriter);
+            fileWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileWriter != null) {
+                    fileWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public X8lTree(Reader reader) {
         this.reader = reader;
