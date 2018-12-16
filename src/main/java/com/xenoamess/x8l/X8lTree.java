@@ -66,10 +66,10 @@ public class X8lTree {
             nowChar = (char) nowInt;
             if (nowInt == -1) {
                 if (nowNode == this.root && !inAttributeArea && !inCommentArea) {
-                    if (stringBuilder.length() != 0) {
-                        new TextNode(nowNode, stringBuilder.toString());
+
+                    new TextNode(nowNode, stringBuilder.toString());
 //                        stringBuilder = new StringBuilder();
-                    }
+
                     break;
                 } else {
                     throw new X8lGrammarException();
@@ -99,19 +99,19 @@ public class X8lTree {
                         inCommentArea = true;
                     }
                 } else {
-                    if (stringBuilder.length() != 0) {
-                        new TextNode(nowNode, stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                    }
+
+                    new TextNode(nowNode, stringBuilder.toString());
+                    stringBuilder = new StringBuilder();
+
                     nowNode = new ContentNode(nowNode);
                     inAttributeArea = true;
                 }
             } else if (nowChar == '>') {
                 if (!inAttributeArea) {
-                    if (stringBuilder.length() != 0) {
-                        new TextNode(nowNode, stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                    }
+
+                    new TextNode(nowNode, stringBuilder.toString());
+                    stringBuilder = new StringBuilder();
+
                     nowNode = nowNode.parent;
                     if (nowNode == null) {
                         throw new X8lGrammarException();
