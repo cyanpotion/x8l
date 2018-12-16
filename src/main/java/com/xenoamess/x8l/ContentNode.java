@@ -1,7 +1,5 @@
 package com.xenoamess.x8l;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
