@@ -202,7 +202,7 @@ public class X8lTree {
                     }
                     inAttributeArea = false;
                 }
-            } else if (nowChar == ' ' || nowChar == '\t' || nowChar == '\r' || nowChar == '\n') {
+            } else if (Character.isWhitespace(nowChar)) {
                 if (inAttributeArea) {
                     if (stringBuilder.length() != 0) {
                         nowNode.addAttribute(stringBuilder.toString());
