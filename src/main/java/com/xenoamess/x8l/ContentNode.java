@@ -63,11 +63,11 @@ public class ContentNode extends TreeNode {
     }
 
     @Override
-    public void destroy() {
+    public void close() {
         for (TreeNode au : this.children) {
-            au.destroy();
+            au.close();
         }
-        super.destroy();
+        super.close();
         this.children = null;
         this.attributes = null;
         this.attributesKeyList = null;
@@ -96,11 +96,11 @@ public class ContentNode extends TreeNode {
 
 
     @Override
-    public void output(Writer writer) {
+    public void write(Writer writer) {
         try {
             if (this.parent == null) {
                 for (TreeNode treeNode : this.children) {
-                    treeNode.output(writer);
+                    treeNode.write(writer);
                 }
             } else {
                 writer.append('<');
@@ -120,7 +120,7 @@ public class ContentNode extends TreeNode {
                 }
                 writer.append('>');
                 for (TreeNode treeNode : this.children) {
-                    treeNode.output(writer);
+                    treeNode.write(writer);
                 }
                 writer.append('>');
             }

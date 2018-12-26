@@ -21,19 +21,19 @@ public class X8lDemo {
         new File("out").mkdirs();
 
         try {
-            tree.output(new FileWriter("out/output.x8l"));
+            tree.write(new FileWriter("out/output.x8l"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         tree.trim();
         try {
-            tree.output(new FileWriter("out/outputTrim.x8l"));
+            tree.write(new FileWriter("out/outputTrim.x8l"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         tree.format();
         try {
-            tree.output(new FileWriter("out/outputFormat.x8l"));
+            tree.write(new FileWriter("out/outputFormat.x8l"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -30,13 +30,13 @@ public class TextNode extends TreeNode {
     }
 
     @Override
-    public void destroy() {
-        super.destroy();
+    public void close() {
+        super.close();
         this.textContent = null;
     }
 
     @Override
-    public void output(Writer writer) {
+    public void write(Writer writer) {
         try {
             writer.append(X8lTree.Transcode(textContent));
         } catch (IOException e) {

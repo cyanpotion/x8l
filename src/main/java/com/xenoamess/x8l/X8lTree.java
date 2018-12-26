@@ -2,9 +2,12 @@ package com.xenoamess.x8l;
 
 import java.io.*;
 
-public class X8lTree {
+public class X8lTree implements AutoCloseable, Serializable {
+    protected static class X8lGrammarException extends RuntimeException {
+    }
+
     public boolean debug;
-    public ContentNode root = null;
+    public ContentNode root = new ContentNode(null);
     public Reader reader;
 
     public static X8lTree LoadFromFile(File file) throws IOException {
@@ -12,21 +15,13 @@ public class X8lTree {
             throw new FileNotFoundException();
         }
         X8lTree res = null;
-        FileReader fileReader = null;
-        try {
-            fileReader = new FileReader(file);
+        try (
+                FileReader fileReader = new FileReader(file)
+        ) {
             res = new X8lTree(fileReader);
             res.parse();
         } catch (FileNotFoundException e) {
             throw e;
-        } finally {
-            try {
-                if (fileReader != null) {
-                    fileReader.close();
-                }
-            } catch (IOException e) {
-                throw e;
-            }
         }
         return res;
     }
@@ -44,59 +39,42 @@ public class X8lTree {
             }
         }
 
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(file);
-            x8lTree.output(fileWriter);
-            fileWriter.close();
+        try (
+                FileWriter fileWriter = new FileWriter(file);
+        ) {
+            x8lTree.write(fileWriter);
         } catch (IOException e) {
             throw e;
-        } finally {
-            try {
-                if (fileWriter != null) {
-                    fileWriter.close();
-                }
-            } catch (IOException e) {
-                throw e;
-            }
         }
     }
 
     public static X8lTree LoadFromString(String string) {
         X8lTree res = null;
-        StringReader stringReader = null;
-        try {
-            stringReader = new StringReader(string);
+        try (
+                StringReader stringReader = new StringReader(string);
+        ) {
             res = new X8lTree(stringReader);
             res.parse();
-        } finally {
-            if (stringReader != null) {
-                stringReader.close();
-            }
         }
         return res;
     }
 
     public static String SaveToString(X8lTree x8lTree) {
-        StringWriter stringWriter = null;
-        try {
-            stringWriter = new StringWriter();
-            x8lTree.output(stringWriter);
-            stringWriter.close();
+        String res = "";
+        try (
+                StringWriter stringWriter = new StringWriter();
+        ) {
+            x8lTree.write(stringWriter);
+            res = stringWriter.toString();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (stringWriter != null) {
-                    stringWriter.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-        return stringWriter.toString();
+        return res;
+    }
+
+    public X8lTree() {
     }
 
     public X8lTree(Reader reader) {
@@ -105,10 +83,10 @@ public class X8lTree {
 
 
     /*
-     * destroy this tree.
+     * close this tree.
      */
-    public void destroy() {
-        this.root.destroy();
+    public void close() {
+        this.root.close();
         this.root = null;
         if (this.reader != null) {
             try {
@@ -120,7 +98,24 @@ public class X8lTree {
         }
     }
 
+    public void read(Reader reader) {
+        this.parse(reader);
+    }
+
+    public void write(Writer writer) {
+        this.root.write(writer);
+        try {
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void parse() {
+        this.parse(this.reader);
+    }
+
+    public void parse(Reader reader) {
         if (this.debug) {
             System.out.println("building:");
             System.out.println(this);
@@ -137,7 +132,7 @@ public class X8lTree {
         char nowChar;
         while (true) {
             try {
-                nowInt = this.reader.read();
+                nowInt = reader.read();
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new X8lGrammarException();
@@ -172,7 +167,7 @@ public class X8lTree {
                         throw new X8lGrammarException();
                     } else {
                         ContentNode nowParent = nowNode.parent;
-                        nowNode.destroy();
+                        nowNode.close();
                         nowNode = nowParent;
                         inAttributeArea = false;
                         inCommentArea = true;
@@ -246,14 +241,6 @@ public class X8lTree {
         return this;
     }
 
-    public void output(Writer writer) {
-        this.root.output(writer);
-        try {
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static String Transcode(String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -282,5 +269,37 @@ public class X8lTree {
             }
         }
         return stringBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.SaveToString(this);
+    }
+
+    @Override
+    public boolean equals(Object x8lTree) {
+        if (x8lTree instanceof X8lTree) {
+            return this.toString().equals(x8lTree.toString());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    public void readObject(ObjectInputStream objectInputStream)
+            throws IOException, ClassNotFoundException {
+        try (Reader reader = new InputStreamReader(objectInputStream)) {
+            this.read(reader);
+        }
+    }
+
+    public void writeObject(ObjectOutputStream objectOutputStream)
+            throws IOException {
+        try (Writer writer = new OutputStreamWriter(objectOutputStream)) {
+            this.write(writer);
+        }
     }
 }

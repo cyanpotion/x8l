@@ -1,8 +1,11 @@
 package com.xenoamess.x8l;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 
-public abstract class TreeNode {
+public abstract class TreeNode implements AutoCloseable {
     public static boolean DEBUG = false;
     public ContentNode parent;
 
@@ -28,7 +31,7 @@ public abstract class TreeNode {
         System.out.println("parent : " + this.parent);
     }
 
-    public void destroy() {
+    public void close() {
         if (this.parent != null) {
             if (this.parent.children != null) {
                 this.parent.children.remove(this);
@@ -65,7 +68,36 @@ public abstract class TreeNode {
         return this.changeParentAndRegister(contentNode, -1);
     }
 
-    public abstract void output(Writer writer);
+    public abstract void write(Writer writer);
 
     public abstract void format(int space);
+
+    @Override
+    public boolean equals(Object treeNode) {
+        if (treeNode.getClass().equals(this.getClass())) {
+            return this.toString().equals(treeNode.toString());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+        try (
+                StringWriter stringWriter = new StringWriter();
+        ) {
+            this.write(stringWriter);
+            res = stringWriter.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 }
