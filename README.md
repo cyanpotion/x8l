@@ -1,10 +1,10 @@
-# x8l Readme
-# shut down the markdown.
-# you shall see this file in raw.
-Make a new markup language named x8l which can completely replace xml but always use smaller size.
+#x8l
+Make a new markup language named x8l which can replace xml in most areas but always use smaller size.
+
 if you use maven you can always go jitpack for it.
 https://jitpack.io/#XenoAmess/x8l
 
+```text
 <<here goes a basic demo of x8l>
 <<first,a comment is like this>  
 < <or this this>  
@@ -116,3 +116,4 @@ and here goes some reallife x8l files:
 <ch>谢谢!>
     >
 >
+```
