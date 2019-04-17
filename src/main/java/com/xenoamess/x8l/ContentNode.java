@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author XenoAmess
+ */
 public class ContentNode extends TreeNode {
     public List<TreeNode> children = new ArrayList<TreeNode>();
     public Map<String, String> attributes = new HashMap<String, String>();
@@ -83,7 +86,7 @@ public class ContentNode extends TreeNode {
                 ((ContentNode) au).trim();
                 newChildren.add(au);
             } else if (au.getClass().equals(TextNode.class)) {
-                if (!((TextNode) au).textContent.trim().equals("")) {
+                if (!"".equals(((TextNode) au).textContent.trim())) {
                     newChildren.add(au);
                 }
             } else {
@@ -113,7 +116,7 @@ public class ContentNode extends TreeNode {
                     }
                     writer.append(X8lTree.Transcode(key));
                     String value = attributes.get(key);
-                    if (!value.equals("")) {
+                    if (!"".equals(value)) {
                         writer.append("=");
                         writer.append(X8lTree.Transcode(value));
                     }
@@ -129,6 +132,7 @@ public class ContentNode extends TreeNode {
         }
     }
 
+    @Override
     public void format(int space) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < space; i++) {
@@ -140,21 +144,13 @@ public class ContentNode extends TreeNode {
             spaceString2 = "";
         }
 
-//        if (this.parent == null) {
-//            for (TreeNode treeNode : this.children) {
-//                treeNode.format(0);
-//            }
-//        } else {
         for (TreeNode treeNode : this.children) {
             treeNode.format(space + 1);
         }
 
         if (this.children.size() > 1 || (this.children.size() == 1 && !(this.children.get(0) instanceof TextNode))) {
             List<TreeNode> newChildren = new ArrayList<TreeNode>();
-//        newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
-//            newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
             for (TreeNode treeNode : this.children) {
-//            newChildren.add(new TextNode(null, "\n" + spaceString + "    ").changeParent(this));
                 newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
                 newChildren.add(treeNode);
                 this.children = newChildren;

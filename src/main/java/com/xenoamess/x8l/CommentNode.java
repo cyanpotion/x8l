@@ -3,6 +3,9 @@ package com.xenoamess.x8l;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * @author XenoAmess
+ */
 public class CommentNode extends TreeNode {
     public String textContent;
 

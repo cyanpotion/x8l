@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
+/**
+ * @author XenoAmess
+ */
 public abstract class TreeNode implements AutoCloseable {
     public static boolean DEBUG = false;
     public ContentNode parent;
@@ -31,6 +34,7 @@ public abstract class TreeNode implements AutoCloseable {
         System.out.println("parent : " + this.parent);
     }
 
+    @Override
     public void close() {
         if (this.parent != null) {
             if (this.parent.children != null) {

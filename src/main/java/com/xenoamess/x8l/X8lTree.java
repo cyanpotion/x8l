@@ -2,6 +2,9 @@ package com.xenoamess.x8l;
 
 import java.io.*;
 
+/**
+ * @author XenoAmess
+ */
 public class X8lTree implements AutoCloseable, Serializable {
     protected static class X8lGrammarException extends RuntimeException {
     }
@@ -82,9 +85,10 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
 
-    /*
+    /**
      * close this tree.
      */
+    @Override
     public void close() {
         this.root.close();
         this.root = null;
@@ -140,10 +144,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             nowChar = (char) nowInt;
             if (nowInt == -1) {
                 if (nowNode == this.root && !inAttributeArea && !inCommentArea) {
-
                     new TextNode(nowNode, stringBuilder.toString());
-//                        stringBuilder = new StringBuilder();
-
                     break;
                 } else {
                     throw new X8lGrammarException();
@@ -212,14 +213,14 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    /*
+    /**
      * print contents to console for debug.
      */
     public void show() {
         root.show();
     }
 
-    /*
+    /**
      * delete TextNode that only have \s in their textContent.
      */
     public X8lTree trim() {
@@ -227,7 +228,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return this;
     }
 
-    /*
+    /**
      * format the tree.
      * notice that format will trim every text content in text nodes and comment nodes.
      * that is designed to do so, in order to notice the user that, when you format the tree,
@@ -273,7 +274,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     @Override
     public String toString() {
-        return this.SaveToString(this);
+        return SaveToString(this);
     }
 
     @Override
