@@ -74,6 +74,8 @@ public abstract class AbstractTreeNode implements AutoCloseable {
 
     /**
      * write this AbstractTreeNode's data to a writer.
+     *
+     * @param writer the writer to write to.
      */
     public abstract void write(Writer writer);
 

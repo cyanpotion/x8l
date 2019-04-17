@@ -119,6 +119,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.parse(this.reader);
     }
 
+    @SuppressWarnings("AlibabaMethodTooLong")
     public void parse(Reader reader) {
         if (this.debug) {
             System.out.println("building:");

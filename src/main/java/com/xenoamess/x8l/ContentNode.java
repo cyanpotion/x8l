@@ -153,8 +153,8 @@ public class ContentNode extends AbstractTreeNode {
             for (AbstractTreeNode abstractTreeNode : this.children) {
                 newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
                 newChildren.add(abstractTreeNode);
-                this.children = newChildren;
             }
+            this.children = newChildren;
             newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
         }
     }
