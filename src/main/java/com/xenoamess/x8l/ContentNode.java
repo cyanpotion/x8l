@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * @author XenoAmess
  */
-public class ContentNode extends TreeNode {
-    public List<TreeNode> children = new ArrayList<TreeNode>();
+public class ContentNode extends AbstractTreeNode {
+    public List<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
     public Map<String, String> attributes = new HashMap<String, String>();
     public List<String> attributesKeyList = new ArrayList<String>();
 
@@ -60,14 +60,14 @@ public class ContentNode extends TreeNode {
         for (Map.Entry<String, String> au : attributes.entrySet()) {
             System.out.println(au.getKey() + " = " + au.getValue());
         }
-        for (TreeNode au : this.children) {
+        for (AbstractTreeNode au : this.children) {
             au.show();
         }
     }
 
     @Override
     public void close() {
-        for (TreeNode au : this.children) {
+        for (AbstractTreeNode au : this.children) {
             au.close();
         }
         super.close();
@@ -77,8 +77,8 @@ public class ContentNode extends TreeNode {
     }
 
     public void trim() {
-        List<TreeNode> newChildren = new ArrayList<TreeNode>();
-        for (TreeNode au : this.children) {
+        List<AbstractTreeNode> newChildren = new ArrayList<AbstractTreeNode>();
+        for (AbstractTreeNode au : this.children) {
             //it is done in this way to make sure that:
             //  if you extend this library,and make a class extended ContentNode, it will be call trim() here.
             //  but if you make a class extended TextNode, its nodes will not be deleted during trim().
@@ -102,8 +102,8 @@ public class ContentNode extends TreeNode {
     public void write(Writer writer) {
         try {
             if (this.parent == null) {
-                for (TreeNode treeNode : this.children) {
-                    treeNode.write(writer);
+                for (AbstractTreeNode abstractTreeNode : this.children) {
+                    abstractTreeNode.write(writer);
                 }
             } else {
                 writer.append('<');
@@ -114,16 +114,16 @@ public class ContentNode extends TreeNode {
                     } else {
                         writer.append(' ');
                     }
-                    writer.append(X8lTree.Transcode(key));
+                    writer.append(X8lTree.transcode(key));
                     String value = attributes.get(key);
                     if (!"".equals(value)) {
                         writer.append("=");
-                        writer.append(X8lTree.Transcode(value));
+                        writer.append(X8lTree.transcode(value));
                     }
                 }
                 writer.append('>');
-                for (TreeNode treeNode : this.children) {
-                    treeNode.write(writer);
+                for (AbstractTreeNode abstractTreeNode : this.children) {
+                    abstractTreeNode.write(writer);
                 }
                 writer.append('>');
             }
@@ -144,15 +144,15 @@ public class ContentNode extends TreeNode {
             spaceString2 = "";
         }
 
-        for (TreeNode treeNode : this.children) {
-            treeNode.format(space + 1);
+        for (AbstractTreeNode abstractTreeNode : this.children) {
+            abstractTreeNode.format(space + 1);
         }
 
         if (this.children.size() > 1 || (this.children.size() == 1 && !(this.children.get(0) instanceof TextNode))) {
-            List<TreeNode> newChildren = new ArrayList<TreeNode>();
-            for (TreeNode treeNode : this.children) {
+            List<AbstractTreeNode> newChildren = new ArrayList<AbstractTreeNode>();
+            for (AbstractTreeNode abstractTreeNode : this.children) {
                 newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
-                newChildren.add(treeNode);
+                newChildren.add(abstractTreeNode);
                 this.children = newChildren;
             }
             newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
@@ -166,7 +166,7 @@ public class ContentNode extends TreeNode {
 
     public List<TextNode> getTextNodesFromChildren(int maxSize) {
         List<TextNode> res = new ArrayList<TextNode>();
-        for (TreeNode au : this.children) {
+        for (AbstractTreeNode au : this.children) {
             if (au instanceof TextNode) {
                 res.add((TextNode) au);
                 if (res.size() == maxSize) {
@@ -183,7 +183,7 @@ public class ContentNode extends TreeNode {
 
     public List<ContentNode> getContentNodesFromChildren(int maxSize) {
         List<ContentNode> res = new ArrayList<ContentNode>();
-        for (TreeNode au : this.children) {
+        for (AbstractTreeNode au : this.children) {
             if (au instanceof ContentNode) {
                 res.add((ContentNode) au);
                 if (res.size() == maxSize) {
@@ -201,7 +201,7 @@ public class ContentNode extends TreeNode {
 
     public List<CommentNode> getCommentNodesFromChildren(int maxSize) {
         List<CommentNode> res = new ArrayList<CommentNode>();
-        for (TreeNode au : this.children) {
+        for (AbstractTreeNode au : this.children) {
             if (au instanceof CommentNode) {
                 res.add((CommentNode) au);
                 if (res.size() == maxSize) {
@@ -226,7 +226,7 @@ public class ContentNode extends TreeNode {
 
     public List<ContentNode> getContentNodesFromChildrenThatNameIs(String name, int maxSize) {
         List<ContentNode> res = new ArrayList<ContentNode>();
-        for (TreeNode au : this.children) {
+        for (AbstractTreeNode au : this.children) {
             if (au instanceof CommentNode && ((ContentNode) au).getName().equals(name)) {
                 res.add((ContentNode) au);
                 if (res.size() == maxSize) {

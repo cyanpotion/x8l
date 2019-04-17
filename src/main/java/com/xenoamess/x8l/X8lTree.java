@@ -13,7 +13,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public ContentNode root = new ContentNode(null);
     public Reader reader;
 
-    public static X8lTree LoadFromFile(File file) throws IOException {
+    public static X8lTree loadFromFile(File file) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException();
         }
@@ -29,7 +29,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static void SaveToFile(File file, X8lTree x8lTree) throws IOException {
+    public static void saveToFile(File file, X8lTree x8lTree) throws IOException {
         if (file == null || !file.isFile()) {
             throw new FileNotFoundException();
         }
@@ -51,7 +51,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static X8lTree LoadFromString(String string) {
+    public static X8lTree loadFromString(String string) {
         X8lTree res = null;
         try (
                 StringReader stringReader = new StringReader(string);
@@ -62,7 +62,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static String SaveToString(X8lTree x8lTree) {
+    public static String saveToString(X8lTree x8lTree) {
         String res = "";
         try (
                 StringWriter stringWriter = new StringWriter();
@@ -243,7 +243,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
 
-    public static String Transcode(String originalString) {
+    public static String transcode(String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
@@ -255,7 +255,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return stringBuilder.toString();
     }
 
-    public static String Untranscode(String transcodedString) {
+    public static String untranscode(String transcodedString) {
         StringBuilder stringBuilder = new StringBuilder();
         boolean lastCharIsModulus = false;
         for (int i = 0; i < transcodedString.length(); i++) {
@@ -274,7 +274,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     @Override
     public String toString() {
-        return SaveToString(this);
+        return saveToString(this);
     }
 
     @Override

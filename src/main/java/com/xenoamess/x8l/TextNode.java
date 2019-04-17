@@ -6,7 +6,7 @@ import java.io.Writer;
 /**
  * @author XenoAmess
  */
-public class TextNode extends TreeNode {
+public class TextNode extends AbstractTreeNode {
     public String textContent;
 
     public TextNode(ContentNode parent, String textContent) {
@@ -41,7 +41,7 @@ public class TextNode extends TreeNode {
     @Override
     public void write(Writer writer) {
         try {
-            writer.append(X8lTree.Transcode(textContent));
+            writer.append(X8lTree.transcode(textContent));
         } catch (IOException e) {
             e.printStackTrace();
         }

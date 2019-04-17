@@ -8,18 +8,18 @@ import java.io.Writer;
 /**
  * @author XenoAmess
  */
-public abstract class TreeNode implements AutoCloseable {
+public abstract class AbstractTreeNode implements AutoCloseable {
     public static boolean DEBUG = false;
     public ContentNode parent;
 
-    public TreeNode(ContentNode parent) {
+    public AbstractTreeNode(ContentNode parent) {
         this.parent = parent;
         if (this.parent != null) {
             this.parent.children.add(this);
         }
     }
 
-    public TreeNode(ContentNode parent, int index) {
+    public AbstractTreeNode(ContentNode parent, int index) {
         this.parent = parent;
         if (this.parent != null) {
             this.parent.children.add(index, this);
@@ -44,7 +44,7 @@ public abstract class TreeNode implements AutoCloseable {
         this.parent = null;
     }
 
-    public TreeNode removeParent() {
+    public AbstractTreeNode removeParent() {
         if (this.parent != null) {
             this.parent.children.remove(this);
             this.parent = null;
@@ -52,13 +52,13 @@ public abstract class TreeNode implements AutoCloseable {
         return this;
     }
 
-    public TreeNode changeParent(ContentNode contentNode) {
+    public AbstractTreeNode changeParent(ContentNode contentNode) {
         this.removeParent();
         this.parent = contentNode;
         return this;
     }
 
-    public TreeNode changeParentAndRegister(ContentNode contentNode, int index) {
+    public AbstractTreeNode changeParentAndRegister(ContentNode contentNode, int index) {
         this.changeParent(contentNode);
         if (index == -1) {
             this.parent.children.add(this);
@@ -68,12 +68,21 @@ public abstract class TreeNode implements AutoCloseable {
         return this;
     }
 
-    public TreeNode changeParentAndRegister(ContentNode contentNode) {
+    public AbstractTreeNode changeParentAndRegister(ContentNode contentNode) {
         return this.changeParentAndRegister(contentNode, -1);
     }
 
+    /**
+     * write this AbstractTreeNode's data to a writer.
+     */
     public abstract void write(Writer writer);
 
+    /**
+     * format the tree node.
+     *
+     * @param space spaces before the node.
+     *              if space < 0 then no space is before the node.
+     */
     public abstract void format(int space);
 
     @Override

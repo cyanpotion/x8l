@@ -7,7 +7,7 @@ public class X8lDemo {
     public static void main(String args[]) {
         FileReader reader = null;
         try {
-            reader = new FileReader(new File("README"));
+            reader = new FileReader(new File("README.md"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
