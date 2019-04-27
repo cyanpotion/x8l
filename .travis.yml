@@ -1,7 +1,8 @@
-language: bash
+language: java
 sudo: true
 dist: trusty
-before_install: true
+before_install:
+  - chmod +x mvnw
 git:
   depth: 1
 cache:
@@ -12,7 +13,17 @@ env:
   global:
 matrix:
   include:
-    - os: windows
+    - os: linux
+      jdk: openjdk8
+    - os: linux
+      jdk: openjdk9
+    - os: linux
+      jdk: openjdk10
+    - os: linux
+      jdk: openjdk11
+    - os: linux
+      jdk: openjdk12
+    - os: linux
+      jdk: openjdk-ea
 script:
-  - git clone --depth=1 https://github.com/XenoAmess/java-ci.git
-  - ./java-ci/java-ci-test.cmd
+  - ./mvnw clean package -Dmaven.javadoc.skip=false
