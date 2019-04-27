@@ -1,10 +1,11 @@
-import com.xenoamess.x8l.X8lTree;
+package com.xenoamess.x8l;
 
 import java.io.*;
 
-public class X8lDemo {
+public class X8lTest {
 
     public static void main(String args[]) {
+        System.out.println(Version.VERSION);
         Reader reader = new StringReader(
                 "<<here goes a basic demo of x8l>\n" +
                         "<<first,a comment is like this>  \n" +
@@ -144,5 +145,7 @@ public class X8lDemo {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 }
