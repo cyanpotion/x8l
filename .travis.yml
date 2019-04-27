@@ -15,5 +15,10 @@ matrix:
     - os: windows
 script:
   - git clone --depth=1 https://github.com/XenoAmess/java-ci.git
-  - copy "java-ci\java-ci-test.cmd" ".\"
+  - (
+    echo .\java-ci\7z x """.\java-ci\jdk.7z.001""" -y -aos
+    echo set JAVA_HOME=.\java-ci\jdk
+    echo set path=%path%;%JAVA_HOME%\bin
+    echo .\java-ci\mvnw.cmd clean package -Dmaven.javadoc.skip=false
+    ) > java-ci\java-ci-test.cmd
   - java-ci-test.cmd
