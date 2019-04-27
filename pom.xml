@@ -56,15 +56,9 @@
             </resource>
         </resources>
 
-        <!--        <pluginManagement>-->
+        
         <plugins>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--                <configuration>-->
-            <!--                    <argLine>-J-Duser.language=en_US</argLine>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -160,7 +154,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <!--        </pluginManagement>-->
     </build>
 
     <distributionManagement>
