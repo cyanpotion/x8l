@@ -83,7 +83,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * format the tree node.
      *
      * @param space spaces before the node.
-     *              if space < 0 then no space is before the node.
+     *              if space is less than 0 then no space is before the node.
      */
     public abstract void format(int space);
 

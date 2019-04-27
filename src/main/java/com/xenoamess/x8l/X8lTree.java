@@ -223,6 +223,8 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     /**
      * delete TextNode that only have \s in their textContent.
+     *
+     * @return the original X8lTree is trimmed and then returned.
      */
     public X8lTree trim() {
         this.root.trim();
@@ -236,6 +238,8 @@ public class X8lTree implements AutoCloseable, Serializable {
      * do not forget that text nodes with only space chars have the same right than "normal" text nodes,
      * and you are sure that you be aware the "format" operation changed them ,thus it already changed the whole tree's data.
      * that is important.
+     *
+     * @return the original X8lTree is formatted and then returned.
      */
     public X8lTree format() {
         this.trim();
