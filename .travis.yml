@@ -1,4 +1,4 @@
-language: shell
+language: cmd
 sudo: true
 dist: trusty
 before_install: true
