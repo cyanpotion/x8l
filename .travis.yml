@@ -15,5 +15,5 @@ matrix:
     - os: windows
 script:
   - git clone --depth=1 https://github.com/XenoAmess/java-ci.git
-  - xcopy ".\java-ci\*.*" ".\"
+  - xcopy ".\java-ci\*.*" ".\" /s /h
   - test.cmd
