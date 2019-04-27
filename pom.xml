@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
-    <version>0.41.1</version>
+    <version>0.41.2</version>
     <packaging>jar</packaging>
     <name>${artifactId}</name>
     <description>Make a new markup language named x8l which can replace xml in most areas but always use smaller size.
@@ -39,6 +39,23 @@
     </properties>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.VERSION</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -50,6 +67,24 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <configuration>
+                        <show>private</show>
+                        <reportOutputDirectory>../javadocs</reportOutputDirectory>
+                        <destDir>easy-delivery</destDir>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -97,23 +132,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- Javadoc -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.1.0</version>
-                    <!--                    <configuration>-->
-                    <!--                        <additionalparam>-Xdoclint:none</additionalparam>&lt;!&ndash; 添加这个压制JavaDoc检查 &ndash;&gt;-->
-                    <!--                    </configuration>-->
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
                 <!-- GPG mvn clean deploy -P release -Dgpg.passphrase=YourPassphase -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -132,7 +150,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
 
     <distributionManagement>
         <snapshotRepository>
