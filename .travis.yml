@@ -14,14 +14,6 @@ env:
 matrix:
   include:
     - os: linux
-      jdk: openjdk8
-    - os: linux
-      jdk: openjdk9
-    - os: linux
-      jdk: openjdk10
-    - os: linux
-      jdk: openjdk11
-    - os: linux
       jdk: openjdk12
     - os: linux
       jdk: openjdk-ea
