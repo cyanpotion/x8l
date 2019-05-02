@@ -225,9 +225,9 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public List<ContentNode> getContentNodesFromChildrenThatNameIs(String name, int maxSize) {
-        List<ContentNode> res = new ArrayList<ContentNode>();
+        List<ContentNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.children) {
-            if (au instanceof CommentNode && ((ContentNode) au).getName().equals(name)) {
+            if (au instanceof ContentNode && ((ContentNode) au).getName().equals(name)) {
                 res.add((ContentNode) au);
                 if (res.size() == maxSize) {
                     return res;
