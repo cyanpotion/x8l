@@ -3,7 +3,6 @@ Make a new markup language named x8l which can replace xml in most areas but alw
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xenoamess/x8l/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xenoamess/x8l)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-<br/>
 [![Build Status](https://travis-ci.org/cyanpotion/x8l.svg?branch=master)](https://travis-ci.org/cyanpotion/x8l)
 [![Build status](https://ci.appveyor.com/api/projects/status/594i6j3y8w8o2a69?svg=true)](https://ci.appveyor.com/project/XenoAmess/x8l)
 
