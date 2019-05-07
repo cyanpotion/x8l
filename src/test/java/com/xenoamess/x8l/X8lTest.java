@@ -4,7 +4,8 @@ import java.io.*;
 
 public class X8lTest {
 
-    public static void main(String args[]) {
+    @org.junit.jupiter.api.Test
+    public static void test() {
         System.out.println(Version.VERSION);
         Reader reader = new StringReader(
                 "<<here goes a basic demo of x8l>\n" +
@@ -13,7 +14,8 @@ public class X8lTest {
                         "<<<or even this this.< in a comment need not be transcoded.>  \n" +
                         "<<use %% to transcode.for example, %>, and this is still in it.>  \n" +
                         "<<the content between the first < and the second < is treated as \"attributes\".>  \n" +
-                        "<<the order of attributes is important, and node with different order of same attributes are different.>\n" +
+                        "<<the order of attributes is important, and node with different order of same attributes are" +
+                        " different.>\n" +
                         "<<attribute can have = in it.if so, it will be departed into key and value.>\n" +
                         "<<key is the part left than the first =,and value is the rest content.>\n" +
                         "<a=b>>\n" +
@@ -21,7 +23,8 @@ public class X8lTest {
                         "<<remember, the first =.>\n" +
                         "<a=b=c>>\n" +
                         "<<that means this node's key is \"a\" and value is \"b=c\">\n" +
-                        "<<if there is no \"=\" in a attribute then the whole string is the key,and \"\" is the value>\n" +
+                        "<<if there is no \"=\" in a attribute then the whole string is the key,and \"\" is the " +
+                        "value>\n" +
                         "<<spaces between attributes are treated as nothing, so does '\\r' '\\n' '\\t'>\n" +
                         "<<which means you can write it like this>\n" +
                         "<views\n" +
@@ -121,7 +124,11 @@ public class X8lTest {
         );
 
         X8lTree tree = new X8lTree(reader);
-        tree.parse();
+        try {
+            tree.parse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("BuildFinished");
         tree.show();
 

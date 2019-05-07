@@ -6,6 +6,20 @@
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
     <version>0.42.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>Make a new markup language named x8l which can replace xml in

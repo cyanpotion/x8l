@@ -49,7 +49,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static X8lTree loadFromString(String string) {
+    public static X8lTree loadFromString(String string) throws IOException {
         X8lTree res = null;
         try (
                 StringReader stringReader = new StringReader(string);
@@ -97,7 +97,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public void read(Reader reader) {
+    public void read(Reader reader) throws IOException {
         this.parse(reader);
     }
 
@@ -106,7 +106,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         writer.flush();
     }
 
-    public void parse() {
+    public void parse() throws IOException {
         this.parse(this.reader);
     }
 
