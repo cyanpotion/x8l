@@ -10,7 +10,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return root;
     }
 
-    protected static class X8lGrammarException extends RuntimeException {
+    protected static class X8lGrammarException extends IOException {
     }
 
     private final ContentNode root = new ContentNode(null);
@@ -111,7 +111,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")
-    public void parse(Reader reader) {
+    public void parse(Reader reader) throws IOException {
         assert (reader != null);
         int nowInt;
         ContentNode nowNode = this.getRoot();
@@ -122,12 +122,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         StringBuilder stringBuilder = new StringBuilder();
         char nowChar;
         while (true) {
-            try {
-                nowInt = reader.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new X8lGrammarException();
-            }
+            nowInt = reader.read();
             nowChar = (char) nowInt;
             if (nowInt == -1) {
                 if (nowNode == this.getRoot() && !inAttributeArea && !inCommentArea) {
@@ -137,7 +132,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                     throw new X8lGrammarException();
                 }
             } else if (lastCharIsModulus) {
-                stringBuilder.append((char) nowChar);
+                stringBuilder.append(nowChar);
                 lastCharIsModulus = false;
             } else if (nowChar == '%') {
                 lastCharIsModulus = true;
@@ -147,7 +142,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                     stringBuilder = new StringBuilder();
                     inCommentArea = false;
                 } else {
-                    stringBuilder.append((char) nowChar);
+                    stringBuilder.append(nowChar);
                 }
             } else if (nowChar == '<') {
                 if (inAttributeArea) {
@@ -161,19 +156,15 @@ public class X8lTree implements AutoCloseable, Serializable {
                         inCommentArea = true;
                     }
                 } else {
-
                     new TextNode(nowNode, stringBuilder.toString());
                     stringBuilder = new StringBuilder();
-
                     nowNode = new ContentNode(nowNode);
                     inAttributeArea = true;
                 }
             } else if (nowChar == '>') {
                 if (!inAttributeArea) {
-
                     new TextNode(nowNode, stringBuilder.toString());
                     stringBuilder = new StringBuilder();
-
                     nowNode = nowNode.getParent();
                     if (nowNode == null) {
                         throw new X8lGrammarException();
@@ -192,10 +183,10 @@ public class X8lTree implements AutoCloseable, Serializable {
                         stringBuilder = new StringBuilder();
                     }
                 } else {
-                    stringBuilder.append((char) nowChar);
+                    stringBuilder.append(nowChar);
                 }
             } else {
-                stringBuilder.append((char) nowChar);
+                stringBuilder.append(nowChar);
             }
         }
     }
