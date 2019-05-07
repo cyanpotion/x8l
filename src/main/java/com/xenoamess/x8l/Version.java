@@ -51,7 +51,8 @@ public class Version {
     public static String loadFile(String resourceFilePath) {
         String res = "";
         try (
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getURL(resourceFilePath).openStream()));
+                BufferedReader bufferedReader =
+                        new BufferedReader(new InputStreamReader(getURL(resourceFilePath).openStream()));
         ) {
             final StringBuffer sb = new StringBuffer();
             String tmp;

@@ -9,20 +9,19 @@ import java.io.Writer;
  * @author XenoAmess
  */
 public abstract class AbstractTreeNode implements AutoCloseable {
-    public static boolean DEBUG = false;
-    public ContentNode parent;
+    private ContentNode parent;
 
     public AbstractTreeNode(ContentNode parent) {
-        this.parent = parent;
-        if (this.parent != null) {
-            this.parent.children.add(this);
+        this.setParent(parent);
+        if (this.getParent() != null) {
+            this.getParent().getChildren().add(this);
         }
     }
 
     public AbstractTreeNode(ContentNode parent, int index) {
-        this.parent = parent;
-        if (this.parent != null) {
-            this.parent.children.add(index, this);
+        this.setParent(parent);
+        if (this.getParent() != null) {
+            this.getParent().getChildren().add(index, this);
         }
     }
 
@@ -31,39 +30,39 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         System.out.println();
         System.out.println("show!");
         System.out.println("self : " + this);
-        System.out.println("parent : " + this.parent);
+        System.out.println("parent : " + this.getParent());
     }
 
     @Override
     public void close() {
-        if (this.parent != null) {
-            if (this.parent.children != null) {
-                this.parent.children.remove(this);
+        if (this.getParent() != null) {
+            if (this.getParent().getChildren() != null) {
+                this.getParent().getChildren().remove(this);
             }
         }
-        this.parent = null;
+        this.setParent(null);
     }
 
     public AbstractTreeNode removeParent() {
-        if (this.parent != null) {
-            this.parent.children.remove(this);
-            this.parent = null;
+        if (this.getParent() != null) {
+            this.getParent().getChildren().remove(this);
+            this.setParent(null);
         }
         return this;
     }
 
     public AbstractTreeNode changeParent(ContentNode contentNode) {
         this.removeParent();
-        this.parent = contentNode;
+        this.setParent(contentNode);
         return this;
     }
 
     public AbstractTreeNode changeParentAndRegister(ContentNode contentNode, int index) {
         this.changeParent(contentNode);
         if (index == -1) {
-            this.parent.children.add(this);
+            this.getParent().getChildren().add(this);
         } else {
-            this.parent.children.add(index, this);
+            this.getParent().getChildren().add(index, this);
         }
         return this;
     }
@@ -89,10 +88,13 @@ public abstract class AbstractTreeNode implements AutoCloseable {
 
     @Override
     public boolean equals(Object treeNode) {
-        if (treeNode.getClass().equals(this.getClass())) {
-            return this.toString().equals(treeNode.toString());
+        if (treeNode == null) {
+            return false;
         }
-        return false;
+        if (!treeNode.getClass().equals(this.getClass())) {
+            return false;
+        }
+        return this.toString().equals(treeNode.toString());
     }
 
     @Override
@@ -114,5 +116,13 @@ public abstract class AbstractTreeNode implements AutoCloseable {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public ContentNode getParent() {
+        return parent;
+    }
+
+    public void setParent(ContentNode parent) {
+        this.parent = parent;
     }
 }

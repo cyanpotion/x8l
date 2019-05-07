@@ -7,14 +7,14 @@ import java.io.Writer;
  * @author XenoAmess
  */
 public class TextNode extends AbstractTreeNode {
-    public String textContent;
+    private String textContent;
 
     public TextNode(ContentNode parent, String textContent) {
         super(parent);
         if (textContent == null) {
             textContent = "";
         }
-        this.textContent = textContent;
+        this.setTextContent(textContent);
     }
 
     public TextNode(ContentNode parent, int index, String textContent) {
@@ -22,26 +22,26 @@ public class TextNode extends AbstractTreeNode {
         if (textContent == null) {
             textContent = "";
         }
-        this.textContent = textContent;
+        this.setTextContent(textContent);
     }
 
 
     @Override
     public void show() {
         super.show();
-        System.out.println("textContent : " + this.textContent);
+        System.out.println("textContent : " + this.getTextContent());
     }
 
     @Override
     public void close() {
         super.close();
-        this.textContent = null;
+        this.setTextContent(null);
     }
 
     @Override
     public void write(Writer writer) {
         try {
-            writer.append(X8lTree.transcode(textContent));
+            writer.append(X8lTree.transcode(getTextContent()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,6 +49,14 @@ public class TextNode extends AbstractTreeNode {
 
     @Override
     public void format(int space) {
-        this.textContent = this.textContent.trim();
+        this.setTextContent(this.getTextContent().trim());
+    }
+
+    public String getTextContent() {
+        return textContent;
+    }
+
+    public void setTextContent(String textContent) {
+        this.textContent = textContent;
     }
 }

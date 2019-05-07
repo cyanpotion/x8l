@@ -7,14 +7,14 @@ import java.io.Writer;
  * @author XenoAmess
  */
 public class CommentNode extends AbstractTreeNode {
-    public String textContent;
+    private String textContent;
 
     public CommentNode(ContentNode parent, String textContent) {
         super(parent);
         if (textContent == null) {
             textContent = "";
         }
-        this.textContent = textContent;
+        this.setTextContent(textContent);
     }
 
     public CommentNode(ContentNode parent, int index, String textContent) {
@@ -22,19 +22,19 @@ public class CommentNode extends AbstractTreeNode {
         if (textContent == null) {
             textContent = "";
         }
-        this.textContent = textContent;
+        this.setTextContent(textContent);
     }
 
     @Override
     public void show() {
         super.show();
-        System.out.println("textContent : " + this.textContent);
+        System.out.println("textContent : " + this.getTextContent());
     }
 
     @Override
     public void close() {
         super.close();
-        this.textContent = null;
+        this.setTextContent(null);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CommentNode extends AbstractTreeNode {
         try {
             writer.append('<');
             writer.append('<');
-            writer.append(X8lTree.transcode(textContent));
+            writer.append(X8lTree.transcode(getTextContent()));
             writer.append('>');
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,6 +51,14 @@ public class CommentNode extends AbstractTreeNode {
 
     @Override
     public void format(int space) {
-        this.textContent = this.textContent.trim();
+        this.setTextContent(this.getTextContent().trim());
+    }
+
+    public String getTextContent() {
+        return textContent;
+    }
+
+    public void setTextContent(String textContent) {
+        this.textContent = textContent;
     }
 }

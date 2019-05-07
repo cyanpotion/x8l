@@ -165,10 +165,10 @@ public class X8lTree implements AutoCloseable, Serializable {
                 }
             } else if (nowChar == '<') {
                 if (inAttributeArea) {
-                    if (!nowNode.attributes.isEmpty() || stringBuilder.length() != 0) {
+                    if (!nowNode.getAttributes().isEmpty() || stringBuilder.length() != 0) {
                         throw new X8lGrammarException();
                     } else {
-                        ContentNode nowParent = nowNode.parent;
+                        ContentNode nowParent = nowNode.getParent();
                         nowNode.close();
                         nowNode = nowParent;
                         inAttributeArea = false;
@@ -188,7 +188,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                     new TextNode(nowNode, stringBuilder.toString());
                     stringBuilder = new StringBuilder();
 
-                    nowNode = nowNode.parent;
+                    nowNode = nowNode.getParent();
                     if (nowNode == null) {
                         throw new X8lGrammarException();
                     }
@@ -236,7 +236,8 @@ public class X8lTree implements AutoCloseable, Serializable {
      * notice that format will trim every text content in text nodes and comment nodes.
      * that is designed to do so, in order to notice the user that, when you format the tree,
      * do not forget that text nodes with only space chars have the same right than "normal" text nodes,
-     * and you are sure that you be aware the "format" operation changed them ,thus it already changed the whole tree's data.
+     * and you are sure that you be aware the "format" operation changed them ,thus it already changed the whole
+     * tree's data.
      * that is important.
      *
      * @return the original X8lTree is formatted and then returned.
@@ -295,14 +296,14 @@ public class X8lTree implements AutoCloseable, Serializable {
         return this.toString().hashCode();
     }
 
-    public void readObject(ObjectInputStream objectInputStream)
+    private void readObject(ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
         try (Reader reader = new InputStreamReader(objectInputStream)) {
             this.read(reader);
         }
     }
 
-    public void writeObject(ObjectOutputStream objectOutputStream)
+    private void writeObject(ObjectOutputStream objectOutputStream)
             throws IOException {
         try (Writer writer = new OutputStreamWriter(objectOutputStream)) {
             this.write(writer);
