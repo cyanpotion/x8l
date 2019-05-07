@@ -121,7 +121,6 @@ public class X8lTest {
         );
 
         X8lTree tree = new X8lTree(reader);
-        tree.debug = true;
         tree.parse();
         System.out.println("BuildFinished");
         tree.show();

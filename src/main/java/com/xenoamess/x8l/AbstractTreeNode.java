@@ -1,6 +1,5 @@
 package com.xenoamess.x8l;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -110,8 +109,6 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         ) {
             this.write(stringWriter);
             res = stringWriter.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

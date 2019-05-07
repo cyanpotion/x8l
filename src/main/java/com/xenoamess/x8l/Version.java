@@ -44,8 +44,7 @@ public class Version {
      * @return the url returned
      */
     public static URL getURL(String resourceFilePath) {
-        final URL res = Version.class.getResource(resourceFilePath);
-        return res;
+        return Version.class.getResource(resourceFilePath);
     }
 
     public static String loadFile(String resourceFilePath) {
@@ -54,7 +53,7 @@ public class Version {
                 BufferedReader bufferedReader =
                         new BufferedReader(new InputStreamReader(getURL(resourceFilePath).openStream()));
         ) {
-            final StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
             String tmp;
             while (true) {
                 tmp = bufferedReader.readLine();

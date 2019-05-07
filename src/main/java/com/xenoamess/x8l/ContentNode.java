@@ -11,9 +11,9 @@ import java.util.Map;
  * @author XenoAmess
  */
 public class ContentNode extends AbstractTreeNode {
-    private List<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
-    private Map<String, String> attributes = new HashMap<String, String>();
-    private List<String> attributesKeyList = new ArrayList<String>();
+    private List<AbstractTreeNode> children = new ArrayList<>();
+    private Map<String, String> attributes = new HashMap<>();
+    private List<String> attributesKeyList = new ArrayList<>();
 
     public ContentNode(ContentNode parent) {
         super(parent);
@@ -35,7 +35,7 @@ public class ContentNode extends AbstractTreeNode {
 
 
     public void addAttribute(String attributeString) {
-        int index = attributeString.indexOf("=");
+        int index = attributeString.indexOf('=');
         if (index == -1) {
             this.addAttribute(attributeString, null);
         } else {
@@ -44,8 +44,9 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public void removeAttribute(String attributeString) {
-        int index = attributeString.indexOf("=");
+        int index = attributeString.indexOf('=');
         if (index == -1) {
+            //key not exist, thus do nothing here.
         } else {
             attributeString = attributeString.substring(0, index);
         }
@@ -77,7 +78,7 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public void trim() {
-        List<AbstractTreeNode> newChildren = new ArrayList<AbstractTreeNode>();
+        List<AbstractTreeNode> newChildren = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
             //it is done in this way to make sure that:
             //  if you extend this library,and make a class extended ContentNode, it will be call trim() here.
@@ -149,7 +150,7 @@ public class ContentNode extends AbstractTreeNode {
         }
 
         if (this.getChildren().size() > 1 || (this.getChildren().size() == 1 && !(this.getChildren().get(0) instanceof TextNode))) {
-            List<AbstractTreeNode> newChildren = new ArrayList<AbstractTreeNode>();
+            List<AbstractTreeNode> newChildren = new ArrayList<>();
             for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
                 newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
                 newChildren.add(abstractTreeNode);
@@ -165,7 +166,7 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public List<TextNode> getTextNodesFromChildren(int maxSize) {
-        List<TextNode> res = new ArrayList<TextNode>();
+        List<TextNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
             if (au instanceof TextNode) {
                 res.add((TextNode) au);
@@ -182,7 +183,7 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public List<ContentNode> getContentNodesFromChildren(int maxSize) {
-        List<ContentNode> res = new ArrayList<ContentNode>();
+        List<ContentNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
             if (au instanceof ContentNode) {
                 res.add((ContentNode) au);
@@ -200,7 +201,7 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public List<CommentNode> getCommentNodesFromChildren(int maxSize) {
-        List<CommentNode> res = new ArrayList<CommentNode>();
+        List<CommentNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
             if (au instanceof CommentNode) {
                 res.add((CommentNode) au);

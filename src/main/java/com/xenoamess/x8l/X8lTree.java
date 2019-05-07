@@ -9,9 +9,8 @@ public class X8lTree implements AutoCloseable, Serializable {
     protected static class X8lGrammarException extends RuntimeException {
     }
 
-    public boolean debug;
     public ContentNode root = new ContentNode(null);
-    public Reader reader;
+    private Reader reader;
 
     public static X8lTree loadFromFile(File file) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
@@ -23,8 +22,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         ) {
             res = new X8lTree(fileReader);
             res.parse();
-        } catch (FileNotFoundException e) {
-            throw e;
         }
         return res;
     }
@@ -35,10 +32,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw e;
+            if (!file.createNewFile()) {
+                System.err.println("File not exist when check but is already there when try to create it. Will " +
+                        "use it directly.");
             }
         }
 
@@ -46,8 +42,6 @@ public class X8lTree implements AutoCloseable, Serializable {
                 FileWriter fileWriter = new FileWriter(file);
         ) {
             x8lTree.write(fileWriter);
-        } catch (IOException e) {
-            throw e;
         }
     }
 
@@ -121,11 +115,6 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     @SuppressWarnings("AlibabaMethodTooLong")
     public void parse(Reader reader) {
-        if (this.debug) {
-            System.out.println("building:");
-            System.out.println(this);
-            System.out.println();
-        }
         this.root = new ContentNode(null);
         int nowInt;
         ContentNode nowNode = this.root;
@@ -298,8 +287,8 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     private void readObject(ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
-        try (Reader reader = new InputStreamReader(objectInputStream)) {
-            this.read(reader);
+        try (Reader objectInputStreamReader = new InputStreamReader(objectInputStream)) {
+            this.read(objectInputStreamReader);
         }
     }
 
