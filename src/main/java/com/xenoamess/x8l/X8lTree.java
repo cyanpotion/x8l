@@ -101,13 +101,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.parse(reader);
     }
 
-    public void write(Writer writer) {
+    public void write(Writer writer) throws IOException {
         this.getRoot().write(writer);
-        try {
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.flush();
     }
 
     public void parse() {
