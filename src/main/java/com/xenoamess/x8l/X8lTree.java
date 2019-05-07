@@ -6,10 +6,14 @@ import java.io.*;
  * @author XenoAmess
  */
 public class X8lTree implements AutoCloseable, Serializable {
+    public ContentNode getRoot() {
+        return root;
+    }
+
     protected static class X8lGrammarException extends RuntimeException {
     }
 
-    public ContentNode root = new ContentNode(null);
+    private final ContentNode root = new ContentNode(null);
     private Reader reader;
 
     public static X8lTree loadFromFile(File file) throws IOException {
@@ -63,8 +67,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         ) {
             x8lTree.write(stringWriter);
             res = stringWriter.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,8 +86,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      */
     @Override
     public void close() {
-        this.root.close();
-        this.root = null;
+        this.getRoot().close();
         if (this.reader != null) {
             try {
                 this.reader.close();
@@ -101,7 +102,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public void write(Writer writer) {
-        this.root.write(writer);
+        this.getRoot().write(writer);
         try {
             writer.flush();
         } catch (IOException e) {
@@ -115,9 +116,9 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     @SuppressWarnings("AlibabaMethodTooLong")
     public void parse(Reader reader) {
-        this.root = new ContentNode(null);
+        assert (reader != null);
         int nowInt;
-        ContentNode nowNode = this.root;
+        ContentNode nowNode = this.getRoot();
         boolean inAttributeArea = false;
         boolean inCommentArea = false;
         boolean lastCharIsModulus = false;
@@ -133,7 +134,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             }
             nowChar = (char) nowInt;
             if (nowInt == -1) {
-                if (nowNode == this.root && !inAttributeArea && !inCommentArea) {
+                if (nowNode == this.getRoot() && !inAttributeArea && !inCommentArea) {
                     new TextNode(nowNode, stringBuilder.toString());
                     break;
                 } else {
@@ -207,7 +208,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * print contents to console for debug.
      */
     public void show() {
-        root.show();
+        getRoot().show();
     }
 
     /**
@@ -216,7 +217,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @return the original X8lTree is trimmed and then returned.
      */
     public X8lTree trim() {
-        this.root.trim();
+        this.getRoot().trim();
         return this;
     }
 
@@ -233,7 +234,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      */
     public X8lTree format() {
         this.trim();
-        this.root.format(-1);
+        this.getRoot().format(-1);
         return this;
     }
 

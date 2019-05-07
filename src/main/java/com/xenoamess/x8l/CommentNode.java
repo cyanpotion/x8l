@@ -38,15 +38,11 @@ public class CommentNode extends AbstractTreeNode {
     }
 
     @Override
-    public void write(Writer writer) {
-        try {
-            writer.append('<');
-            writer.append('<');
-            writer.append(X8lTree.transcode(getTextContent()));
-            writer.append('>');
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void write(Writer writer) throws IOException {
+        writer.append('<');
+        writer.append('<');
+        writer.append(X8lTree.transcode(getTextContent()));
+        writer.append('>');
     }
 
     @Override

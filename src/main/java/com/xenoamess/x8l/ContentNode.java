@@ -100,36 +100,32 @@ public class ContentNode extends AbstractTreeNode {
 
 
     @Override
-    public void write(Writer writer) {
-        try {
-            if (this.getParent() == null) {
-                for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-                    abstractTreeNode.write(writer);
-                }
-            } else {
-                writer.append('<');
-                boolean firstAttribute = true;
-                for (String key : getAttributesKeyList()) {
-                    if (firstAttribute) {
-                        firstAttribute = false;
-                    } else {
-                        writer.append(' ');
-                    }
-                    writer.append(X8lTree.transcode(key));
-                    String value = getAttributes().get(key);
-                    if (!"".equals(value)) {
-                        writer.append("=");
-                        writer.append(X8lTree.transcode(value));
-                    }
-                }
-                writer.append('>');
-                for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-                    abstractTreeNode.write(writer);
-                }
-                writer.append('>');
+    public void write(Writer writer) throws IOException {
+        if (this.getParent() == null) {
+            for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
+                abstractTreeNode.write(writer);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            writer.append('<');
+            boolean firstAttribute = true;
+            for (String key : getAttributesKeyList()) {
+                if (firstAttribute) {
+                    firstAttribute = false;
+                } else {
+                    writer.append(' ');
+                }
+                writer.append(X8lTree.transcode(key));
+                String value = getAttributes().get(key);
+                if (!"".equals(value)) {
+                    writer.append("=");
+                    writer.append(X8lTree.transcode(value));
+                }
+            }
+            writer.append('>');
+            for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
+                abstractTreeNode.write(writer);
+            }
+            writer.append('>');
         }
     }
 

@@ -34,10 +34,8 @@ public abstract class AbstractTreeNode implements AutoCloseable {
 
     @Override
     public void close() {
-        if (this.getParent() != null) {
-            if (this.getParent().getChildren() != null) {
-                this.getParent().getChildren().remove(this);
-            }
+        if (this.getParent() != null && this.getParent().getChildren() != null) {
+            this.getParent().getChildren().remove(this);
         }
         this.setParent(null);
     }
@@ -75,7 +73,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      *
      * @param writer the writer to write to.
      */
-    public abstract void write(Writer writer);
+    public abstract void write(Writer writer) throws IOException;
 
     /**
      * format the tree node.

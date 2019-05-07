@@ -39,12 +39,8 @@ public class TextNode extends AbstractTreeNode {
     }
 
     @Override
-    public void write(Writer writer) {
-        try {
-            writer.append(X8lTree.transcode(getTextContent()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void write(Writer writer) throws IOException {
+        writer.append(X8lTree.transcode(getTextContent()));
     }
 
     @Override
