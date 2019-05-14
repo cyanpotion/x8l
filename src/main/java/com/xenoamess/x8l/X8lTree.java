@@ -10,8 +10,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         return root;
     }
 
-    protected static class X8lGrammarException extends IOException {
-    }
 
     private final ContentNode root = new ContentNode(null);
     private Reader reader;
@@ -129,7 +127,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                     new TextNode(nowNode, stringBuilder.toString());
                     break;
                 } else {
-                    throw new X8lGrammarException();
+                    throw new X8lGrammarException("Unexpected stop of x8l file.");
                 }
             } else if (lastCharIsModulus) {
                 stringBuilder.append(nowChar);
@@ -147,7 +145,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             } else if (nowChar == '<') {
                 if (inAttributeArea) {
                     if (!nowNode.getAttributes().isEmpty() || stringBuilder.length() != 0) {
-                        throw new X8lGrammarException();
+                        throw new X8lGrammarException("Unexpected < in attribute area of a content node.");
                     } else {
                         ContentNode nowParent = nowNode.getParent();
                         nowNode.close();
@@ -166,9 +164,6 @@ public class X8lTree implements AutoCloseable, Serializable {
                     new TextNode(nowNode, stringBuilder.toString());
                     stringBuilder = new StringBuilder();
                     nowNode = nowNode.getParent();
-                    if (nowNode == null) {
-                        throw new X8lGrammarException();
-                    }
                 } else {
                     if (stringBuilder.length() != 0) {
                         nowNode.addAttribute(stringBuilder.toString());

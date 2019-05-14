@@ -1,11 +1,13 @@
 package com.xenoamess.x8l;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.*;
 
 public class X8lTest {
 
-    @org.junit.jupiter.api.Test
-    public static void test() {
+    @Test
+    public void test() {
         boolean flag0 = false;
         try {
             System.out.println(Version.VERSION);
