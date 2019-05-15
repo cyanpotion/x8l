@@ -233,10 +233,16 @@ public class ContentNode extends AbstractTreeNode {
 
 
     public void append(AbstractTreeNode abstractTreeNode) {
+        if (abstractTreeNode == null) {
+            return;
+        }
         this.getChildren().add(abstractTreeNode);
     }
 
     public void appendAll(Collection<AbstractTreeNode> abstractTreeNodes) {
+        if (abstractTreeNodes == null) {
+            return;
+        }
         this.getChildren().addAll(abstractTreeNodes);
     }
 
