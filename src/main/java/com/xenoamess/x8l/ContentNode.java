@@ -243,7 +243,7 @@ public class ContentNode extends AbstractTreeNode {
         if (abstractTreeNode == null) {
             return;
         }
-        abstractTreeNode.changeParent(this);
+        abstractTreeNode.setParent(this);
         this.getChildren().add(abstractTreeNode);
     }
 

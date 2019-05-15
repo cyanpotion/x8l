@@ -48,12 +48,29 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         return this;
     }
 
+    /**
+     * delete this from old parent's children.
+     * then set this node's parent to new parent node.
+     *
+     * @param contentNode new parent node.
+     * @return
+     */
     public AbstractTreeNode changeParent(ContentNode contentNode) {
         this.removeParent();
         this.setParent(contentNode);
         return this;
     }
 
+    /**
+     * delete this from old parent's children.
+     * then set this node's parent to new parent node.
+     * <p>
+     * then add this node into new parent node's children's assigned position.
+     *
+     * @param contentNode new parent node.
+     * @param index       insert index of this node into new parent's children
+     * @return
+     */
     public AbstractTreeNode changeParentAndRegister(ContentNode contentNode, int index) {
         this.changeParent(contentNode);
         if (index == -1) {
