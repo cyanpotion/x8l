@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * @author XenoAmess
  */
-public class X8lTree implements AutoCloseable, Serializable {
+public class X8lTree implements AutoCloseable, Serializable, Cloneable {
     public ContentNode getRoot() {
         return root;
     }
@@ -282,10 +282,29 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
+    /**
+     * Append an X8lTree upon this X8lTree.
+     * Notice that this function will break the original X8lTree.
+     *
+     * @param patch patch tree.
+     * @see ContentNode
+     */
     public void append(X8lTree patch) {
         if (patch == null) {
             return;
         }
         this.getRoot().appendAll(patch.getRoot().getChildren());
+    }
+
+    @Override
+    public X8lTree clone() {
+        X8lTree res = null;
+        try {
+            res = X8lTree.loadFromString(this.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert (res != null);
+        return res;
     }
 }

@@ -232,18 +232,35 @@ public class ContentNode extends AbstractTreeNode {
     }
 
 
+    /**
+     * Append an AbstractTreeNode as a new child of this node.
+     * Notice that this function will change parent of the new added child nodes.
+     *
+     * @param abstractTreeNode new child node.
+     * @see AbstractTreeNode
+     */
     public void append(AbstractTreeNode abstractTreeNode) {
         if (abstractTreeNode == null) {
             return;
         }
+        abstractTreeNode.changeParent(this);
         this.getChildren().add(abstractTreeNode);
     }
 
+    /**
+     * Append an Collection of AbstractTreeNode as new children of this node.
+     * Notice that this function will change parent of the new added children nodes.
+     *
+     * @param abstractTreeNodes new children collection.
+     * @see AbstractTreeNode
+     */
     public void appendAll(Collection<AbstractTreeNode> abstractTreeNodes) {
         if (abstractTreeNodes == null) {
             return;
         }
-        this.getChildren().addAll(abstractTreeNodes);
+        for (AbstractTreeNode abstractTreeNode : abstractTreeNodes) {
+            this.append(abstractTreeNode);
+        }
     }
 
     //---getters and setters
