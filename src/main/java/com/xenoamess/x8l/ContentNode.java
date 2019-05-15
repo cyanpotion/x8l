@@ -2,10 +2,7 @@ package com.xenoamess.x8l;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author XenoAmess
@@ -233,6 +230,17 @@ public class ContentNode extends AbstractTreeNode {
         }
         return res;
     }
+
+
+    public void append(AbstractTreeNode abstractTreeNode) {
+        this.getChildren().add(abstractTreeNode);
+    }
+
+    public void appendAll(Collection<AbstractTreeNode> abstractTreeNodes) {
+        this.getChildren().addAll(abstractTreeNodes);
+    }
+
+    //---getters and setters
 
     public List<AbstractTreeNode> getChildren() {
         return children;

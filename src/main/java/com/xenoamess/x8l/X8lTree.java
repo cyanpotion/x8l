@@ -281,4 +281,8 @@ public class X8lTree implements AutoCloseable, Serializable {
             this.write(writer);
         }
     }
+
+    public void append(X8lTree patch) {
+        this.getRoot().appendAll(patch.getRoot().getChildren());
+    }
 }
