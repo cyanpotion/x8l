@@ -108,7 +108,6 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
         this.parse(this.reader);
     }
 
-    @SuppressWarnings("AlibabaMethodTooLong")
     public void parse(Reader reader) throws IOException {
         assert (reader != null);
         int nowInt;
