@@ -24,8 +24,6 @@
 
 package com.xenoamess.x8l;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,6 +55,17 @@ public class Version implements Comparable<Version> {
     public static final String VERSION = loadCurrentVersion();
     public static final String VERSION_MISSING = "VersionMissing";
 
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null) {
+            return false;
+        }
+        if (Version.class != object.getClass()) {
+            return false;
+        }
+        return this.version.equals(((Version) object).version);
+    }
 
     public static int compareVersions(String versionString1, String versionString2) {
         String snapshotString = "-SNAPSHOT";
@@ -95,7 +104,7 @@ public class Version implements Comparable<Version> {
     private static String loadCurrentVersion() {
         String res;
         res = Version.loadFile("/VERSION/" + Version.class.getPackage().getName() + ".VERSION");
-        if (StringUtils.isEmpty(res)) {
+        if ("".equals(res)) {
             res = VERSION_MISSING;
             System.err.println("version missing!");
         }
