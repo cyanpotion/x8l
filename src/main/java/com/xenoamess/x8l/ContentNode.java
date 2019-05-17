@@ -70,9 +70,7 @@ public class ContentNode extends AbstractTreeNode {
 
     public void removeAttribute(String attributeString) {
         int index = attributeString.indexOf('=');
-        if (index == -1) {
-            //key not exist, thus do nothing here.
-        } else {
+        if (index != -1) {
             attributeString = attributeString.substring(0, index);
         }
         this.getAttributes().remove(attributeString);
@@ -125,11 +123,14 @@ public class ContentNode extends AbstractTreeNode {
 
     @Override
     public void format(int space) {
+        //notice that space can less than 0 here.
+        //thus this loop can never be changed to String.repeat().
+        //please ignore the warning about that.
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < space; i++) {
             stringBuilder.append("    ");
         }
-        String spaceString = stringBuilder.toString();
+        String spaceString1 = stringBuilder.toString();
         String spaceString2 = stringBuilder.toString() + "    ";
         if (space < 0) {
             spaceString2 = "";
@@ -142,12 +143,16 @@ public class ContentNode extends AbstractTreeNode {
         if (this.getChildren().size() > 1 || (this.getChildren().size() == 1 && !(this.getChildren().get(0) instanceof TextNode))) {
             List<AbstractTreeNode> newChildren = new ArrayList<>();
             for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-                newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
+                if (space != -1) {
+                    newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
+                } else {
+                    space = 0;
+                }
                 newChildren.add(abstractTreeNode);
             }
             this.getChildren().clear();
             this.getChildren().addAll(newChildren);
-            newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
+            new TextNode(this, "\n" + spaceString1);
         }
     }
 

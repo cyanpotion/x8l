@@ -57,11 +57,11 @@ public class X8lDealer implements AbstractLanguageDealer {
                     } else {
                         writer.append(' ');
                     }
-                    writer.append(X8lTree.transcode(key));
+                    writer.append(X8lTree.transcodeWithWhitespace(key));
                     String value = contentNode.getAttributes().get(key);
                     if (!StringUtils.isEmpty(value)) {
                         writer.append("=");
-                        writer.append(X8lTree.transcode(value));
+                        writer.append(X8lTree.transcodeWithWhitespace(value));
                     }
                 }
                 writer.append('>');
@@ -77,7 +77,7 @@ public class X8lDealer implements AbstractLanguageDealer {
             CommentNode commentNode = (CommentNode) treeNode;
             writer.append('<');
             writer.append('<');
-            writer.append(X8lTree.transcode(commentNode.getTextContent()));
+            writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
             writer.append('>');
         } else {
             throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());

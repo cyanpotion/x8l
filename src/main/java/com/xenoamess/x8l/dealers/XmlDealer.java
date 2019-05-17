@@ -37,7 +37,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 /**
- * Read and output the "xml like" syntax.
+ * Read and output xml.
  * Notice that I can not ensure the output is really an xml, because x8l has loosen rules on things,
  * And when convert, it might not suit xml's rule.
  * Thus if you want to convert your x8l file into an xml, please does not use some behavior that xml does not allow.
@@ -60,8 +60,8 @@ public class XmlDealer implements AbstractLanguageDealer {
 
     public static final XmlDealer INSTANCE = new XmlDealer();
 
-    @Override
-    public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
+    @Deprecated
+    public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
         if (treeNode instanceof ContentNode) {
             ContentNode contentNode = (ContentNode) treeNode;
             writer.append('<');
@@ -96,13 +96,13 @@ public class XmlDealer implements AbstractLanguageDealer {
                 if (!firstAttribute) {
                     writer.append(' ');
                 }
-                writer.append(X8lTree.transcode(key));
+                writer.append(X8lTree.transcodeWithWhitespace(key));
                 String value = contentNode.getAttributes().get(key);
 
                 if (!StringUtils.isEmpty(value)) {
                     writer.append('=');
                     writer.append('"');
-                    writer.append(X8lTree.transcode(value));
+                    writer.append(X8lTree.transcodeWithWhitespace(value));
                     writer.append('"');
                 } else {
                     if (!firstAttribute) {
@@ -131,10 +131,85 @@ public class XmlDealer implements AbstractLanguageDealer {
         } else if (treeNode instanceof CommentNode) {
             CommentNode commentNode = (CommentNode) treeNode;
             writer.append("<!--");
-            writer.append(X8lTree.transcode(commentNode.getTextContent()));
+            writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
             writer.append("-->");
         } else {
             throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
+        }
+    }
+
+
+    @Override
+    public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
+        assert (writer != null);
+        Document document = DocumentHelper.createDocument();
+        Element element = document.addElement(STRING_MAMELESS);
+        if (treeNode instanceof ContentNode) {
+            this.write((ContentNode) treeNode, element);
+        } else if (treeNode instanceof TextNode) {
+            TextNode textNode = (TextNode) element;
+            element.addText(textNode.getTextContent());
+        } else if (treeNode instanceof CommentNode) {
+            CommentNode commentNode = (CommentNode) element;
+            element.addComment(commentNode.getTextContent());
+        } else {
+            throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
+        }
+        document.write(writer);
+        writer.flush();
+    }
+
+    private void write(ContentNode contentNode, Element element) {
+        boolean firstAttribute = true;
+        String nodeName;
+        boolean nodeNameless = false;
+
+        if (contentNode.getAttributesKeyList().isEmpty()) {
+            //if have no attributes then it is nameless.
+            nodeName = STRING_MAMELESS;
+            nodeNameless = true;
+        } else {
+            nodeName = contentNode.getAttributesKeyList().get(0);
+            if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
+                //if "name" has value then it is nameless.
+                nodeName = STRING_MAMELESS;
+                nodeNameless = true;
+            }
+            //else, nodeName be first attribute's key
+        }
+        if (nodeNameless) {
+            //if nameless then give it a name.
+            element.setName(nodeName);
+            firstAttribute = false;
+        }
+
+        for (String key : contentNode.getAttributesKeyList()) {
+            String value = contentNode.getAttributes().get(key);
+
+            if (!StringUtils.isEmpty(value)) {
+                element.addAttribute(key, value);
+            } else {
+                if (!firstAttribute) {
+                    element.addAttribute(key, "");
+                } else {
+                    element.setName(key);
+                }
+            }
+
+            firstAttribute = false;
+        }
+        for (AbstractTreeNode au : contentNode.getChildren()) {
+            if (au instanceof ContentNode) {
+                this.write((ContentNode) au, element.addElement(STRING_MAMELESS));
+            } else if (au instanceof TextNode) {
+                TextNode textNode = (TextNode) au;
+                element.addText(textNode.getTextContent());
+            } else if (au instanceof CommentNode) {
+                CommentNode commentNode = (CommentNode) au;
+                element.addComment(commentNode.getTextContent());
+            } else {
+                throw new NotImplementedException("not implemented for this class : " + au.getClass());
+            }
         }
     }
 

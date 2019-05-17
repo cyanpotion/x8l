@@ -219,6 +219,45 @@ public class X8lTree implements AutoCloseable, Serializable {
         return stringBuilder.toString();
     }
 
+    /**
+     * use this function instead of transcode function when you need to transCode even whiteSpace
+     * this is used in key / value in attribute.
+     *
+     * @param originalString originalS tring
+     * @return transCoded String
+     */
+    public static String transcodeWithWhitespace(String originalString) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < originalString.length(); i++) {
+            char chr = originalString.charAt(i);
+            if (chr == '<' || chr == '>' || chr == '%' || Character.isWhitespace(chr)) {
+                stringBuilder.append('%');
+            }
+            stringBuilder.append(chr);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * use this function instead of transcode function when you need to transCode only &gt;
+     * this is used in comment only.
+     *
+     * @param originalString originalS tring
+     * @return transCoded String
+     */
+    public static String transcodeComment(String originalString) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < originalString.length(); i++) {
+            char chr = originalString.charAt(i);
+            if (chr == '>') {
+                stringBuilder.append('%');
+            }
+            stringBuilder.append(chr);
+        }
+        return stringBuilder.toString();
+    }
+
+
     public static String untranscode(String transcodedString) {
         StringBuilder stringBuilder = new StringBuilder();
         boolean lastCharIsModulus = false;
