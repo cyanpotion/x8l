@@ -32,7 +32,7 @@ import java.io.*;
 /**
  * @author XenoAmess
  */
-public class X8lTree implements AutoCloseable, Serializable, Cloneable {
+public class X8lTree implements AutoCloseable, Serializable {
     private AbstractLanguageDealer languageDealer = X8lDealer.INSTANCE;
     private final ContentNode root = new ContentNode(null);
     private Reader reader;
@@ -108,7 +108,7 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
     public X8lTree(Reader reader, boolean readItNow) throws IOException {
         this.reader = reader;
         if (readItNow) {
-            this.read(reader, this.languageDealer);
+            this.read(reader);
         }
     }
 
@@ -117,6 +117,18 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
         this.languageDealer = languageDealer;
         if (readItNow) {
             this.read(reader, this.languageDealer);
+        }
+    }
+
+    public X8lTree(X8lTree original) {
+        try (
+                StringReader stringReader = new StringReader(original.toString());
+        ) {
+            this.reader = stringReader;
+            this.languageDealer = original.languageDealer;
+            this.read(this.reader, this.languageDealer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -283,15 +295,4 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
         this.getRoot().appendAll(patch.getRoot().getChildren());
     }
 
-    @Override
-    public X8lTree clone() {
-        X8lTree res = null;
-        try {
-            res = X8lTree.loadFromString(this.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert (res != null);
-        return res;
-    }
 }
