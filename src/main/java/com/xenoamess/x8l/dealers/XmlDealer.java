@@ -60,85 +60,6 @@ public class XmlDealer implements AbstractLanguageDealer {
 
     public static final XmlDealer INSTANCE = new XmlDealer();
 
-    @Deprecated
-    public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
-        if (treeNode instanceof ContentNode) {
-            ContentNode contentNode = (ContentNode) treeNode;
-            writer.append('<');
-            boolean firstAttribute = true;
-
-            String nodeName;
-            boolean nodeNameless = false;
-
-            if (contentNode.getAttributesKeyList().isEmpty()) {
-                //if have no attributes then it is nameless.
-                nodeName = STRING_MAMELESS;
-                nodeNameless = true;
-            } else {
-                nodeName = contentNode.getAttributesKeyList().get(0);
-                if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
-                    //if "name" has value then it is nameless.
-                    nodeName = STRING_MAMELESS;
-                    nodeNameless = true;
-                }
-                //else, nodeName be first attribute's key
-            }
-            if (nodeNameless) {
-                //if nameless then give it a name.
-                writer.append(nodeName);
-                if (!contentNode.getAttributesKeyList().isEmpty()) {
-                    writer.append(' ');
-                }
-                firstAttribute = false;
-            }
-
-            for (String key : contentNode.getAttributesKeyList()) {
-                if (!firstAttribute) {
-                    writer.append(' ');
-                }
-                writer.append(X8lTree.transcodeWithWhitespace(key));
-                String value = contentNode.getAttributes().get(key);
-
-                if (!StringUtils.isEmpty(value)) {
-                    writer.append('=');
-                    writer.append('"');
-                    writer.append(X8lTree.transcodeWithWhitespace(value));
-                    writer.append('"');
-                } else {
-                    if (!firstAttribute) {
-                        writer.append("=\"\"");
-                    }
-                }
-
-                firstAttribute = false;
-            }
-            if (!contentNode.getChildren().isEmpty()) {
-                writer.append('>');
-            }
-            for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {
-                abstractTreeNode.write(writer, this);
-            }
-            if (contentNode.getChildren().isEmpty()) {
-                writer.append("/>");
-            } else {
-                writer.append("</");
-                writer.append(nodeName);
-                writer.append(">");
-            }
-        } else if (treeNode instanceof TextNode) {
-            TextNode textNode = (TextNode) treeNode;
-            writer.append(X8lTree.transcode(textNode.getTextContent()));
-        } else if (treeNode instanceof CommentNode) {
-            CommentNode commentNode = (CommentNode) treeNode;
-            writer.append("<!--");
-            writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
-            writer.append("-->");
-        } else {
-            throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
-        }
-    }
-
-
     @Override
     public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
         assert (writer != null);
@@ -239,6 +160,84 @@ public class XmlDealer implements AbstractLanguageDealer {
             } else if (node instanceof DefaultComment) {
                 new CommentNode(contentNode, node.getText());
             }
+        }
+    }
+
+    @Deprecated
+    public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
+        if (treeNode instanceof ContentNode) {
+            ContentNode contentNode = (ContentNode) treeNode;
+            writer.append('<');
+            boolean firstAttribute = true;
+
+            String nodeName;
+            boolean nodeNameless = false;
+
+            if (contentNode.getAttributesKeyList().isEmpty()) {
+                //if have no attributes then it is nameless.
+                nodeName = STRING_MAMELESS;
+                nodeNameless = true;
+            } else {
+                nodeName = contentNode.getAttributesKeyList().get(0);
+                if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
+                    //if "name" has value then it is nameless.
+                    nodeName = STRING_MAMELESS;
+                    nodeNameless = true;
+                }
+                //else, nodeName be first attribute's key
+            }
+            if (nodeNameless) {
+                //if nameless then give it a name.
+                writer.append(nodeName);
+                if (!contentNode.getAttributesKeyList().isEmpty()) {
+                    writer.append(' ');
+                }
+                firstAttribute = false;
+            }
+
+            for (String key : contentNode.getAttributesKeyList()) {
+                if (!firstAttribute) {
+                    writer.append(' ');
+                }
+                writer.append(X8lTree.transcodeWithWhitespace(key));
+                String value = contentNode.getAttributes().get(key);
+
+                if (!StringUtils.isEmpty(value)) {
+                    writer.append('=');
+                    writer.append('"');
+                    writer.append(X8lTree.transcodeWithWhitespace(value));
+                    writer.append('"');
+                } else {
+                    if (!firstAttribute) {
+                        writer.append("=\"\"");
+                    }
+                }
+
+                firstAttribute = false;
+            }
+            if (!contentNode.getChildren().isEmpty()) {
+                writer.append('>');
+            }
+            for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {
+                abstractTreeNode.write(writer, this);
+            }
+            if (contentNode.getChildren().isEmpty()) {
+                writer.append("/>");
+            } else {
+                writer.append("</");
+                writer.append(nodeName);
+                writer.append(">");
+            }
+        } else if (treeNode instanceof TextNode) {
+            TextNode textNode = (TextNode) treeNode;
+            writer.append(X8lTree.transcode(textNode.getTextContent()));
+        } else if (treeNode instanceof CommentNode) {
+            CommentNode commentNode = (CommentNode) treeNode;
+            writer.append("<!--");
+            writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
+            writer.append("-->");
+        } else {
+            throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
         }
     }
 }
