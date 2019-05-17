@@ -1,8 +1,5 @@
 package com.xenoamess.x8l;
 
-import java.io.IOException;
-import java.io.Writer;
-
 /**
  * @author XenoAmess
  */
@@ -32,17 +29,8 @@ public class CommentNode extends AbstractTreeNode {
     }
 
     @Override
-    public void close() {
-        super.close();
+    public void clear() {
         this.setTextContent(null);
-    }
-
-    @Override
-    public void write(Writer writer) throws IOException {
-        writer.append('<');
-        writer.append('<');
-        writer.append(X8lTree.transcode(getTextContent()));
-        writer.append('>');
     }
 
     @Override

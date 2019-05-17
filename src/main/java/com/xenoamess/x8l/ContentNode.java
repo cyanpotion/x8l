@@ -1,16 +1,20 @@
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
+import com.xenoamess.x8l.dealers.X8lDealer;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
-import java.io.Writer;
+import java.io.Reader;
 import java.util.*;
 
 /**
  * @author XenoAmess
  */
 public class ContentNode extends AbstractTreeNode {
-    private List<AbstractTreeNode> children = new ArrayList<>();
-    private Map<String, String> attributes = new HashMap<>();
-    private List<String> attributesKeyList = new ArrayList<>();
+    private final List<AbstractTreeNode> children = new ArrayList<>();
+    private final Map<String, String> attributes = new HashMap<>();
+    private final List<String> attributesKeyList = new ArrayList<>();
 
     public ContentNode(ContentNode parent) {
         super(parent);
@@ -64,14 +68,13 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     @Override
-    public void close() {
+    public void clear() {
         for (AbstractTreeNode au : this.getChildren()) {
             au.close();
         }
-        super.close();
-        this.setChildren(null);
-        this.setAttributes(null);
-        this.setAttributesKeyList(null);
+        this.getChildren().clear();
+        this.getAttributes().clear();
+        this.getAttributesKeyList().clear();
     }
 
     public void trim() {
@@ -84,7 +87,7 @@ public class ContentNode extends AbstractTreeNode {
                 ((ContentNode) au).trim();
                 newChildren.add(au);
             } else if (au.getClass().equals(TextNode.class)) {
-                if (!"".equals(((TextNode) au).getTextContent().trim())) {
+                if (!StringUtils.isEmpty(((TextNode) au).getTextContent().trim())) {
                     newChildren.add(au);
                 }
             } else {
@@ -92,39 +95,9 @@ public class ContentNode extends AbstractTreeNode {
             }
         }
         this.getChildren().clear();
-        this.setChildren(newChildren);
+        this.getChildren().addAll(newChildren);
     }
 
-
-    @Override
-    public void write(Writer writer) throws IOException {
-        if (this.getParent() == null) {
-            for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-                abstractTreeNode.write(writer);
-            }
-        } else {
-            writer.append('<');
-            boolean firstAttribute = true;
-            for (String key : getAttributesKeyList()) {
-                if (firstAttribute) {
-                    firstAttribute = false;
-                } else {
-                    writer.append(' ');
-                }
-                writer.append(X8lTree.transcode(key));
-                String value = getAttributes().get(key);
-                if (!"".equals(value)) {
-                    writer.append("=");
-                    writer.append(X8lTree.transcode(value));
-                }
-            }
-            writer.append('>');
-            for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-                abstractTreeNode.write(writer);
-            }
-            writer.append('>');
-        }
-    }
 
     @Override
     public void format(int space) {
@@ -148,7 +121,8 @@ public class ContentNode extends AbstractTreeNode {
                 newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
                 newChildren.add(abstractTreeNode);
             }
-            this.setChildren(newChildren);
+            this.getChildren().clear();
+            this.getChildren().addAll(newChildren);
             newChildren.add(new TextNode(null, "\n" + spaceString).changeParent(this));
         }
     }
@@ -263,29 +237,27 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+
+    public void read(Reader reader) throws IOException {
+        this.read(reader, X8lDealer.INSTANCE);
+    }
+
+    public void read(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
+        languageDealer.read(reader, this);
+    }
+
     //---getters and setters
 
     public List<AbstractTreeNode> getChildren() {
         return children;
     }
 
-    public void setChildren(List<AbstractTreeNode> children) {
-        this.children = children;
-    }
-
     public Map<String, String> getAttributes() {
         return attributes;
-    }
-
-    public void setAttributes(Map<String, String> attributes) {
-        this.attributes = attributes;
     }
 
     public List<String> getAttributesKeyList() {
         return attributesKeyList;
     }
 
-    public void setAttributesKeyList(List<String> attributesKeyList) {
-        this.attributesKeyList = attributesKeyList;
-    }
 }

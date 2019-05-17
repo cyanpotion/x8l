@@ -1,5 +1,8 @@
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
+import com.xenoamess.x8l.dealers.X8lDealer;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -32,8 +35,22 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         System.out.println("parent : " + this.getParent());
     }
 
+    /**
+     * clear the node.
+     * <p>
+     * close and delete all children.
+     * delete all attributes.
+     */
+    public abstract void clear();
+
+    /**
+     * clear the node if need.
+     * <p>
+     * then, remove this node from parent node.
+     */
     @Override
     public void close() {
+        this.clear();
         if (this.getParent() != null && this.getParent().getChildren() != null) {
             this.getParent().getChildren().remove(this);
         }
@@ -53,7 +70,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * then set this node's parent to new parent node.
      *
      * @param contentNode new parent node.
-     * @return
+     * @return this
      */
     public AbstractTreeNode changeParent(ContentNode contentNode) {
         this.removeParent();
@@ -69,7 +86,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      *
      * @param contentNode new parent node.
      * @param index       insert index of this node into new parent's children
-     * @return
+     * @return this
      */
     public AbstractTreeNode changeParentAndRegister(ContentNode contentNode, int index) {
         this.changeParent(contentNode);
@@ -89,9 +106,22 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * write this AbstractTreeNode's data to a writer.
      *
      * @param writer the writer to write to.
-     * @throws IOException If an I/O error occurs
+     * @throws IOException IOException
      */
-    public abstract void write(Writer writer) throws IOException;
+    public void write(Writer writer) throws IOException {
+        this.write(writer, X8lDealer.INSTANCE);
+    }
+
+    /**
+     * write this AbstractTreeNode's data to a writer.
+     *
+     * @param writer         the writer to write to.
+     * @param languageDealer the languageDealer to deal with this.
+     * @throws IOException IOException
+     */
+    public void write(Writer writer, AbstractLanguageDealer languageDealer) throws IOException {
+        languageDealer.write(writer, this);
+    }
 
     /**
      * format the tree node.
@@ -138,4 +168,6 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     public void setParent(ContentNode parent) {
         this.parent = parent;
     }
+
+
 }

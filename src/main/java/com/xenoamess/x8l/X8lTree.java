@@ -1,18 +1,21 @@
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
+import com.xenoamess.x8l.dealers.X8lDealer;
+
 import java.io.*;
 
 /**
  * @author XenoAmess
  */
 public class X8lTree implements AutoCloseable, Serializable, Cloneable {
+    private AbstractLanguageDealer languageDealer = X8lDealer.INSTANCE;
+    private final ContentNode root = new ContentNode(null);
+    private Reader reader;
+
     public ContentNode getRoot() {
         return root;
     }
-
-
-    private final ContentNode root = new ContentNode(null);
-    private Reader reader;
 
     public static X8lTree loadFromFile(File file) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
@@ -78,6 +81,21 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
         this.reader = reader;
     }
 
+    public X8lTree(Reader reader, boolean readItNow) throws IOException {
+        this.reader = reader;
+        if (readItNow) {
+            this.read(reader, this.languageDealer);
+        }
+    }
+
+    public X8lTree(Reader reader, AbstractLanguageDealer languageDealer, boolean readItNow) throws IOException {
+        this.reader = reader;
+        this.languageDealer = languageDealer;
+        if (readItNow) {
+            this.read(reader, this.languageDealer);
+        }
+    }
+
 
     /**
      * close this tree.
@@ -96,93 +114,26 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
     }
 
     public void read(Reader reader) throws IOException {
-        this.parse(reader);
+        read(reader, this.languageDealer);
     }
 
+    public void read(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
+        this.getRoot().read(reader, languageDealer);
+    }
+
+
     public void write(Writer writer) throws IOException {
-        this.getRoot().write(writer);
+        this.write(writer, this.languageDealer);
+    }
+
+    public void write(Writer writer, AbstractLanguageDealer languageDealer) throws IOException {
+        this.getRoot().write(writer, languageDealer);
         writer.flush();
     }
 
+
     public void parse() throws IOException {
-        this.parse(this.reader);
-    }
-
-    public void parse(Reader reader) throws IOException {
-        assert (reader != null);
-        int nowInt;
-        ContentNode nowNode = this.getRoot();
-        boolean inAttributeArea = false;
-        boolean inCommentArea = false;
-        boolean lastCharIsModulus = false;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        char nowChar;
-        while (true) {
-            nowInt = reader.read();
-            nowChar = (char) nowInt;
-            if (nowInt == -1) {
-                if (nowNode == this.getRoot() && !inAttributeArea && !inCommentArea) {
-                    new TextNode(nowNode, stringBuilder.toString());
-                    break;
-                } else {
-                    throw new X8lGrammarException("Unexpected stop of x8l file.");
-                }
-            } else if (lastCharIsModulus) {
-                stringBuilder.append(nowChar);
-                lastCharIsModulus = false;
-            } else if (nowChar == '%') {
-                lastCharIsModulus = true;
-            } else if (inCommentArea) {
-                if (nowChar == '>') {
-                    new CommentNode(nowNode, stringBuilder.toString());
-                    stringBuilder = new StringBuilder();
-                    inCommentArea = false;
-                } else {
-                    stringBuilder.append(nowChar);
-                }
-            } else if (nowChar == '<') {
-                if (inAttributeArea) {
-                    if (!nowNode.getAttributes().isEmpty() || stringBuilder.length() != 0) {
-                        throw new X8lGrammarException("Unexpected < in attribute area of a content node.");
-                    } else {
-                        ContentNode nowParent = nowNode.getParent();
-                        nowNode.close();
-                        nowNode = nowParent;
-                        inAttributeArea = false;
-                        inCommentArea = true;
-                    }
-                } else {
-                    new TextNode(nowNode, stringBuilder.toString());
-                    stringBuilder = new StringBuilder();
-                    nowNode = new ContentNode(nowNode);
-                    inAttributeArea = true;
-                }
-            } else if (nowChar == '>') {
-                if (!inAttributeArea) {
-                    new TextNode(nowNode, stringBuilder.toString());
-                    stringBuilder = new StringBuilder();
-                    nowNode = nowNode.getParent();
-                } else {
-                    if (stringBuilder.length() != 0) {
-                        nowNode.addAttribute(stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                    }
-                    inAttributeArea = false;
-                }
-            } else if (Character.isWhitespace(nowChar)) {
-                if (inAttributeArea) {
-                    if (stringBuilder.length() != 0) {
-                        nowNode.addAttribute(stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                    }
-                } else {
-                    stringBuilder.append(nowChar);
-                }
-            } else {
-                stringBuilder.append(nowChar);
-            }
-        }
+        this.read(this.reader);
     }
 
     /**
@@ -267,6 +218,13 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
         return this.toString().hashCode();
     }
 
+    /**
+     * used by Serializable
+     *
+     * @param objectInputStream objectInputStream
+     * @throws IOException            IOException
+     * @throws ClassNotFoundException ClassNotFoundException
+     */
     private void readObject(ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
         try (Reader objectInputStreamReader = new InputStreamReader(objectInputStream)) {
@@ -274,6 +232,13 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
         }
     }
 
+    /**
+     * used by Serializable
+     *
+     * @param objectOutputStream objectOutputStream
+     * @throws IOException            IOException
+     * @throws ClassNotFoundException ClassNotFoundException
+     */
     private void writeObject(ObjectOutputStream objectOutputStream)
             throws IOException {
         try (Writer writer = new OutputStreamWriter(objectOutputStream)) {

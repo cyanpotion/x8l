@@ -1,5 +1,7 @@
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.X8lDealer;
+import com.xenoamess.x8l.dealers.XmlDealer;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -147,7 +149,12 @@ public class X8lTest {
             tree.format();
             tree.write(new FileWriter("out/outputFormat.x8l"));
 
+            tree.write(new FileWriter("out/outputFormat.xml"), XmlDealer.INSTANCE);
+            X8lTree tree2 = new X8lTree();
+            tree2.read(new FileReader("out/demo.xml"), XmlDealer.INSTANCE);
             flag0 = true;
+            tree2.write(new FileWriter("out/demoout.x8l"), X8lDealer.INSTANCE);
+            tree2.write(new FileWriter("out/demoout.xml"), XmlDealer.INSTANCE);
         } catch (IOException e) {
             e.printStackTrace();
         }
