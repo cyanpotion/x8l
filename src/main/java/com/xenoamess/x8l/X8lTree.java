@@ -236,8 +236,7 @@ public class X8lTree implements AutoCloseable, Serializable, Cloneable {
      * used by Serializable
      *
      * @param objectOutputStream objectOutputStream
-     * @throws IOException            IOException
-     * @throws ClassNotFoundException ClassNotFoundException
+     * @throws IOException IOException
      */
     private void writeObject(ObjectOutputStream objectOutputStream)
             throws IOException {
