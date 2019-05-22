@@ -102,6 +102,23 @@ public class XmlDealer implements AbstractLanguageDealer {
             element.setName(nodeName);
             firstAttribute = false;
         }
+        if (nodeNameless && contentNode.getChildren().size() == 1) {
+            //if nameless and have only one child,
+            //then does not output this nameless node, and let the child node be here.
+            AbstractTreeNode treeNode = contentNode.getChildren().get(0);
+            if (treeNode instanceof ContentNode) {
+                this.write((ContentNode) treeNode, element);
+            } else if (treeNode instanceof TextNode) {
+                TextNode textNode = (TextNode) treeNode;
+                element.addText(textNode.getTextContent());
+            } else if (treeNode instanceof CommentNode) {
+                CommentNode commentNode = (CommentNode) treeNode;
+                element.addComment(commentNode.getTextContent());
+            } else {
+                throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
+            }
+            return;
+        }
 
         for (String key : contentNode.getAttributesKeyList()) {
             String value = contentNode.getAttributes().get(key);
