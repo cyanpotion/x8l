@@ -153,6 +153,14 @@ public class X8lTree implements AutoCloseable, Serializable {
         read(reader, this.languageDealer);
     }
 
+
+    /**
+     * will not close the reader after reading.
+     *
+     * @param reader         reader
+     * @param languageDealer languageDealer
+     * @throws IOException IOException
+     */
     public void read(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
         this.getRoot().read(reader, languageDealer);
     }
@@ -162,9 +170,16 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.write(writer, this.languageDealer);
     }
 
+    /**
+     * close the writer after writing.
+     *
+     * @param writer         writer
+     * @param languageDealer languageDealer
+     * @throws IOException IOException
+     */
     public void write(Writer writer, AbstractLanguageDealer languageDealer) throws IOException {
         this.getRoot().write(writer, languageDealer);
-        writer.flush();
+        writer.close();
     }
 
 
@@ -249,7 +264,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
-            if (chr == '>') {
+            if (chr == '%' || chr == '>') {
                 stringBuilder.append('%');
             }
             stringBuilder.append(chr);

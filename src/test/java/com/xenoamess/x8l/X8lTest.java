@@ -24,6 +24,7 @@
 
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
 import org.junit.jupiter.api.Test;
@@ -154,41 +155,104 @@ public class X8lTest {
                     "    >\n" +
                     ">";
 
-            Reader reader = new StringReader(inputString);
+            try (Reader reader = new StringReader(inputString)) {
 
-            try (FileWriter fileWriter = new FileWriter("out/input.x8l")) {
-                fileWriter.write(inputString);
+                try (FileWriter fileWriter = new FileWriter("out/input.x8l")) {
+                    fileWriter.write(inputString);
+                }
+
+                X8lTree tree = new X8lTree(reader);
+
+                tree.parse();
+
+                System.out.println("BuildFinished");
+                tree.show();
+
+                new File("out").mkdirs();
+
+
+                try (FileWriter fileWriter = new FileWriter("out/output.x8l")) {
+                    tree.write(fileWriter);
+                }
+
+
+                tree.trim();
+
+                try (FileWriter fileWriter = new FileWriter("out/outputTrim.x8l")) {
+                    tree.write(fileWriter);
+                }
+
+                tree.format();
+
+                try (FileWriter fileWriter = new FileWriter("out/outputFormat.x8l")) {
+                    tree.write(fileWriter);
+                }
+
+                try (FileWriter fileWriter = new FileWriter("out/outputFormat.xml")) {
+                    tree.write(fileWriter, XmlDealer.INSTANCE);
+                }
             }
 
-            X8lTree tree = new X8lTree(reader);
 
-            tree.parse();
-
-            System.out.println("BuildFinished");
-            tree.show();
-
-            new File("out").mkdirs();
-
-
-            tree.write(new FileWriter("out/output.x8l"));
-
-            tree.trim();
-
-            tree.write(new FileWriter("out/outputTrim.x8l"));
-
-            tree.format();
-            tree.write(new FileWriter("out/outputFormat.x8l"));
-
-            tree.write(new FileWriter("out/outputFormat.xml"), XmlDealer.INSTANCE);
             X8lTree tree2 = new X8lTree();
-            tree2.read(new FileReader("out/demo.xml"), XmlDealer.INSTANCE);
-            flag0 = true;
-            tree2.write(new FileWriter("out/demoout.x8l"), X8lDealer.INSTANCE);
-            tree2.write(new FileWriter("out/demoout.xml"), XmlDealer.INSTANCE);
+
+
+            try (Reader reader = new StringReader("<note a=\"1\" b=\"2\">\n" +
+                    "    <to>Tove</to>\n" +
+                    "    <from>Jani</from>\n" +
+                    "    <!-- aaa -->\n" +
+                    "    <heading>Reminder</heading>\n" +
+                    "    <body>Don't forget me this weekend!</body>\n" +
+                    "</note>")) {
+                tree2.read(reader, XmlDealer.INSTANCE);
+                flag0 = true;
+
+                try (FileWriter fileWriter = new FileWriter("out/demoout.x8l")) {
+                    tree2.write(fileWriter, X8lDealer.INSTANCE);
+                }
+
+                try (FileWriter fileWriter = new FileWriter("out/demoout.xml")) {
+                    tree2.write(fileWriter, XmlDealer.INSTANCE);
+                }
+            }
+
+            try (Reader reader = new StringReader("{\n" +
+                    "    \"glossary\": {\n" +
+                    "        \"title\": \"example glossary\",\n" +
+                    "\t\t\"GlossDiv\": {\n" +
+                    "            \"title\": 50,\n" +
+                    "\t\t\t\"GlossList\": {\n" +
+                    "                \"GlossEntry\": {\n" +
+                    "                    \"ID\": \"SGML\",\n" +
+                    "\t\t\t\t\t\"SortAs\": \"SGML\",\n" +
+                    "\t\t\t\t\t\"GlossTerm\": \"Standard Generalized Markup Language\",\n" +
+                    "\t\t\t\t\t\"Acronym\": \"SGML\",\n" +
+                    "\t\t\t\t\t\"Abbrev\": \"ISO 8879:1986\",\n" +
+                    "\t\t\t\t\t\"GlossDef\": {\n" +
+                    "                        \"para\": \"A meta-markup language, used to create markup languages such" +
+                    " as DocBook.\",\n" +
+                    "\t\t\t\t\t\t\"GlossSeeAlso\": [null, \"XML\", {\"a\":104}]\n" +
+                    "                    },\n" +
+                    "\t\t\t\t\t\"GlossSee\": \"markup\"\n" +
+                    "                }\n" +
+                    "            }\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}")) {
+
+                X8lTree tree3 = new X8lTree();
+                tree3.read(reader, JsonDealer.INSTANCE);
+
+                try (FileWriter fileWriter = new FileWriter("out/jsondemoout.x8l")) {
+                    tree3.write(fileWriter, X8lDealer.INSTANCE);
+                }
+                try (FileWriter fileWriter = new FileWriter("out/jsondemoout.json")) {
+                    tree3.write(fileWriter, JsonDealer.INSTANCE);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         assert (flag0);
     }
 }

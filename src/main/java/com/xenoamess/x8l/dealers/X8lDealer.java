@@ -42,6 +42,7 @@ public class X8lDealer implements AbstractLanguageDealer {
 
     @Override
     public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
+        assert (writer != null);
         if (treeNode instanceof ContentNode) {
             ContentNode contentNode = (ContentNode) treeNode;
             if (contentNode.getParent() == null) {

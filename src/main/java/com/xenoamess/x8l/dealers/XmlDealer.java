@@ -51,7 +51,7 @@ import java.io.Writer;
  * <p>
  * I use dom4j for reading xml now. No interest in rewriting it.
  * <p>
- * If anybody want to implement it, pull request is always welcomed.
+ * If anybody want to refine it, pull request is always welcomed.
  *
  * @author XenoAmess
  */
@@ -68,16 +68,15 @@ public class XmlDealer implements AbstractLanguageDealer {
         if (treeNode instanceof ContentNode) {
             this.write((ContentNode) treeNode, element);
         } else if (treeNode instanceof TextNode) {
-            TextNode textNode = (TextNode) element;
+            TextNode textNode = (TextNode) treeNode;
             element.addText(textNode.getTextContent());
         } else if (treeNode instanceof CommentNode) {
-            CommentNode commentNode = (CommentNode) element;
+            CommentNode commentNode = (CommentNode) treeNode;
             element.addComment(commentNode.getTextContent());
         } else {
             throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
         }
         document.write(writer);
-        writer.flush();
     }
 
     private void write(ContentNode contentNode, Element element) {
