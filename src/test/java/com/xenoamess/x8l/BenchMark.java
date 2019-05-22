@@ -30,6 +30,7 @@ import com.xenoamess.x8l.dealers.XmlDealer;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author XenoAmess
@@ -89,8 +90,12 @@ public class BenchMark {
     }
 
     public void testXml(String filePathString) {
-        try (Reader reader =
-                     new InputStreamReader(this.getClass().getResource("/" + filePathString + ".xml").openStream())) {
+        try (ZipInputStream zipInputStream = new ZipInputStream(
+                this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
+             Reader reader =
+                     new InputStreamReader(zipInputStream)
+        ) {
+            zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, XmlDealer.INSTANCE, true);
             new File("out").mkdirs();
             FileWriter fileWriter;
@@ -106,8 +111,12 @@ public class BenchMark {
     }
 
     public void testJson(String filePathString) {
-        try (Reader reader =
-                     new InputStreamReader(this.getClass().getResource("/" + filePathString + ".json").openStream())) {
+        try (ZipInputStream zipInputStream = new ZipInputStream(
+                this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
+             Reader reader =
+                     new InputStreamReader(zipInputStream)
+        ) {
+            zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);
             new File("out").mkdirs();
             FileWriter fileWriter;
