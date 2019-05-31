@@ -154,9 +154,8 @@ public class Version implements Comparable<Version> {
         return res;
     }
 
+    @Override
     public String toString() {
         return this.versionString;
     }
-
-
 }
