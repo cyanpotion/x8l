@@ -179,6 +179,15 @@ public class XmlDealer implements AbstractLanguageDealer {
         }
     }
 
+    /**
+     * My naive implement to read xml file.
+     * It is outdated and far limited,
+     * and should not be used anymore now.
+     *
+     * @param writer   writer
+     * @param treeNode treeNode
+     * @throws IOException
+     */
     @Deprecated
     public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
         if (treeNode instanceof ContentNode) {
