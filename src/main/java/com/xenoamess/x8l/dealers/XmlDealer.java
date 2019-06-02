@@ -186,7 +186,7 @@ public class XmlDealer implements AbstractLanguageDealer {
      *
      * @param writer   writer
      * @param treeNode treeNode
-     * @throws IOException
+     * @throws IOException IOException
      */
     @Deprecated
     public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
