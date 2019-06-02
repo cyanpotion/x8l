@@ -68,7 +68,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
 
         try (
-                FileWriter fileWriter = new FileWriter(file);
+                FileWriter fileWriter = new FileWriter(file)
         ) {
             x8lTree.write(fileWriter);
         }
@@ -77,7 +77,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static X8lTree loadFromString(String string) throws IOException {
         X8lTree res = null;
         try (
-                StringReader stringReader = new StringReader(string);
+                StringReader stringReader = new StringReader(string)
         ) {
             res = new X8lTree(stringReader);
             res.parse();
@@ -88,7 +88,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static String saveToString(X8lTree x8lTree) {
         String res = "";
         try (
-                StringWriter stringWriter = new StringWriter();
+                StringWriter stringWriter = new StringWriter()
         ) {
             x8lTree.write(stringWriter);
             res = stringWriter.toString();
@@ -122,7 +122,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     public X8lTree(X8lTree original) {
         try (
-                StringReader stringReader = new StringReader(original.toString());
+                StringReader stringReader = new StringReader(original.toString())
         ) {
             this.reader = stringReader;
             this.languageDealer = original.languageDealer;

@@ -175,7 +175,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     public String toString() {
         String res = "";
         try (
-                StringWriter stringWriter = new StringWriter();
+                StringWriter stringWriter = new StringWriter()
         ) {
             this.write(stringWriter);
             res = stringWriter.toString();
