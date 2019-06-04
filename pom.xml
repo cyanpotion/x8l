@@ -5,7 +5,46 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
-    <version>0.47.1</version>
+    <version>0.47.2</version>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <description>Make a new markup language named x8l which can replace xml in
+        most areas but always use smaller size.
+    </description>
+    <url>https://github.com/cyanpotion/x8l</url>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>${project.url}/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Jin Xu</name>
+            <email>xenoamess@gmail.com</email>
+            <organization>XenoAmess</organization>
+            <url>https://github.com/xenoamess</url>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:${project.url}.git</connection>
+        <developerConnection>${scm.connection}</developerConnection>
+        <url>${project.url}</url>
+        <tag>${project.version}</tag>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8
+        </project.reporting.outputEncoding>
+        <java.version>8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <jackson.version>2.9.9</jackson.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-io.version>2.6</commons-io.version>
+        <dom4j.version>2.1.1</dom4j.version>
+    </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -56,53 +95,21 @@
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-    <packaging>jar</packaging>
-    <name>${project.artifactId}</name>
-    <description>Make a new markup language named x8l which can replace xml in
-        most areas but always use smaller size.
-    </description>
-    <url>https://github.com/cyanpotion/x8l</url>
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>${project.url}/blob/master/LICENSE</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Jin Xu</name>
-            <email>xenoamess@gmail.com</email>
-            <organization>XenoAmess</organization>
-            <url>https://github.com/xenoamess</url>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:${project.url}.git</connection>
-        <developerConnection>${scm.connection}</developerConnection>
-        <url>${project.url}</url>
-        <tag>${project.version}</tag>
-    </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8
-        </project.reporting.outputEncoding>
-        <java.version>8</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <jackson.version>2.9.9</jackson.version>
-        <commons-lang3.version>3.9</commons-lang3.version>
-        <commons-io.version>2.6</commons-io.version>
-        <dom4j.version>2.1.1</dom4j.version>
-    </properties>
+
     <build>
         <resources>
             <resource>
