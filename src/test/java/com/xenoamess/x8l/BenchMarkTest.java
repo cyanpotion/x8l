@@ -35,7 +35,7 @@ import java.util.zip.ZipInputStream;
 /**
  * @author XenoAmess
  */
-public class BenchMark {
+public class BenchMarkTest {
 
     /**
      * test file : src/main/test/java/resources/citylots.json

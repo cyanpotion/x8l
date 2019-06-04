@@ -37,6 +37,8 @@ public class X8lTest {
     public void test() {
         boolean flag0 = false;
         try {
+            new File("out").mkdir();
+
             System.out.println(Version.VERSION);
 
             String inputString = "<<here goes a basic demo of x8l>\n" +

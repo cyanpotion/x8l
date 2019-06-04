@@ -44,7 +44,7 @@ We want to make sure when a data can be saved as json, it shall be able to be sa
 Of course due to x8l's lack of type information, all type information of attributes will lost in this process.
 )
 
-The details of the bench marks are listed in com.xenoamess.x8l.BenchMark
+The details of the bench marks are listed in com.xenoamess.x8l.BenchMarkTest
 
 ## basic tutorial of x8l
 
