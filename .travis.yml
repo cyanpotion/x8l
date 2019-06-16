@@ -21,6 +21,10 @@ matrix:
       jdk: openjdk11
     - os: linux
       jdk: openjdk12
+    - os: linux
+      jdk: openjdk13
+    - os: linux
+      jdk: openjdk14
 script:
-  - "./mvnw clean package -Dmaven.javadoc.skip=false"
-  - "./mvnw sonar:sonar -Dsonar.projectKey=cyanpotion_x8l -Dsonar.organization=cyanpotion -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=9f24179f0804925e2647f57ca2effc7a0686d0b7"
+  - "./mvnw clean package -U -Dmaven.javadoc.skip=false"
+  - "if [ test \"$TRAVIS_JDK_VERSION\" = \"openjdk12\" ]; then ./mvnw sonar:sonar -Dsonar.projectKey=cyanpotion_x8l -Dsonar.organization=cyanpotion -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=9f24179f0804925e2647f57ca2effc7a0686d0b7 ; fi"
