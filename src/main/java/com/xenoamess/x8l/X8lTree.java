@@ -362,8 +362,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (patch == null) {
             return;
         }
-        X8lTree patchClone = new X8lTree(patch);
-        this.getRoot().appendAll(patchClone.getRoot().getChildren());
+        this.getRoot().appendAll(patch.getRoot().getChildren());
     }
 
     public AbstractLanguageDealer getLanguageDealer() {

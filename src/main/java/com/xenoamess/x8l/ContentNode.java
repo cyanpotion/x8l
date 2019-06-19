@@ -262,7 +262,13 @@ public class ContentNode extends AbstractTreeNode {
         if (abstractTreeNodes == null) {
             return;
         }
-        for (AbstractTreeNode abstractTreeNode : abstractTreeNodes) {
+
+        Collection<AbstractTreeNode> tmpCollection = abstractTreeNodes;
+        if (abstractTreeNodes == this.getChildren()) {
+            tmpCollection = new ArrayList<>(abstractTreeNodes);
+        }
+
+        for (AbstractTreeNode abstractTreeNode : tmpCollection) {
             this.append(abstractTreeNode);
         }
     }
