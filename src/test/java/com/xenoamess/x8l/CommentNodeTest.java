@@ -26,6 +26,8 @@ package com.xenoamess.x8l;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author XenoAmess
  */
@@ -40,12 +42,14 @@ public class CommentNodeTest {
         t1 = new CommentNode(tree.getRoot(), "1");
         t2 = new CommentNode(tree.getRoot(), 1, "2");
         assert (tree.getRoot().getChildren().indexOf(t1) < tree.getRoot().getChildren().indexOf(t2));
+        assert (tree.toString().equals("<<1><<2>"));
         System.out.println(tree);
 
         tree = new X8lTree();
         t1 = new CommentNode(tree.getRoot(), "1");
         t2 = new CommentNode(tree.getRoot(), 0, "2");
         assert (tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
+        assert (tree.toString().equals("<<2><<1>"));
         System.out.println(tree);
 
         try {
@@ -57,5 +61,11 @@ public class CommentNodeTest {
             assert (false);
         } catch (IndexOutOfBoundsException e) {
         }
+
+        new CommentNode(null, null).equals(new TextNode(null, null));
+        t1 = new CommentNode(tree.getRoot(), "1");
+        t2 = new CommentNode(null, "1");
+        assertEquals(t1.hashCode(), t2.hashCode());
+
     }
 }

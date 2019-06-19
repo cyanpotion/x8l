@@ -26,6 +26,8 @@ package com.xenoamess.x8l;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author XenoAmess
  */
@@ -40,12 +42,14 @@ public class TextNodeTest {
         t1 = new TextNode(tree.getRoot(), "1");
         t2 = new TextNode(tree.getRoot(), 1, "2");
         assert (tree.getRoot().getChildren().indexOf(t1) < tree.getRoot().getChildren().indexOf(t2));
+        assert (tree.toString().equals("12"));
         System.out.println(tree);
 
         tree = new X8lTree();
         t1 = new TextNode(tree.getRoot(), "1");
         t2 = new TextNode(tree.getRoot(), 0, "2");
         assert (tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
+        assert (tree.toString().equals("21"));
         System.out.println(tree);
 
         try {
@@ -57,5 +61,27 @@ public class TextNodeTest {
             assert (false);
         } catch (IndexOutOfBoundsException e) {
         }
+
+        new TextNode(null, null).equals(new CommentNode(null, null));
+
+        new TextNode(null, null).equals(new TextNode(null, null));
+        t1 = new TextNode(tree.getRoot(), "1");
+        t2 = new TextNode(null, "1");
+        assertEquals(t1.hashCode(), t2.hashCode());
+
+        X8lTree tree1 = new X8lTree();
+        X8lTree tree2 = new X8lTree();
+        t1 = new TextNode(tree1.getRoot(), "1");
+        t2 = new TextNode(tree1.getRoot(), "2");
+        t1.changeParentAndRegister(tree2.getRoot());
+        assertEquals(tree1.toString(), "2");
+        assertEquals(tree2.toString(), "1");
+        t2.changeParentAndRegister(tree2.getRoot(), 0);
+        assertEquals(tree1.toString(), "");
+        assertEquals(tree2.toString(), "21");
+        t2.changeParentAndRegister(tree2.getRoot(), 1);
+        assertEquals(tree2.toString(), "12");
+        t2.changeParentAndRegister(tree2.getRoot(), 1);
+        assertEquals(tree2.toString(), "12");
     }
 }
