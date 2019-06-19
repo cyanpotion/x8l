@@ -24,26 +24,25 @@
 
 package com.xenoamess.x8l;
 
-import org.junit.jupiter.api.Test;
+import com.xenoamess.commons.version.Version;
 
 /**
+ * A version class that represent a package's version.
+ * It will read the /VERSION/${package name of this class}.VERSION file
+ * That file is a template and shall be replaced and filled by maven when
+ * start up.
+ * However if the file is not found then VERSION will be VERSION_MISSING,
+ * And a waring message will be write to System.err
+ * <p>
+ * See pom of this project for more information.
+ *
  * @author XenoAmess
+ * @version 0.6.0
  */
-public class VersionTest {
-    public static final int compareVersionsTest(String va, String vb) {
-        System.out.println("compareVersionsTest : " + va + " " + vb);
-        int res = Version.compareVersions(va, vb);
-        System.out.println("res : " + res);
-        return res;
-    }
+public class PackageVersion {
 
-    @Test
-    public final void Test() {
-        assert (compareVersionsTest("0.1.0-SNAPSHOT", "0.1.0") < 0);
-        assert (compareVersionsTest("0.1.0-SNAPSHOT", "0.25.0") < 0);
-        assert (compareVersionsTest("1.1.0-SNAPSHOT", "0.25.0") > 0);
-        assert (compareVersionsTest("1.33", "5") < 0);
-        assert (compareVersionsTest("1.33.0", "0.44.0") > 0);
-        assert (compareVersionsTest("0.1.0-SNAPSHOT", "0.1.0-SNAPSHOT") == 0);
-    }
+    /**
+     * current version of this component.
+     */
+    public static final Version VERSION = Version.loadPackageVersion(PackageVersion.class);
 }

@@ -49,9 +49,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
         X8lTree res = null;
         try (
-                FileReader fileReader = new FileReader(file)
+                Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
         ) {
-            res = new X8lTree(fileReader);
+            res = new X8lTree(reader);
             res.parse();
         }
         return res;
@@ -70,9 +70,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
 
         try (
-                FileWriter fileWriter = new FileWriter(file)
+                Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))
         ) {
-            x8lTree.write(fileWriter);
+            x8lTree.write(writer);
         }
     }
 
@@ -336,7 +336,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (this.root == null) {
             this.root = new ContentNode(null);
         }
-        this.read(new InputStreamReader(objectInputStream));
+        try (Reader reader = new InputStreamReader(objectInputStream)) {
+            this.read(reader);
+        }
     }
 
     /**
@@ -348,7 +350,9 @@ public class X8lTree implements AutoCloseable, Serializable {
     private void writeObject(ObjectOutputStream objectOutputStream)
             throws IOException {
         objectOutputStream.defaultWriteObject();
-        this.write(new OutputStreamWriter(objectOutputStream));
+        try (Writer writer = new OutputStreamWriter(objectOutputStream)) {
+            this.write(writer);
+        }
     }
 
     /**

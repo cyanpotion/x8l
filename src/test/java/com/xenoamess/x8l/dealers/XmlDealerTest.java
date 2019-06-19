@@ -29,15 +29,17 @@ import com.xenoamess.x8l.X8lTree;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.StringWriter;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class XmlDealerTest {
     @Test
     public void naiveWriteTest() throws IOException {
         X8lTree tree = new X8lTest().prepare();
-        try (Writer writer = new OutputStreamWriter(System.out)) {
+        try (StringWriter writer = new StringWriter()) {
             new XmlDealer().naiveWrite(writer, tree.getRoot());
+            assertNotEquals(writer.toString(), "");
         }
     }
 }

@@ -27,6 +27,7 @@ package com.xenoamess.x8l;
 import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
+import org.codehaus.plexus.util.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -36,8 +37,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class X8lTest {
 
+    @Test
+    public void prepareTest() throws IOException {
+        prepare();
+    }
+
     public X8lTree prepare() throws IOException {
-        System.out.println(Version.VERSION);
+        System.out.println(PackageVersion.VERSION);
         new File("out").mkdir();
         String inputString = "<<here goes a basic demo of x8l>\n" +
                 "<<first,a comment is like this>  \n" +
@@ -155,8 +161,8 @@ public class X8lTest {
                 "    >\n" +
                 ">";
 
-        try (FileWriter fileWriter = new FileWriter("out/input.x8l")) {
-            fileWriter.write(inputString);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/input.x8l")))) {
+            writer.write(inputString);
         }
 
         X8lTree tree = X8lTree.loadFromString(inputString);
@@ -178,18 +184,18 @@ public class X8lTest {
 
         tree.trim();
 
-        try (FileWriter fileWriter = new FileWriter("out/outputTrim.x8l")) {
-            tree.write(fileWriter);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/outputTrim.x8l")))) {
+            tree.write(writer);
         }
 
         tree.format();
 
-        try (FileWriter fileWriter = new FileWriter("out/outputFormat.x8l")) {
-            tree.write(fileWriter);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/outputFormat.x8l")))) {
+            tree.write(writer);
         }
 
-        try (FileWriter fileWriter = new FileWriter("out/outputFormat.xml")) {
-            tree.write(fileWriter, XmlDealer.INSTANCE);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/outputFormat.xml")))) {
+            tree.write(writer, XmlDealer.INSTANCE);
         }
 
 
@@ -205,12 +211,12 @@ public class X8lTest {
                 "</note>")) {
             tree2.read(reader, XmlDealer.INSTANCE);
 
-            try (FileWriter fileWriter = new FileWriter("out/demoout.x8l")) {
-                tree2.write(fileWriter, X8lDealer.INSTANCE);
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoout.x8l")))) {
+                tree2.write(writer, X8lDealer.INSTANCE);
             }
 
-            try (FileWriter fileWriter = new FileWriter("out/demoout.xml")) {
-                tree2.write(fileWriter, XmlDealer.INSTANCE);
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoout.xml")))) {
+                tree2.write(writer, XmlDealer.INSTANCE);
             }
         }
 
@@ -241,11 +247,13 @@ public class X8lTest {
             X8lTree tree3 = new X8lTree(reader, JsonDealer.INSTANCE);
             tree3.read();
 
-            try (FileWriter fileWriter = new FileWriter("out/jsondemoout.x8l")) {
-                tree3.write(fileWriter, X8lDealer.INSTANCE);
+            try (Writer writer =
+                         new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsondemoout.x8l")))) {
+                tree3.write(writer, X8lDealer.INSTANCE);
             }
-            try (FileWriter fileWriter = new FileWriter("out/jsondemoout.json")) {
-                tree3.write(fileWriter, JsonDealer.INSTANCE);
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsondemoout" +
+                    ".json")))) {
+                tree3.write(writer, JsonDealer.INSTANCE);
             }
         }
 
@@ -278,6 +286,8 @@ public class X8lTest {
         ByteArrayInputStream ios = new ByteArrayInputStream(out.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(ios);
         X8lTree cloneTree = (X8lTree) ois.readObject();
+        String diff = StringUtils.difference(tree.toString(), cloneTree.toString());
+        assertEquals("", diff);
         assertEquals(tree, cloneTree);
         assertEquals(tree.getRoot(), cloneTree.getRoot());
         ois.close();

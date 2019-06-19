@@ -98,11 +98,11 @@ public class BenchMark {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, XmlDealer.INSTANCE, true);
             new File("out").mkdirs();
-            FileWriter fileWriter;
-            fileWriter = new FileWriter("out/" + filePathString + ".x8l");
-            tree.write(fileWriter, X8lDealer.INSTANCE);
-            fileWriter = new FileWriter("out/" + filePathString + ".xml");
-            tree.write(fileWriter, XmlDealer.INSTANCE);
+            Writer writer;
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".x8l")));
+            tree.write(writer, X8lDealer.INSTANCE);
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".xml")));
+            tree.write(writer, XmlDealer.INSTANCE);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -119,11 +119,13 @@ public class BenchMark {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);
             new File("out").mkdirs();
-            FileWriter fileWriter;
-            fileWriter = new FileWriter("out/" + filePathString + ".x8l");
-            tree.write(fileWriter, X8lDealer.INSTANCE);
-            fileWriter = new FileWriter("out/" + filePathString + ".json");
-            tree.write(fileWriter, JsonDealer.INSTANCE);
+            Writer writer;
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
+                    ".x8l")));
+            tree.write(writer, X8lDealer.INSTANCE);
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
+                    ".json")));
+            tree.write(writer, JsonDealer.INSTANCE);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
