@@ -76,13 +76,15 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static X8lTree loadFromString(String string) throws IOException {
+    public static X8lTree loadFromString(String string) {
         X8lTree res = null;
         try (
                 StringReader stringReader = new StringReader(string)
         ) {
             res = new X8lTree(stringReader);
             res.parse();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return res;
     }
