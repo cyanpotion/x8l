@@ -58,7 +58,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static void saveToFile(File file, X8lTree x8lTree) throws IOException {
-        if (file == null || !file.isFile()) {
+        if (file == null || (file.exists() && !file.isFile())) {
             throw new FileNotFoundException();
         }
         if (!file.exists()) {
