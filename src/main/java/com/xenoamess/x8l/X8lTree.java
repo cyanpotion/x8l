@@ -102,21 +102,22 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public X8lTree(Reader reader) {
-        this.reader = reader;
+        this.setReader(reader);
     }
 
     public X8lTree(Reader reader, boolean readItNow) throws IOException {
-        this.reader = reader;
-        if (readItNow) {
-            this.read(reader);
-        }
+        this(reader, X8lDealer.INSTANCE, readItNow);
+    }
+
+    public X8lTree(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
+        this(reader, languageDealer, false);
     }
 
     public X8lTree(Reader reader, AbstractLanguageDealer languageDealer, boolean readItNow) throws IOException {
-        this.reader = reader;
-        this.languageDealer = languageDealer;
+        this(reader);
+        this.setLanguageDealer(languageDealer);
         if (readItNow) {
-            this.read(reader, this.languageDealer);
+            this.read(reader, this.getLanguageDealer());
         }
     }
 
@@ -124,9 +125,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         try (
                 StringReader stringReader = new StringReader(original.toString())
         ) {
-            this.reader = stringReader;
-            this.languageDealer = original.languageDealer;
-            this.read(this.reader, this.languageDealer);
+            this.setReader(stringReader);
+            this.setLanguageDealer(original.getLanguageDealer());
+            this.read(this.getReader(), this.getLanguageDealer());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,20 +140,27 @@ public class X8lTree implements AutoCloseable, Serializable {
     @Override
     public void close() {
         this.getRoot().close();
-        if (this.reader != null) {
+        if (this.getReader() != null) {
             try {
-                this.reader.close();
+                this.getReader().close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.reader = null;
+            this.setReader(null);
         }
     }
 
-    public void read(Reader reader) throws IOException {
-        read(reader, this.languageDealer);
+    public void read() throws IOException {
+        read(this.getReader());
     }
 
+    public void read(Reader reader) throws IOException {
+        read(reader, this.getLanguageDealer());
+    }
+
+    public void read(AbstractLanguageDealer languageDealer) throws IOException {
+        read(this.getReader(), languageDealer);
+    }
 
     /**
      * will not close the reader after reading.
@@ -167,7 +175,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
 
     public void write(Writer writer) throws IOException {
-        this.write(writer, this.languageDealer);
+        this.write(writer, this.getLanguageDealer());
     }
 
     /**
@@ -184,7 +192,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
 
     public void parse() throws IOException {
-        this.read(this.reader);
+        this.read(this.getReader());
     }
 
     /**
@@ -296,11 +304,14 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     @Override
-    public boolean equals(Object x8lTree) {
-        if (x8lTree instanceof X8lTree) {
-            return this.toString().equals(x8lTree.toString());
+    public boolean equals(Object object) {
+        if (object == null) {
+            return false;
         }
-        return false;
+        if (!(object instanceof X8lTree)) {
+            return false;
+        }
+        return this.toString().equals(object.toString());
     }
 
     @Override
@@ -346,7 +357,23 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (patch == null) {
             return;
         }
-        this.getRoot().appendAll(patch.getRoot().getChildren());
+        X8lTree patchClone = new X8lTree(patch);
+        this.getRoot().appendAll(patchClone.getRoot().getChildren());
     }
 
+    public AbstractLanguageDealer getLanguageDealer() {
+        return languageDealer;
+    }
+
+    public void setLanguageDealer(AbstractLanguageDealer languageDealer) {
+        this.languageDealer = languageDealer;
+    }
+
+    public Reader getReader() {
+        return reader;
+    }
+
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
 }

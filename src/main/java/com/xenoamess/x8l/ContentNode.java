@@ -91,7 +91,8 @@ public class ContentNode extends AbstractTreeNode {
 
     @Override
     public void clear() {
-        for (AbstractTreeNode au : this.getChildren()) {
+        List<AbstractTreeNode> tmpChildren = new ArrayList<>(this.getChildren());
+        for (AbstractTreeNode au : tmpChildren) {
             au.close();
         }
         this.getChildren().clear();
@@ -279,6 +280,23 @@ public class ContentNode extends AbstractTreeNode {
 
     public List<AbstractTreeNode> getChildren() {
         return children;
+    }
+
+    /**
+     * if find child in this.children then remove it and return true;
+     * otherwise return false.
+     *
+     * @return
+     */
+    public boolean removeChild(AbstractTreeNode child) {
+        Iterator<AbstractTreeNode> iterator = this.getChildren().iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next() == child) {
+                iterator.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     public Map<String, String> getAttributes() {
