@@ -24,6 +24,7 @@
 
 package com.xenoamess.x8l;
 
+import com.xenoamess.commons.as_final_field.AsFinalField;
 import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 
@@ -34,8 +35,9 @@ import java.io.*;
  */
 public class X8lTree implements AutoCloseable, Serializable {
     private AbstractLanguageDealer languageDealer = X8lDealer.INSTANCE;
-    private final ContentNode root = new ContentNode(null);
-    private Reader reader;
+    @AsFinalField
+    private transient ContentNode root = new ContentNode(null);
+    private transient Reader reader;
 
     public ContentNode getRoot() {
         return root;
@@ -328,9 +330,11 @@ public class X8lTree implements AutoCloseable, Serializable {
      */
     private void readObject(ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
-        try (Reader objectInputStreamReader = new InputStreamReader(objectInputStream)) {
-            this.read(objectInputStreamReader);
+        objectInputStream.defaultReadObject();
+        if (this.root == null) {
+            this.root = new ContentNode(null);
         }
+        this.read(new InputStreamReader(objectInputStream));
     }
 
     /**
@@ -341,9 +345,8 @@ public class X8lTree implements AutoCloseable, Serializable {
      */
     private void writeObject(ObjectOutputStream objectOutputStream)
             throws IOException {
-        try (Writer writer = new OutputStreamWriter(objectOutputStream)) {
-            this.write(writer);
-        }
+        objectOutputStream.defaultWriteObject();
+        this.write(new OutputStreamWriter(objectOutputStream));
     }
 
     /**

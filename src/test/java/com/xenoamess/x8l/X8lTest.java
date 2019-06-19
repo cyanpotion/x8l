@@ -268,15 +268,16 @@ public class X8lTest {
     @Test
     public void testSerializable() throws IOException, ClassNotFoundException {
         X8lTree tree = prepare();
-        try (
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                ObjectOutputStream obs = new ObjectOutputStream(out);
-        ) {
-            obs.writeObject(tree);
-            ByteArrayInputStream ios = new ByteArrayInputStream(out.toByteArray());
-            ObjectInputStream ois = new ObjectInputStream(ios);
-            X8lTree cloneTree = (X8lTree) ois.readObject();
-            assertEquals(tree, cloneTree);
-        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream obs = new ObjectOutputStream(out);
+        obs.close();
+
+        obs.writeObject(tree);
+        ByteArrayInputStream ios = new ByteArrayInputStream(out.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(ios);
+        X8lTree cloneTree = (X8lTree) ois.readObject();
+        assertEquals(tree, cloneTree);
+        ois.close();
     }
 }

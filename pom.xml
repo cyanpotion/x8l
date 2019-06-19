@@ -173,6 +173,11 @@
             <artifactId>versions-maven-plugin</artifactId>
             <version>${versions-maven-plugin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.xenoamess</groupId>
+            <artifactId>commonx</artifactId>
+            <version>${commonx.version}</version>
+        </dependency>
     </dependencies>
 
 

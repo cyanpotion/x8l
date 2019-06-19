@@ -29,12 +29,13 @@ import com.xenoamess.x8l.ContentNode;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 
 /**
  * @author XenoAmess
  */
-public interface AbstractLanguageDealer {
+public interface AbstractLanguageDealer extends Serializable {
 
     void write(Writer writer, AbstractTreeNode treeNode) throws IOException;
 
