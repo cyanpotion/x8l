@@ -75,10 +75,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     @Override
     public void close() {
         this.clear();
-        if (this.getParent() != null && this.getParent().getChildren() != null) {
-            this.getParent().removeChild(this);
-        }
-        this.setParent(null);
+        this.removeParent();
     }
 
     public AbstractTreeNode removeParent() {

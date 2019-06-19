@@ -278,6 +278,7 @@ public class X8lTest {
         ObjectInputStream ois = new ObjectInputStream(ios);
         X8lTree cloneTree = (X8lTree) ois.readObject();
         assertEquals(tree, cloneTree);
+        assertEquals(tree.getRoot(), cloneTree.getRoot());
         ois.close();
     }
 }
