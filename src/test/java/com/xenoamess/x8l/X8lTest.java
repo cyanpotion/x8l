@@ -263,6 +263,7 @@ public class X8lTest {
         tree4.append(tree4);
         System.out.println(tree4.toString());
         tree4.close();
+        assertEquals(new X8lTree(tree4), tree4);
     }
 
     @Test
