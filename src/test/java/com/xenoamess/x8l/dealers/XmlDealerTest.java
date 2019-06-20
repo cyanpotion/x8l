@@ -68,7 +68,7 @@ public class XmlDealerTest {
         try (Writer writer = new StringWriter()) {
             tree.applyToAllNodes(abstractTreeNode -> {
                 try {
-                    XmlDealer.INSTANCE.write(writer, abstractTreeNode);
+                    XmlDealer.INSTANCE.naiveWrite(writer, abstractTreeNode);
                 } catch (IOException e) {
                 }
                 return null;
