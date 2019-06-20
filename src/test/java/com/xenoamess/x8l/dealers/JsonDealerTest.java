@@ -24,7 +24,6 @@
 
 package com.xenoamess.x8l.dealers;
 
-import com.xenoamess.x8l.AbstractTreeNode;
 import com.xenoamess.x8l.X8lTree;
 import org.junit.jupiter.api.Test;
 
@@ -68,8 +67,16 @@ public class JsonDealerTest {
                     ".json")))) {
                 tree3.write(writer, JsonDealer.INSTANCE);
             }
+            try (Writer writer = new StringWriter()) {
+                tree3.applyToAllNodes(abstractTreeNode -> {
+                    try {
+                        abstractTreeNode.write(writer, JsonDealer.INSTANCE);
+                    } catch (IOException e) {
+                    }
+                    return null;
+                });
+            }
 
-            tree3.applyToAllNodes(AbstractTreeNode::toString);
         }
     }
 }
