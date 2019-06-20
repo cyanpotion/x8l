@@ -29,6 +29,9 @@ import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author XenoAmess
@@ -367,6 +370,12 @@ public class X8lTree implements AutoCloseable, Serializable {
             return;
         }
         this.getRoot().appendAll(patch.getRoot().getChildren());
+    }
+
+    public <T> List<T> applyToAllNodes(Function<AbstractTreeNode, T> function) {
+        ArrayList<T> res = new ArrayList<>();
+        this.getRoot().applyToAllNodes(res, function);
+        return res;
     }
 
     public AbstractLanguageDealer getLanguageDealer() {

@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author XenoAmess
@@ -280,6 +281,24 @@ public class ContentNode extends AbstractTreeNode {
 
     public void read(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
         languageDealer.read(reader, this);
+    }
+
+
+    public <T> List<T> applyToAllNodes(Function<AbstractTreeNode, T> function) {
+        ArrayList<T> res = new ArrayList<>();
+        this.applyToAllNodes(res, function);
+        return res;
+    }
+
+    public <T> void applyToAllNodes(List<T> results, Function<AbstractTreeNode, T> function) {
+        results.add(function.apply(this));
+        for (AbstractTreeNode au : this.getChildren()) {
+            if (au instanceof ContentNode) {
+                ((ContentNode) au).applyToAllNodes(results, function);
+            } else {
+                results.add(function.apply(au));
+            }
+        }
     }
 
     //---getters and setters
