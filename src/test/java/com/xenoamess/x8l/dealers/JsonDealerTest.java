@@ -67,10 +67,11 @@ public class JsonDealerTest {
                     ".json")))) {
                 tree3.write(writer, JsonDealer.INSTANCE);
             }
+
             try (Writer writer = new StringWriter()) {
                 tree3.applyToAllNodes(abstractTreeNode -> {
                     try {
-                        abstractTreeNode.write(writer, JsonDealer.INSTANCE);
+                        abstractTreeNode.write(writer, tree3.getLanguageDealer());
                     } catch (IOException e) {
                     }
                     return null;
