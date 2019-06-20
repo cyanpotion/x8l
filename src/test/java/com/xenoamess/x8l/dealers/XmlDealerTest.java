@@ -64,6 +64,16 @@ public class XmlDealerTest {
                 return null;
             });
         }
+        tree.setLanguageDealer(XmlDealer.INSTANCE);
+        try (Writer writer = new StringWriter()) {
+            tree.applyToAllNodes(abstractTreeNode -> {
+                try {
+                    XmlDealer.INSTANCE.write(writer, abstractTreeNode);
+                } catch (IOException e) {
+                }
+                return null;
+            });
+        }
         tree.setLanguageDealer(JsonDealer.INSTANCE);
         try (Writer writer = new StringWriter()) {
             tree.applyToAllNodes(abstractTreeNode -> {
