@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class X8lTest {
 
@@ -165,8 +165,7 @@ public class X8lTest {
             writer.write(inputString);
         }
 
-        X8lTree tree = X8lTree.loadFromString(inputString);
-        return tree;
+        return X8lTree.loadFromString(inputString);
     }
 
     @Test
@@ -222,8 +221,8 @@ public class X8lTest {
 
         X8lTree tree4 = X8lTree.loadFromFile(new File("out/input.x8l"));
         X8lTree tree41 = X8lTree.loadFromFile(new File("out/input.x8l"));
-        assert (tree4.equals(tree41));
-        assertFalse(tree4.equals(null));
+        assertEquals(tree4, tree41);
+        assertNotEquals(null, tree4);
         assertEquals(tree4.getLanguageDealer(), X8lDealer.INSTANCE);
         System.out.println(tree4.toString());
         tree4.setLanguageDealer(JsonDealer.INSTANCE);

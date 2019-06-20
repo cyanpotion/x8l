@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
-    <version>0.48.0</version>
+    <version>0.48.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>Make a new markup language named x8l which can replace xml in
@@ -60,7 +60,7 @@
         <!--home made libraries versions-->
         <commonx.version>0.9.4</commonx.version>
         <multi_language.version>0.43.4</multi_language.version>
-        <x8l.version>0.47.3</x8l.version>
+        <x8l.version>0.48.0</x8l.version>
         <SDL_GameControllerDB_Util.version>0.1.2
         </SDL_GameControllerDB_Util.version>
         <!---->

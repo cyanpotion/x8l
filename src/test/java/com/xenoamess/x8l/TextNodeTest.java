@@ -27,6 +27,7 @@ package com.xenoamess.x8l;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * @author XenoAmess
@@ -62,9 +63,9 @@ public class TextNodeTest {
         } catch (IndexOutOfBoundsException e) {
         }
 
-        new TextNode(null, null).equals(new CommentNode(null, null));
+        assertNotEquals(new TextNode(null, null), new CommentNode(null, null));
+        assertEquals(new TextNode(null, null), new TextNode(null, null));
 
-        new TextNode(null, null).equals(new TextNode(null, null));
         t1 = new TextNode(tree.getRoot(), "1");
         t2 = new TextNode(null, "1");
         assertEquals(t1.hashCode(), t2.hashCode());
