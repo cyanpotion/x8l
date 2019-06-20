@@ -143,13 +143,13 @@ public class X8lTest {
                 "    <a0001>\n" +
                 "        <en>Thanks!>\n" +
                 "        <<just comment>\n" +
-                "<ch>谢谢!>\n" +
+                "<ch>AAAAA>\n" +
                 "    >\n" +
                 "    <<just comment>\n" +
                 "    <a0002>\n" +
                 "        <en>Hello?>\n" +
                 "<<just comment>\n" +
-                "<ch>您好？>\n" +
+                "<ch>BBBBB>\n" +
                 "    >\n" +
                 ">\n" +
                 "\n" +
@@ -157,7 +157,7 @@ public class X8lTest {
                 "    <a0001>\n" +
                 "        <en>Thanks!>\n" +
                 "        <<just comment>\n" +
-                "<ch>谢谢!>\n" +
+                "<ch>CCCCC>\n" +
                 "    >\n" +
                 ">";
 
