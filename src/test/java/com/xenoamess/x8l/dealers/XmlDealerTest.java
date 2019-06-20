@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -41,6 +42,37 @@ public class XmlDealerTest {
             new XmlDealer().naiveWrite(writer, tree.getRoot());
             System.out.println(writer);
             assertNotEquals(writer.toString(), "");
+        }
+
+        tree.setLanguageDealer(X8lDealer.INSTANCE);
+        try (Writer writer = new StringWriter()) {
+            tree.applyToAllNodes(abstractTreeNode -> {
+                try {
+                    abstractTreeNode.write(writer, tree.getLanguageDealer());
+                } catch (IOException e) {
+                }
+                return null;
+            });
+        }
+        tree.setLanguageDealer(XmlDealer.INSTANCE);
+        try (Writer writer = new StringWriter()) {
+            tree.applyToAllNodes(abstractTreeNode -> {
+                try {
+                    abstractTreeNode.write(writer, tree.getLanguageDealer());
+                } catch (IOException e) {
+                }
+                return null;
+            });
+        }
+        tree.setLanguageDealer(JsonDealer.INSTANCE);
+        try (Writer writer = new StringWriter()) {
+            tree.applyToAllNodes(abstractTreeNode -> {
+                try {
+                    abstractTreeNode.write(writer, tree.getLanguageDealer());
+                } catch (IOException e) {
+                }
+                return null;
+            });
         }
     }
 }
