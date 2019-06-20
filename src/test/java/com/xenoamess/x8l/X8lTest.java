@@ -292,4 +292,9 @@ public class X8lTest {
         assertEquals(tree.getRoot(), cloneTree.getRoot());
         ois.close();
     }
+
+    @Test
+    public void untranscodeTest() {
+        assertEquals(X8lTree.untranscode("%%%<%>% "), "%<> ");
+    }
 }

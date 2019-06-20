@@ -58,7 +58,7 @@ public class BenchMark {
      * DEALINGS IN THE SOFTWARE.
      */
     @Test
-    public void testJson_citylots() {
+    public void testJson_citylots() throws IOException {
         this.testJson("citylots");
     }
 
@@ -67,7 +67,7 @@ public class BenchMark {
      * resource uri: ftp://ftpmirror.your.org/pub/wikimedia/dumps/20110115/enwiki-20110115-abstract9.xml
      */
     @Test
-    public void testXml_enwiki_20110115_abstract9() {
+    public void testXml_enwiki_20110115_abstract9() throws IOException {
         this.testXml("enwiki-20110115-abstract9");
     }
 
@@ -76,7 +76,7 @@ public class BenchMark {
      * resource uri: ftp://ftpmirror.your.org/pub/wikimedia/dumps/20110115/enwiki-20110115-abstract10.xml
      */
     @Test
-    public void testXml_enwiki_20110115_abstract10() {
+    public void testXml_enwiki_20110115_abstract10() throws IOException {
         this.testXml("enwiki-20110115-abstract10");
     }
 
@@ -85,11 +85,11 @@ public class BenchMark {
      * resource uri: ftp://ftpmirror.your.org/pub/wikimedia/dumps/20110115/enwiki-20110115-abstract11.xml
      */
     @Test
-    public void testXml_enwiki_20110115_abstract11() {
+    public void testXml_enwiki_20110115_abstract11() throws IOException {
         this.testXml("enwiki-20110115-abstract11");
     }
 
-    public void testXml(String filePathString) {
+    public void testXml(String filePathString) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
              Reader reader =
@@ -103,14 +103,10 @@ public class BenchMark {
             tree.write(writer, X8lDealer.INSTANCE);
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".xml")));
             tree.write(writer, XmlDealer.INSTANCE);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public void testJson(String filePathString) {
+    public void testJson(String filePathString) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
              Reader reader =
@@ -126,10 +122,6 @@ public class BenchMark {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
                     ".json")));
             tree.write(writer, JsonDealer.INSTANCE);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

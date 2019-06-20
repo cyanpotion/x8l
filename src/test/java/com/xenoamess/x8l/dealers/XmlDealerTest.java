@@ -39,6 +39,7 @@ public class XmlDealerTest {
         X8lTree tree = new X8lTest().prepare();
         try (StringWriter writer = new StringWriter()) {
             new XmlDealer().naiveWrite(writer, tree.getRoot());
+            System.out.println(writer);
             assertNotEquals(writer.toString(), "");
         }
     }
