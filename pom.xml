@@ -48,7 +48,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <dom4j.version>2.1.1</dom4j.version>
         <guava.version>28.0-jre</guava.version>
-        <jackson.version>2.9.9</jackson.version>
+        <jackson.version>2.10.0.pr1</jackson.version>
         <joml.version>1.9.15</joml.version>
         <log4j.version>2.11.2</log4j.version>
         <lwjgl.version>3.2.2</lwjgl.version>
