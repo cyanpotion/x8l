@@ -311,7 +311,8 @@ public class ContentNode extends AbstractTreeNode {
      * if find child in this.children then remove it and return true;
      * otherwise return false.
      *
-     * @return
+     * @param child the child node to remove.
+     * @return if remove success.
      */
     public boolean removeChild(AbstractTreeNode child) {
         Iterator<AbstractTreeNode> iterator = this.getChildren().iterator();
