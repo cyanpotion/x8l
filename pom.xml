@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
-    <version>0.48.2</version>
+    <version>0.48.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>Make a new markup language named x8l which can replace xml in
@@ -47,26 +47,26 @@
         <commons-io.version>2.6</commons-io.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <dom4j.version>2.1.1</dom4j.version>
-        <guava.version>28.0-jre</guava.version>
-        <jackson.version>2.10.0.pr1</jackson.version>
-        <joml.version>1.9.16</joml.version>
-        <log4j.version>2.12.0</log4j.version>
-        <lwjgl.version>3.2.2</lwjgl.version>
-        <slf4j.version>2.0.0-alpha0</slf4j.version>
+        <guava.version>28.1-jre</guava.version>
+        <jackson.version>2.10.0.pr3</jackson.version>
+        <joml.version>1.9.18</joml.version>
+        <log4j.version>2.12.1</log4j.version>
+        <lwjgl.version>3.2.3</lwjgl.version>
+        <slf4j.version>2.0.0-alpha1</slf4j.version>
         <steamworks4j.version>1.8.0</steamworks4j.version>
         <JXInput.version>1.0.0</JXInput.version>
         <!---->
         <!---->
         <!--home made libraries versions-->
-        <commonx.version>0.9.5</commonx.version>
-        <multi_language.version>0.44.1</multi_language.version>
-        <x8l.version>0.48.1</x8l.version>
-        <SDL_GameControllerDB_Util.version>1.0.1
+        <commonx.version>0.9.8</commonx.version>
+        <multi_language.version>0.44.3</multi_language.version>
+        <x8l.version>0.48.2</x8l.version>
+        <SDL_GameControllerDB_Util.version>1.1.20191011
         </SDL_GameControllerDB_Util.version>
         <!---->
         <!---->
         <!--maven plugins versions-->
-        <junit-jupiter.version>5.5.1</junit-jupiter.version>
+        <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>

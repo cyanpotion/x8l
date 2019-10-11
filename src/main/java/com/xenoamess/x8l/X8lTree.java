@@ -48,7 +48,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     public static X8lTree loadFromFile(File file) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
         X8lTree res = null;
         try (
@@ -62,7 +62,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     public static void saveToFile(File file, X8lTree x8lTree) throws IOException {
         if (file == null || (file.exists() && !file.isFile())) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
         if (!file.exists()) {
             file.getParentFile().mkdirs();
