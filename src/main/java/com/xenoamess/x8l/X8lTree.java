@@ -29,6 +29,8 @@ import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -60,6 +62,20 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
+    public static X8lTree loadFromPath(Path path) throws IOException {
+        if (path == null || !Files.isReadable(path)) {
+            throw new FileNotFoundException(path == null ? "null" : path.toString());
+        }
+        X8lTree res = null;
+        try (
+                Reader reader = Files.newBufferedReader(path)
+        ) {
+            res = new X8lTree(reader);
+            res.parse();
+        }
+        return res;
+    }
+
     public static void saveToFile(File file, X8lTree x8lTree) throws IOException {
         if (file == null || (file.exists() && !file.isFile())) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
@@ -74,6 +90,22 @@ public class X8lTree implements AutoCloseable, Serializable {
 
         try (
                 Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))
+        ) {
+            x8lTree.write(writer);
+        }
+    }
+
+    public static void saveToPath(Path path, X8lTree x8lTree) throws IOException {
+        if (path == null || !Files.isReadable(path)) {
+            throw new FileNotFoundException(path == null ? "null" : path.toString());
+        }
+        if (!Files.exists(path)) {
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+        }
+
+        try (
+                Writer writer = Files.newBufferedWriter(path);
         ) {
             x8lTree.write(writer);
         }
