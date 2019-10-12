@@ -355,7 +355,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     @Override
     public String toString() {
-        return saveToString(this);
+        return save(this);
     }
 
     @Override
