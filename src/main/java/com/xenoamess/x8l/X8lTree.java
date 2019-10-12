@@ -48,7 +48,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return root;
     }
 
-    public static X8lTree loadFromFile(File file) throws IOException {
+    public static X8lTree load(File file) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
@@ -62,7 +62,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree loadFromPath(Path path) throws IOException {
+    public static X8lTree load(Path path) throws IOException {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
@@ -76,7 +76,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static void saveToFile(File file, X8lTree x8lTree) throws IOException {
+    public static void save(File file, X8lTree x8lTree) throws IOException {
         if (file == null || (file.exists() && !file.isFile())) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
@@ -95,7 +95,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static void saveToPath(Path path, X8lTree x8lTree) throws IOException {
+    public static void save(Path path, X8lTree x8lTree) throws IOException {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
@@ -111,7 +111,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static X8lTree loadFromString(String string) {
+    public static X8lTree load(String string) {
         X8lTree res = null;
         try (
                 StringReader stringReader = new StringReader(string)
@@ -124,7 +124,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static String saveToString(X8lTree x8lTree) {
+    public static String save(X8lTree x8lTree) {
         String res = "";
         try (
                 StringWriter stringWriter = new StringWriter()
@@ -135,6 +135,22 @@ public class X8lTree implements AutoCloseable, Serializable {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static X8lTree load(InputStream inputStream) throws IOException {
+        X8lTree res = null;
+        try (
+                Reader reader = new InputStreamReader(inputStream)
+        ) {
+            res = new X8lTree(reader);
+            res.parse();
+        }
+        return res;
+    }
+
+    public static void save(OutputStream outputStream, X8lTree x8lTree) throws IOException {
+        Writer writer = new OutputStreamWriter(outputStream);
+        x8lTree.write(writer);
     }
 
     public X8lTree() {
