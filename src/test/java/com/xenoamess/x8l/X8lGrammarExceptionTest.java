@@ -35,7 +35,7 @@ public class X8lGrammarExceptionTest extends IOException {
     @Test
     public void test() {
         try {
-            X8lTree.loadFromString(">");
+            X8lTree.load(">");
             assert (false);
         } catch (X8lGrammarException e) {
         }
