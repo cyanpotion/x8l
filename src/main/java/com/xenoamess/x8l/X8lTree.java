@@ -30,6 +30,7 @@ import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -66,20 +67,60 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
+    public static List<AbstractLanguageDealer> suspectDealer(String nameString, List<AbstractLanguageDealer> originalList) {
+        List<AbstractLanguageDealer> res = new ArrayList<>(originalList);
+        if (nameString.endsWith("json") || nameString.endsWith("json".toUpperCase())) {
+            originalList.remove(JsonDealer.INSTANCE);
+            originalList.add(0, JsonDealer.INSTANCE);
+        } else if (nameString.endsWith("xml") || nameString.endsWith("xml".toUpperCase())) {
+            originalList.remove(XmlDealer.INSTANCE);
+            originalList.add(0, XmlDealer.INSTANCE);
+        } else if (nameString.endsWith("x8l") || nameString.endsWith("x8l".toUpperCase())) {
+            originalList.remove(X8lDealer.INSTANCE);
+            originalList.add(0, X8lDealer.INSTANCE);
+        } else if (nameString.contains("json")) {
+            originalList.remove(JsonDealer.INSTANCE);
+            originalList.add(0, JsonDealer.INSTANCE);
+        } else if (nameString.contains("xml")) {
+            originalList.remove(XmlDealer.INSTANCE);
+            originalList.add(0, XmlDealer.INSTANCE);
+        } else if (nameString.contains("x8l")) {
+            originalList.remove(X8lDealer.INSTANCE);
+            originalList.add(0, X8lDealer.INSTANCE);
+        }
+        return res;
+    }
+
     public ContentNode getRoot() {
         return root;
     }
 
-    public static X8lTree load(File file) throws IOException {
-        if (file == null || !file.exists() || !file.isFile()) {
-            throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
+    /*
+     * Path
+     */
+
+    public static X8lTree load(Path path, AbstractLanguageDealer dealer) throws IOException {
+        if (path == null || !Files.isReadable(path)) {
+            throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
         X8lTree res = null;
         try (
-                Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
+                Reader reader = Files.newBufferedReader(path)
         ) {
-            res = new X8lTree(reader);
-            res.parse();
+            res = load(reader, dealer);
+        }
+        return res;
+    }
+
+    public static X8lTree load(Path path, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
+        if (path == null || !Files.isReadable(path)) {
+            throw new FileNotFoundException(path == null ? "null" : path.toString());
+        }
+        X8lTree res = null;
+        try (
+                Reader reader = Files.newBufferedReader(path)
+        ) {
+            res = load(reader, possibleDealerList);
         }
         return res;
     }
@@ -88,14 +129,110 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
+        return load(path, suspectDealer(path.toString(), getLanguageDealerListCopy()));
+    }
+
+    public static void save(Path path, X8lTree x8lTree) throws IOException {
+        if (path == null || !Files.isReadable(path)) {
+            throw new FileNotFoundException(path == null ? "null" : path.toString());
+        }
+        if (!Files.exists(path)) {
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+        }
+
+        try (
+                Writer writer = Files.newBufferedWriter(path);
+        ) {
+            x8lTree.write(writer);
+        }
+    }
+
+    /*
+     * FileObject
+     */
+
+    public static X8lTree load(FileObject fileObject, AbstractLanguageDealer dealer) throws IOException {
+        if (fileObject == null || !fileObject.exists()) {
+            throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
+        }
         X8lTree res = null;
         try (
-                Reader reader = Files.newBufferedReader(path)
+                InputStream inputStream = fileObject.getContent().getInputStream()
         ) {
-            res = new X8lTree(reader);
-            res.parse();
+            res = load(inputStream, dealer);
         }
         return res;
+    }
+
+    public static X8lTree load(FileObject fileObject, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
+        if (fileObject == null || !fileObject.exists()) {
+            throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
+        }
+        X8lTree res = null;
+        try (
+                InputStream inputStream = fileObject.getContent().getInputStream()
+        ) {
+            res = load(inputStream, possibleDealerList);
+        }
+        return res;
+    }
+
+    public static X8lTree load(FileObject fileObject) throws IOException {
+        if (fileObject == null || !fileObject.exists()) {
+            throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
+        }
+        return load(fileObject, suspectDealer(fileObject.getName().getBaseName(), getLanguageDealerListCopy()));
+    }
+
+    public static void save(FileObject fileObject, X8lTree x8lTree) throws IOException {
+        if (fileObject == null) {
+            throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
+        }
+
+        try (
+                OutputStream outputStream = fileObject.getContent().getOutputStream();
+                Writer writer = new OutputStreamWriter(outputStream);
+        ) {
+            x8lTree.write(writer);
+        }
+    }
+
+    /*
+     * File
+     */
+
+    public static X8lTree load(File file, AbstractLanguageDealer dealer) throws IOException {
+        if (file == null || !file.exists() || !file.isFile()) {
+            throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
+        }
+        X8lTree res = null;
+        try (
+                Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
+        ) {
+            res = load(reader, dealer);
+        }
+        return res;
+    }
+
+    public static X8lTree load(File file, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
+        if (file == null || !file.exists() || !file.isFile()) {
+            throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
+        }
+        X8lTree res = null;
+        try (
+                Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
+        ) {
+            res = load(reader, possibleDealerList);
+        }
+        return res;
+    }
+
+    public static X8lTree load(File file) throws IOException {
+        if (file == null || !file.exists() || !file.isFile()) {
+            throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
+        }
+        return load(file, suspectDealer(file.getName(), getLanguageDealerListCopy()));
     }
 
     public static void save(File file, X8lTree x8lTree) throws IOException {
@@ -117,20 +254,21 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static void save(Path path, X8lTree x8lTree) throws IOException {
-        if (path == null || !Files.isReadable(path)) {
-            throw new FileNotFoundException(path == null ? "null" : path.toString());
-        }
-        if (!Files.exists(path)) {
-            Files.createDirectories(path.getParent());
-            Files.createFile(path);
-        }
-
+    /*
+     * String
+     */
+    public static X8lTree load(String string, AbstractLanguageDealer dealer) {
+        X8lTree res = null;
         try (
-                Writer writer = Files.newBufferedWriter(path);
+                StringReader stringReader = new StringReader(string)
         ) {
-            x8lTree.write(writer);
+            res = new X8lTree(stringReader, dealer);
+            res.parse();
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return res;
     }
 
     public static X8lTree load(String string, List<AbstractLanguageDealer> possibleDealerList) {
@@ -153,7 +291,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         return load(string, getLanguageDealerListCopy());
     }
 
-
     public static String save(X8lTree x8lTree) {
         String res = "";
         try (
@@ -167,6 +304,21 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
+    /*
+     * Stream
+     */
+
+    public static X8lTree load(InputStream inputStream, AbstractLanguageDealer dealer) throws IOException {
+        X8lTree x8lTree = null;
+        try (
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+                Reader reader = new InputStreamReader(bufferedInputStream);
+        ) {
+            x8lTree = load(reader, dealer);
+        }
+        return x8lTree;
+    }
+
     public static X8lTree load(InputStream inputStream, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
         return load(IOUtils.toString(inputStream, StandardCharsets.UTF_8), possibleDealerList);
     }
@@ -176,8 +328,22 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static void save(OutputStream outputStream, X8lTree x8lTree) throws IOException {
-        Writer writer = new OutputStreamWriter(outputStream);
-        x8lTree.write(writer);
+        try (
+                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+                Writer writer = new OutputStreamWriter(bufferedOutputStream);
+        ) {
+            x8lTree.write(writer);
+        }
+    }
+
+    /*
+     * Reader, Writer
+     */
+
+    public static X8lTree load(Reader reader, AbstractLanguageDealer dealer) throws IOException {
+        X8lTree x8lTree = new X8lTree(reader, dealer);
+        x8lTree.parse();
+        return x8lTree;
     }
 
     public static X8lTree load(Reader reader, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
@@ -194,20 +360,12 @@ public class X8lTree implements AutoCloseable, Serializable {
 
 
     public X8lTree() {
-        this((Reader) null);
-    }
-
-    public X8lTree(Reader reader) {
-        this(reader, X8lDealer.INSTANCE);
+        this(null, X8lDealer.INSTANCE);
     }
 
     public X8lTree(Reader reader, AbstractLanguageDealer languageDealer) {
         this.setReader(reader);
         this.setLanguageDealer(languageDealer);
-    }
-
-    public X8lTree(Reader reader, boolean readItNow) throws IOException {
-        this(reader, X8lDealer.INSTANCE, readItNow);
     }
 
     public X8lTree(Reader reader, AbstractLanguageDealer languageDealer, boolean readItNow) throws IOException {

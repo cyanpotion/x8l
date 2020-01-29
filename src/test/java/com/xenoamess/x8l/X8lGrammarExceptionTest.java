@@ -24,6 +24,8 @@
 
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.X8lDealer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -35,8 +37,8 @@ public class X8lGrammarExceptionTest extends IOException {
     @Test
     public void test() {
         try {
-            X8lTree.load(">");
-            assert (false);
+            X8lTree x8lTree = X8lTree.load(">");
+            Assertions.assertNotEquals(x8lTree.getLanguageDealer(), X8lDealer.INSTANCE);
         } catch (X8lGrammarException e) {
         }
     }

@@ -92,8 +92,8 @@ public class BenchMark {
     public void testXml(String filePathString) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
-             Reader reader =
-                     new InputStreamReader(zipInputStream)
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
+             Reader reader = new InputStreamReader(bufferedInputStream)
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, XmlDealer.INSTANCE, true);
@@ -109,8 +109,8 @@ public class BenchMark {
     public void testJson(String filePathString) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
-             Reader reader =
-                     new InputStreamReader(zipInputStream)
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
+             Reader reader = new InputStreamReader(bufferedInputStream);
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);
