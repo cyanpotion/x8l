@@ -26,9 +26,13 @@ package com.xenoamess.x8l;
 
 import com.xenoamess.commons.as_final_field.AsFinalField;
 import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
+import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
+import com.xenoamess.x8l.dealers.XmlDealer;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -43,6 +47,24 @@ public class X8lTree implements AutoCloseable, Serializable {
     @AsFinalField
     private transient ContentNode root = new ContentNode(null);
     private transient Reader reader;
+
+    private static final List<AbstractLanguageDealer> languageDealerList = new ArrayList<>();
+
+    public static void addToLanguageDealerList(AbstractLanguageDealer languageDealer) {
+        languageDealerList.add(languageDealer);
+    }
+
+    static {
+        addToLanguageDealerList(X8lDealer.INSTANCE);
+        addToLanguageDealerList(JsonDealer.INSTANCE);
+        addToLanguageDealerList(XmlDealer.INSTANCE);
+    }
+
+    public static List<AbstractLanguageDealer> getLanguageDealerListCopy() {
+        ArrayList<AbstractLanguageDealer> res = new ArrayList<>();
+        res.addAll(languageDealerList);
+        return res;
+    }
 
     public ContentNode getRoot() {
         return root;
@@ -111,18 +133,26 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static X8lTree load(String string) {
+    public static X8lTree load(String string, List<AbstractLanguageDealer> possibleDealerList) {
         X8lTree res = null;
-        try (
-                StringReader stringReader = new StringReader(string)
-        ) {
-            res = new X8lTree(stringReader);
-            res.parse();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (AbstractLanguageDealer dealer : possibleDealerList) {
+            try (
+                    StringReader stringReader = new StringReader(string)
+            ) {
+                res = new X8lTree(stringReader, dealer);
+                res.parse();
+                return res;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return res;
     }
+
+    public static X8lTree load(String string) {
+        return load(string, getLanguageDealerListCopy());
+    }
+
 
     public static String save(X8lTree x8lTree) {
         String res = "";
@@ -137,15 +167,12 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
+    public static X8lTree load(InputStream inputStream, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
+        return load(IOUtils.toString(inputStream, StandardCharsets.UTF_8), possibleDealerList);
+    }
+
     public static X8lTree load(InputStream inputStream) throws IOException {
-        X8lTree res = null;
-        try (
-                Reader reader = new InputStreamReader(inputStream)
-        ) {
-            res = new X8lTree(reader);
-            res.parse();
-        }
-        return res;
+        return load(IOUtils.toString(inputStream, StandardCharsets.UTF_8));
     }
 
     public static void save(OutputStream outputStream, X8lTree x8lTree) throws IOException {
@@ -153,23 +180,38 @@ public class X8lTree implements AutoCloseable, Serializable {
         x8lTree.write(writer);
     }
 
+    public static X8lTree load(Reader reader, List<AbstractLanguageDealer> possibleDealerList) throws IOException {
+        return load(IOUtils.toString(reader), possibleDealerList);
+    }
+
+    public static X8lTree load(Reader reader) throws IOException {
+        return load(IOUtils.toString(reader));
+    }
+
+    public static void save(Writer writer, X8lTree x8lTree) throws IOException {
+        x8lTree.write(writer);
+    }
+
+
     public X8lTree() {
+        this((Reader) null);
     }
 
     public X8lTree(Reader reader) {
+        this(reader, X8lDealer.INSTANCE);
+    }
+
+    public X8lTree(Reader reader, AbstractLanguageDealer languageDealer) {
         this.setReader(reader);
+        this.setLanguageDealer(languageDealer);
     }
 
     public X8lTree(Reader reader, boolean readItNow) throws IOException {
         this(reader, X8lDealer.INSTANCE, readItNow);
     }
 
-    public X8lTree(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
-        this(reader, languageDealer, false);
-    }
-
     public X8lTree(Reader reader, AbstractLanguageDealer languageDealer, boolean readItNow) throws IOException {
-        this(reader);
+        this.setReader(reader);
         this.setLanguageDealer(languageDealer);
         if (readItNow) {
             this.read(reader, this.getLanguageDealer());
@@ -177,14 +219,16 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public X8lTree(X8lTree original) {
-        try (
-                StringReader stringReader = new StringReader(original.toString())
-        ) {
-            this.setReader(stringReader);
-            this.setLanguageDealer(original.getLanguageDealer());
-            this.read(this.getReader(), this.getLanguageDealer());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (original != null) {
+            try (
+                    StringReader stringReader = new StringReader(original.toString())
+            ) {
+                this.setReader(stringReader);
+                this.setLanguageDealer(original.getLanguageDealer());
+                this.read(this.getReader(), this.getLanguageDealer());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
