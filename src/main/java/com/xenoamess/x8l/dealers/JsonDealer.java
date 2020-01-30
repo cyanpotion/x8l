@@ -221,19 +221,23 @@ public class JsonDealer implements AbstractLanguageDealer {
                     Map.Entry<String, JsonNode> attributeJsonNodeEntry = attributeJsonNodeIterator.next();
                     contentNode.addAttribute(attributeJsonNodeEntry.getKey(), attributeJsonNodeEntry.getValue().asText());
                 }
+                continue;
             }
 
             ContentNode childContentNode = new ContentNode(contentNode);
+            if (entry.getKey().startsWith(TEXT_KEY)) {
+                new TextNode(childContentNode, entry.getValue().asText());
+                continue;
+            } else if (entry.getKey().startsWith(COMMENT_KEY)) {
+                new CommentNode(childContentNode, entry.getValue().asText());
+                continue;
+            }
             childContentNode.addAttribute(entry.getKey());
             if (entry.getValue() instanceof ObjectNode) {
                 this.read(childContentNode, (ObjectNode) entry.getValue());
             } else if (entry.getValue() instanceof ArrayNode) {
                 ArrayNode arrayNode = (ArrayNode) entry.getValue();
                 this.read(childContentNode, arrayNode);
-            } else if (entry.getKey().startsWith(TEXT_KEY)) {
-                new TextNode(childContentNode, entry.getValue().asText());
-            } else if (entry.getKey().startsWith(COMMENT_KEY)) {
-                new CommentNode(childContentNode, entry.getValue().asText());
             } else {
                 new TextNode(childContentNode, entry.getValue().asText());
             }
