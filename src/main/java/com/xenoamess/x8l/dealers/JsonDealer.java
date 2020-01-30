@@ -142,12 +142,14 @@ public class JsonDealer implements AbstractLanguageDealer {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     objectNode.set(contentNode2.getName(), arrayNode2);
                     nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
-                } else if (isSingleNameTextPair(contentNode2)) {
-                    objectNode.put(
-                            contentNode2.getName(),
-                            ((TextNode) contentNode2.getChildren().get(0)).getTextContent()
-                    );
-                } else {
+                }
+//                else if (isSingleNameTextPair(contentNode2)) {
+//                    objectNode.put(
+//                            contentNode2.getName(),
+//                            ((TextNode) contentNode2.getChildren().get(0)).getTextContent()
+//                    );
+//                }
+                else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     objectNode.set(contentNode2.getName(), objectNode2);
                     nowIndex = this.write(contentNode2, objectNode2, nowIndex);
@@ -179,9 +181,11 @@ public class JsonDealer implements AbstractLanguageDealer {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     arrayNode.add(arrayNode2);
                     nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
-                } else if (isSingleNameTextPair(contentNode2)) {
-                    arrayNode.add(((TextNode) contentNode2.getChildren().get(0)).getTextContent());
-                } else {
+                }
+//                else if (isSingleNameTextPair(contentNode2)) {
+//                    arrayNode.add(((TextNode) contentNode2.getChildren().get(0)).getTextContent());
+//                }
+                else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     arrayNode.add(objectNode2);
                     nowIndex = this.write(contentNode2, objectNode2, nowIndex);
