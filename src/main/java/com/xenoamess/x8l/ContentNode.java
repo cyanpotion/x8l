@@ -114,7 +114,7 @@ public class ContentNode extends AbstractTreeNode {
                 ((ContentNode) au).trim();
                 newChildren.add(au);
             } else if (au.getClass().equals(TextNode.class)) {
-                if (!StringUtils.isEmpty(((TextNode) au).getTextContent().trim())) {
+                if (!StringUtils.isBlank(((TextNode) au).getTextContent())) {
                     newChildren.add(au);
                 }
             } else {

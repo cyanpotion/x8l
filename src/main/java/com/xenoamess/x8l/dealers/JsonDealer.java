@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xenoamess.x8l.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +69,7 @@ public class JsonDealer implements AbstractLanguageDealer {
     public static final String ARRAY_ID_ATTRIBUTE = "[";
     public static final String TEXT_KEY = "_text";
     public static final String COMMENT_KEY = "_comment";
+    public static final String ATTRIBUTES_KEY = "_attributes";
     public static final JsonDealer INSTANCE = new JsonDealer();
     private static ObjectMapper objectMapper;
 
@@ -78,6 +80,17 @@ public class JsonDealer implements AbstractLanguageDealer {
             objectMapper = localObjectMapper;
         }
         return objectMapper;
+    }
+
+    public static boolean isSingleNameTextPair(ContentNode contentNode) {
+        if (contentNode.getAttributes().size() == 1) {
+            String name = contentNode.getName();
+            return !StringUtils.isBlank(name)
+                    && StringUtils.isBlank(contentNode.getAttributes().get(name))
+                    && contentNode.getChildren().size() == 1
+                    && (contentNode.getChildren().get(0) instanceof TextNode);
+        }
+        return false;
     }
 
     @Override
@@ -114,6 +127,13 @@ public class JsonDealer implements AbstractLanguageDealer {
             LOGGER.error("Json does not allow this here.we just delete it : {}", contentNode.toString());
             return nowIndex;
         }
+        if (!contentNode.getAttributes().isEmpty()) {
+            ObjectNode attributeNode = getObjectMapper().createObjectNode();
+            for (Map.Entry<String, String> entry : contentNode.getAttributes().entrySet()) {
+                attributeNode.put(entry.getKey(), entry.getValue());
+            }
+            objectNode.put(ATTRIBUTES_KEY, attributeNode);
+        }
 
         for (AbstractTreeNode treeNode : contentNode.getChildren()) {
             if (treeNode instanceof ContentNode) {
@@ -122,7 +142,7 @@ public class JsonDealer implements AbstractLanguageDealer {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     objectNode.set(contentNode2.getName(), arrayNode2);
                     nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
-                } else if (contentNode2.getChildren().size() == 1 && contentNode2.getChildren().get(0) instanceof TextNode) {
+                } else if (isSingleNameTextPair(contentNode2)) {
                     objectNode.put(
                             contentNode2.getName(),
                             ((TextNode) contentNode2.getChildren().get(0)).getTextContent()
@@ -159,13 +179,15 @@ public class JsonDealer implements AbstractLanguageDealer {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     arrayNode.add(arrayNode2);
                     nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
-                } else if (contentNode2.getChildren().size() == 1 && contentNode2.getChildren().get(0) instanceof TextNode) {
+                } else if (isSingleNameTextPair(contentNode2)) {
                     arrayNode.add(((TextNode) contentNode2.getChildren().get(0)).getTextContent());
                 } else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     arrayNode.add(objectNode2);
                     nowIndex = this.write(contentNode2, objectNode2, nowIndex);
                 }
+            } else if (treeNode instanceof TextNode) {
+                arrayNode.add(((TextNode) treeNode).getTextContent());
             } else {
                 LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
             }
@@ -193,6 +215,14 @@ public class JsonDealer implements AbstractLanguageDealer {
     private void read(ContentNode contentNode, ObjectNode objectNode) {
         for (Iterator<Map.Entry<String, JsonNode>> it = objectNode.fields(); it.hasNext(); ) {
             Map.Entry<String, JsonNode> entry = it.next();
+            if (ATTRIBUTES_KEY.equals(entry.getKey())) {
+                JsonNode attributeJsonNode = entry.getValue();
+                for (Iterator<Map.Entry<String, JsonNode>> attributeJsonNodeIterator = attributeJsonNode.fields(); attributeJsonNodeIterator.hasNext(); ) {
+                    Map.Entry<String, JsonNode> attributeJsonNodeEntry = attributeJsonNodeIterator.next();
+                    contentNode.addAttribute(attributeJsonNodeEntry.getKey(), attributeJsonNodeEntry.getValue().asText());
+                }
+            }
+
             ContentNode childContentNode = new ContentNode(contentNode);
             childContentNode.addAttribute(entry.getKey());
             if (entry.getValue() instanceof ObjectNode) {
