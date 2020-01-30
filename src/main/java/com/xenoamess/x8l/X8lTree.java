@@ -473,6 +473,18 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     /**
+     * trim every TextNode's text String.
+     * (and delete them if it be blank)
+     * trim every commentNode's text String.
+     *
+     * @return the original X8lTree is trimmed and then returned.
+     */
+    public X8lTree trimForce() {
+        this.getRoot().trimForce();
+        return this;
+    }
+
+    /**
      * format the tree.
      * notice that format will trim every text content in text nodes and comment nodes.
      * that is designed to do so, in order to notice the user that, when you format the tree,

@@ -35,6 +35,8 @@ import org.dom4j.tree.DefaultText;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Read and output xml.
@@ -79,17 +81,44 @@ public class XmlDealer implements AbstractLanguageDealer {
         document.write(writer);
     }
 
+    /**
+     * delete attributes which contains illegal char in their key.
+     * "illegal" here means illegal to xml, not for x8l.
+     * for example, [ is illegal.(JsonDealer.ARRAY_ID_ATTRIBUTE)
+     *
+     * @param source
+     * @return
+     */
+    public static List<String> filterIllegalChars(List<String> source) {
+        List<String> res = new ArrayList<>();
+        for (String au : source) {
+            boolean add = true;
+            for (char c : au.toCharArray()) {
+                if ((c >= 0x00 && c <= 0x08)
+                        || (c >= 0x0b && c <= 0x0c)
+                        || (c >= 0x0e && c <= 0x1f)) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                res.add(au);
+            }
+        }
+        return res;
+    }
+
     private void write(ContentNode contentNode, Element element) {
         boolean firstAttribute = true;
         String nodeName;
         boolean nodeNameless = false;
-
-        if (contentNode.getAttributesKeyList().isEmpty()) {
+        List<String> filteredAttributesKeyList = filterIllegalChars(contentNode.getAttributesKeyList());
+        if (filteredAttributesKeyList.isEmpty()) {
             //if have no attributes then it is nameless.
             nodeName = STRING_MAMELESS;
             nodeNameless = true;
         } else {
-            nodeName = contentNode.getAttributesKeyList().get(0);
+            nodeName = filteredAttributesKeyList.get(0);
             if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
                 //if "name" has value then it is nameless.
                 nodeName = STRING_MAMELESS;
@@ -120,7 +149,7 @@ public class XmlDealer implements AbstractLanguageDealer {
             return;
         }
 
-        for (String key : contentNode.getAttributesKeyList()) {
+        for (String key : filteredAttributesKeyList) {
             String value = contentNode.getAttributes().get(key);
 
             if (!StringUtils.isEmpty(value)) {

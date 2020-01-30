@@ -125,6 +125,37 @@ public class ContentNode extends AbstractTreeNode {
         this.getChildren().addAll(newChildren);
     }
 
+    public void trimForce() {
+        List<AbstractTreeNode> newChildren = new ArrayList<>();
+        for (AbstractTreeNode au : this.getChildren()) {
+            //it is done in this way to make sure that:
+            //  if you extend this library,and make a class extended ContentNode, it will be call trimForce() here.
+            //  but if you make a class extended TextNode, its nodes will not be deleted during trimForce().
+            if (au instanceof ContentNode) {
+                ((ContentNode) au).trimForce();
+                newChildren.add(au);
+            } else if (au.getClass().equals(TextNode.class)) {
+                TextNode textNode = (TextNode) au;
+                String newContent = textNode.getTextContent().trim();
+                if (!StringUtils.isBlank(newContent)) {
+                    textNode.setTextContent(newContent);
+                    newChildren.add(au);
+                }
+            } else if (au.getClass().equals(CommentNode.class)) {
+                CommentNode textNode = (CommentNode) au;
+                String newContent = textNode.getTextContent().trim();
+                if (!StringUtils.isBlank(newContent)) {
+                    textNode.setTextContent(newContent);
+                    newChildren.add(au);
+                }
+            } else {
+                newChildren.add(au);
+            }
+        }
+        this.getChildren().clear();
+        this.getChildren().addAll(newChildren);
+    }
+
 
     @Override
     public void format(int space) {
