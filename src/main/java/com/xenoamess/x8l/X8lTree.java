@@ -75,23 +75,23 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static List<AbstractLanguageDealer> suspectDealer(String nameString, List<AbstractLanguageDealer> originalList) {
         List<AbstractLanguageDealer> res = new ArrayList<>(originalList);
         if (nameString.endsWith("json") || nameString.endsWith("json".toUpperCase())) {
-            originalList.remove(JsonDealer.INSTANCE);
-            originalList.add(0, JsonDealer.INSTANCE);
+            res.remove(JsonDealer.INSTANCE);
+            res.add(0, JsonDealer.INSTANCE);
         } else if (nameString.endsWith("xml") || nameString.endsWith("xml".toUpperCase())) {
-            originalList.remove(XmlDealer.INSTANCE);
-            originalList.add(0, XmlDealer.INSTANCE);
+            res.remove(XmlDealer.INSTANCE);
+            res.add(0, XmlDealer.INSTANCE);
         } else if (nameString.endsWith("x8l") || nameString.endsWith("x8l".toUpperCase())) {
-            originalList.remove(X8lDealer.INSTANCE);
-            originalList.add(0, X8lDealer.INSTANCE);
+            res.remove(X8lDealer.INSTANCE);
+            res.add(0, X8lDealer.INSTANCE);
         } else if (nameString.contains("json")) {
-            originalList.remove(JsonDealer.INSTANCE);
-            originalList.add(0, JsonDealer.INSTANCE);
+            res.remove(JsonDealer.INSTANCE);
+            res.add(0, JsonDealer.INSTANCE);
         } else if (nameString.contains("xml")) {
-            originalList.remove(XmlDealer.INSTANCE);
-            originalList.add(0, XmlDealer.INSTANCE);
+            res.remove(XmlDealer.INSTANCE);
+            res.add(0, XmlDealer.INSTANCE);
         } else if (nameString.contains("x8l")) {
-            originalList.remove(X8lDealer.INSTANCE);
-            originalList.add(0, X8lDealer.INSTANCE);
+            res.remove(X8lDealer.INSTANCE);
+            res.add(0, X8lDealer.INSTANCE);
         }
         return res;
     }
