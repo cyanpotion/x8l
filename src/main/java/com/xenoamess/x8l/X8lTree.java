@@ -264,9 +264,8 @@ public class X8lTree implements AutoCloseable, Serializable {
         ) {
             res = new X8lTree(stringReader, dealer);
             res.parse();
-            return res;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
         }
         return res;
     }
@@ -281,7 +280,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                 res.parse();
                 return res;
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
             }
         }
         return res;
@@ -299,7 +298,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             x8lTree.write(stringWriter);
             res = stringWriter.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
         }
         return res;
     }
@@ -358,7 +357,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         x8lTree.write(writer);
     }
 
-
     public X8lTree() {
         this(null, X8lDealer.INSTANCE);
     }
@@ -385,24 +383,24 @@ public class X8lTree implements AutoCloseable, Serializable {
                 this.setLanguageDealer(original.getLanguageDealer());
                 this.read(this.getReader(), this.getLanguageDealer());
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
             }
         }
     }
 
 
+    public void clear() {
+        this.getRoot().close();
+    }
+
     /**
      * close this tree.
      */
     @Override
-    public void close() {
-        this.getRoot().close();
+    public void close() throws IOException {
+        this.clear();
         if (this.getReader() != null) {
-            try {
-                this.getReader().close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.getReader().close();
             this.setReader(null);
         }
     }

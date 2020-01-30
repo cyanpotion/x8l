@@ -31,4 +31,8 @@ public class X8lGrammarException extends RuntimeException {
     public X8lGrammarException(String message) {
         super(message);
     }
+
+    public X8lGrammarException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
