@@ -226,16 +226,14 @@ public class JsonDealer implements AbstractLanguageDealer {
                     contentNode.addAttribute(attributeJsonNodeEntry.getKey(), attributeJsonNodeEntry.getValue().asText());
                 }
                 continue;
-            }
-
-            ContentNode childContentNode = new ContentNode(contentNode);
-            if (entry.getKey().startsWith(TEXT_KEY)) {
-                new TextNode(childContentNode, entry.getValue().asText());
+            } else if (entry.getKey().startsWith(TEXT_KEY)) {
+                new TextNode(contentNode, entry.getValue().asText());
                 continue;
             } else if (entry.getKey().startsWith(COMMENT_KEY)) {
-                new CommentNode(childContentNode, entry.getValue().asText());
+                new CommentNode(contentNode, entry.getValue().asText());
                 continue;
             }
+            ContentNode childContentNode = new ContentNode(contentNode);
             childContentNode.addAttribute(entry.getKey());
             if (entry.getValue() instanceof ObjectNode) {
                 this.read(childContentNode, (ObjectNode) entry.getValue());
@@ -253,6 +251,8 @@ public class JsonDealer implements AbstractLanguageDealer {
         for (Iterator<JsonNode> it = arrayNode.elements(); it.hasNext(); ) {
             JsonNode childNode = it.next();
             ContentNode childContentNode = new ContentNode(contentNode);
+
+
             if (childNode instanceof ObjectNode) {
                 this.read(childContentNode, (ObjectNode) childNode);
             } else if (childNode instanceof ArrayNode) {
