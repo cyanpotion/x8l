@@ -92,13 +92,15 @@ public class XmlDealer implements AbstractLanguageDealer {
     public static List<String> filterIllegalChars(List<String> source) {
         List<String> res = new ArrayList<>();
         for (String au : source) {
-            boolean add = true;
-            for (char c : au.toCharArray()) {
-                if ((c >= 0x00 && c <= 0x08)
-                        || (c >= 0x0b && c <= 0x0c)
-                        || (c >= 0x0e && c <= 0x1f)) {
-                    add = false;
-                    break;
+            boolean add = !au.contains(JsonDealer.ARRAY_ID_ATTRIBUTE);
+            if (add) {
+                for (char c : au.toCharArray()) {
+                    if ((c >= 0x00 && c <= 0x08)
+                            || (c >= 0x0b && c <= 0x0c)
+                            || (c >= 0x0e && c <= 0x1f)) {
+                        add = false;
+                        break;
+                    }
                 }
             }
             if (add) {
