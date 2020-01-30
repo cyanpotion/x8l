@@ -24,14 +24,14 @@
 
 package com.xenoamess.x8l.dealers;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.xenoamess.x8l.AbstractTreeNode;
-import com.xenoamess.x8l.ContentNode;
-import com.xenoamess.x8l.TextNode;
-import com.xenoamess.x8l.X8lGrammarException;
+import com.xenoamess.x8l.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -62,13 +62,20 @@ import java.util.Map;
  * @author XenoAmess
  */
 public class JsonDealer implements AbstractLanguageDealer {
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(JsonDealer.class);
+
     public static final String ARRAY_ID_ATTRIBUTE = "[";
+    public static final String TEXT_KEY = "_text";
+    public static final String COMMENT_KEY = "_comment";
     public static final JsonDealer INSTANCE = new JsonDealer();
     private static ObjectMapper objectMapper;
 
     private static ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
+            ObjectMapper localObjectMapper = new ObjectMapper();
+            localObjectMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+            objectMapper = localObjectMapper;
         }
         return objectMapper;
     }
@@ -76,31 +83,36 @@ public class JsonDealer implements AbstractLanguageDealer {
     @Override
     public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
         assert (writer != null);
-
+        int nowIndex = 0;
         if (treeNode instanceof ContentNode) {
             ContentNode contentNode = (ContentNode) treeNode;
             if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                 ArrayNode arrayNode = getObjectMapper().createArrayNode();
-                this.write(contentNode, arrayNode);
+                nowIndex = this.write(contentNode, arrayNode, nowIndex);
                 getObjectMapper().writeValue(writer, arrayNode);
             } else {
                 ObjectNode objectNode = getObjectMapper().createObjectNode();
-                this.write(contentNode, objectNode);
+                nowIndex = this.write(contentNode, objectNode, nowIndex);
                 getObjectMapper().writeValue(writer, objectNode);
             }
         } else if (treeNode instanceof TextNode) {
             TextNode textNode = (TextNode) treeNode;
             writer.append(textNode.getTextContent());
+        } else if (treeNode instanceof CommentNode) {
+            CommentNode commentNode = (CommentNode) treeNode;
+            writer.append("/*");
+            writer.append(commentNode.getTextContent());
+            writer.append("*/");
         } else {
-            System.err.println("Json does not allow this here.we just delete it." + treeNode.toString());
+            LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
         }
     }
 
 
-    private void write(ContentNode contentNode, ObjectNode objectNode) throws IOException {
+    private int write(ContentNode contentNode, ObjectNode objectNode, int nowIndex) throws IOException {
         if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
-            System.err.println("Json does not allow this here.we just delete it." + contentNode.toString());
-            return;
+            LOGGER.error("Json does not allow this here.we just delete it : {}", contentNode.toString());
+            return nowIndex;
         }
 
         for (AbstractTreeNode treeNode : contentNode.getChildren()) {
@@ -109,7 +121,7 @@ public class JsonDealer implements AbstractLanguageDealer {
                 if (contentNode2.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     objectNode.set(contentNode2.getName(), arrayNode2);
-                    this.write(contentNode2, arrayNode2);
+                    nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
                 } else if (contentNode2.getChildren().size() == 1 && contentNode2.getChildren().get(0) instanceof TextNode) {
                     objectNode.put(
                             contentNode2.getName(),
@@ -118,18 +130,26 @@ public class JsonDealer implements AbstractLanguageDealer {
                 } else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     objectNode.set(contentNode2.getName(), objectNode2);
-                    this.write(contentNode2, objectNode2);
+                    nowIndex = this.write(contentNode2, objectNode2, nowIndex);
                 }
+            } else if (treeNode instanceof TextNode) {
+                objectNode.put(TEXT_KEY + nowIndex, ((TextNode) treeNode).getTextContent());
+                nowIndex++;
+            } else if (treeNode instanceof CommentNode) {
+                objectNode.put(COMMENT_KEY + nowIndex, ((CommentNode) treeNode).getTextContent());
+                nowIndex++;
             } else {
-                System.err.println("Json does not allow this here.we just delete it." + treeNode.toString());
+                LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
             }
         }
+
+        return nowIndex;
     }
 
-    private void write(ContentNode contentNode, ArrayNode arrayNode) throws IOException {
+    private int write(ContentNode contentNode, ArrayNode arrayNode, int nowIndex) throws IOException {
         if (!contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
-            System.err.println("Json does not allow this here.we just delete it." + contentNode.toString());
-            return;
+            LOGGER.error("Json does not allow this here.we just delete it : {}", contentNode.toString());
+            return nowIndex;
         }
 
         for (AbstractTreeNode treeNode : contentNode.getChildren()) {
@@ -138,18 +158,20 @@ public class JsonDealer implements AbstractLanguageDealer {
                 if (contentNode2.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     arrayNode.add(arrayNode2);
-                    this.write(contentNode2, arrayNode2);
+                    nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
                 } else if (contentNode2.getChildren().size() == 1 && contentNode2.getChildren().get(0) instanceof TextNode) {
                     arrayNode.add(((TextNode) contentNode2.getChildren().get(0)).getTextContent());
                 } else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     arrayNode.add(objectNode2);
-                    this.write(contentNode2, objectNode2);
+                    nowIndex = this.write(contentNode2, objectNode2, nowIndex);
                 }
             } else {
-                System.err.println("Json does not allow this here.we just delete it." + treeNode.toString());
+                LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
             }
         }
+
+        return nowIndex;
     }
 
 
@@ -178,6 +200,10 @@ public class JsonDealer implements AbstractLanguageDealer {
             } else if (entry.getValue() instanceof ArrayNode) {
                 ArrayNode arrayNode = (ArrayNode) entry.getValue();
                 this.read(childContentNode, arrayNode);
+            } else if (entry.getKey().startsWith(TEXT_KEY)) {
+                new TextNode(childContentNode, entry.getValue().asText());
+            } else if (entry.getKey().startsWith(COMMENT_KEY)) {
+                new CommentNode(childContentNode, entry.getValue().asText());
             } else {
                 new TextNode(childContentNode, entry.getValue().asText());
             }
@@ -199,4 +225,8 @@ public class JsonDealer implements AbstractLanguageDealer {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getCanonicalName();
+    }
 }

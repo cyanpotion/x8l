@@ -265,4 +265,9 @@ public class XmlDealer implements AbstractLanguageDealer {
             throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
         }
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getCanonicalName();
+    }
 }

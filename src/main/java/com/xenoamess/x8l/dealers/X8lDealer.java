@@ -164,4 +164,8 @@ public class X8lDealer implements AbstractLanguageDealer {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getCanonicalName();
+    }
 }

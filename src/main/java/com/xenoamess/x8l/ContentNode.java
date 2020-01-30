@@ -37,6 +37,8 @@ import java.util.function.Function;
  * @author XenoAmess
  */
 public class ContentNode extends AbstractTreeNode {
+    public static final String DEFAULT_ATTRIBUTE_VALUE = "";
+
     private final List<AbstractTreeNode> children = new ArrayList<>();
     private final Map<String, String> attributes = new HashMap<>();
     private final List<String> attributesKeyList = new ArrayList<>();
@@ -49,9 +51,10 @@ public class ContentNode extends AbstractTreeNode {
         super(parent, index);
     }
 
+
     public void addAttribute(String key, String value) {
         if (value == null) {
-            value = "";
+            value = DEFAULT_ATTRIBUTE_VALUE;
         }
         if (!this.getAttributes().containsKey(key)) {
             getAttributesKeyList().add(key);

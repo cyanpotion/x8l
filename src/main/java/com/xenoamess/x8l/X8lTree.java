@@ -31,6 +31,8 @@ import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -44,6 +46,9 @@ import java.util.function.Function;
  * @author XenoAmess
  */
 public class X8lTree implements AutoCloseable, Serializable {
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(X8lTree.class);
+
     private AbstractLanguageDealer languageDealer = X8lDealer.INSTANCE;
     @AsFinalField
     private transient ContentNode root = new ContentNode(null);
@@ -242,7 +247,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             if (!file.createNewFile()) {
-                System.err.println("File not exist when check but is already there when try to create it. Will " +
+                LOGGER.error("File not exist when check but is already there when try to create it. Will " +
                         "use it directly.");
             }
         }
@@ -280,7 +285,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                 res.parse();
                 return res;
             } catch (Exception e) {
-                throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
+                LOGGER.debug("Try to use a dealer to load a X8lTree but failed. dealer:{}, treeString:{}", dealer, string, e);
             }
         }
         return res;
