@@ -67,9 +67,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static List<AbstractLanguageDealer> getLanguageDealerListCopy() {
-        ArrayList<AbstractLanguageDealer> res = new ArrayList<>();
-        res.addAll(languageDealerList);
-        return res;
+        return new ArrayList<>(languageDealerList);
     }
 
     public static List<AbstractLanguageDealer> suspectDealer(String nameString, List<AbstractLanguageDealer> originalList) {
@@ -192,7 +190,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     public static void save(FileObject fileObject, X8lTree x8lTree) throws IOException {
         if (fileObject == null) {
-            throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
+            throw new FileNotFoundException("null");
         }
 
         try (
@@ -571,11 +569,10 @@ public class X8lTree implements AutoCloseable, Serializable {
 
 
     /**
+     * {@inheritDoc}
+     * <p>
      * Notice that X8lTree.equals do not compare X8lTree.reader.
      * If two X8lTrees only differ in reader, then return true.
-     *
-     * @param object the object to compare
-     * @return
      */
     @Override
     public boolean equals(Object object) {
