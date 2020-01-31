@@ -63,6 +63,22 @@ public class TextNode extends AbstractTreeNode {
         this.setTextContent(this.getTextContent().trim());
     }
 
+    @Override
+    public TextNode copy() {
+        return new TextNode(null, this.textContent);
+    }
+
+    @Override
+    public boolean equals(Object treeNode) {
+        if (treeNode == null) {
+            return false;
+        }
+        if (!treeNode.getClass().equals(this.getClass())) {
+            return false;
+        }
+        return textContent.equals(((TextNode) treeNode).textContent);
+    }
+
     public String getTextContent() {
         return textContent;
     }

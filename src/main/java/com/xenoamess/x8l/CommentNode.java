@@ -62,6 +62,23 @@ public class CommentNode extends AbstractTreeNode {
         this.setTextContent(this.getTextContent().trim());
     }
 
+    @Override
+    public CommentNode copy() {
+        return new CommentNode(null, this.textContent);
+    }
+
+    @Override
+    public boolean equals(Object treeNode) {
+        if (treeNode == null) {
+            return false;
+        }
+        if (!treeNode.getClass().equals(this.getClass())) {
+            return false;
+        }
+        return textContent.equals(((CommentNode) treeNode).textContent);
+    }
+
+
     public String getTextContent() {
         return textContent;
     }
@@ -69,4 +86,6 @@ public class CommentNode extends AbstractTreeNode {
     public void setTextContent(String textContent) {
         this.textContent = textContent;
     }
+
+
 }

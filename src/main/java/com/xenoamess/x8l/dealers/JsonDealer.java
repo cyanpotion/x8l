@@ -62,7 +62,17 @@ import java.util.Map;
  *
  * @author XenoAmess
  */
-public class JsonDealer implements AbstractLanguageDealer {
+public final class JsonDealer implements AbstractLanguageDealer {
+    /*
+     * no need to build more JsonDealer instances.
+     * please just use JsonDealer.INSTANCE
+     * if you want to extend it,
+     * please just copy the codes and make your own AbstractLanguageDealer class.
+     */
+    private JsonDealer() {
+
+    }
+
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JsonDealer.class);
 
@@ -132,7 +142,7 @@ public class JsonDealer implements AbstractLanguageDealer {
             for (Map.Entry<String, String> entry : contentNode.getAttributes().entrySet()) {
                 attributeNode.put(entry.getKey(), entry.getValue());
             }
-            objectNode.put(ATTRIBUTES_KEY, attributeNode);
+            objectNode.set(ATTRIBUTES_KEY, attributeNode);
         }
 
         for (AbstractTreeNode treeNode : contentNode.getChildren()) {

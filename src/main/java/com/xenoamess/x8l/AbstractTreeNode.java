@@ -153,17 +153,6 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     public abstract void format(int space);
 
     @Override
-    public boolean equals(Object treeNode) {
-        if (treeNode == null) {
-            return false;
-        }
-        if (!treeNode.getClass().equals(this.getClass())) {
-            return false;
-        }
-        return this.toString().equals(treeNode.toString());
-    }
-
-    @Override
     public int hashCode() {
         return this.toString().hashCode();
     }
@@ -182,6 +171,8 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         return res;
     }
 
+    public abstract AbstractTreeNode copy();
+
     public ContentNode getParent() {
         return parent;
     }
@@ -189,6 +180,4 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     public void setParent(ContentNode parent) {
         this.parent = parent;
     }
-
-
 }

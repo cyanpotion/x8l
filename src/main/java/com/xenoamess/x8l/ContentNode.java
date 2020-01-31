@@ -359,6 +359,34 @@ public class ContentNode extends AbstractTreeNode {
         return false;
     }
 
+    @Override
+    public ContentNode copy() {
+        ContentNode res = new ContentNode(null);
+        for (String attributeKey : this.getAttributesKeyList()) {
+            String attributeValue = this.getAttributes().get(attributeKey);
+            res.addAttribute(attributeKey, attributeValue);
+        }
+        for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
+            abstractTreeNode.copy().changeParentAndRegister(res);
+        }
+        return res;
+    }
+
+    @Override
+    public boolean equals(Object treeNode) {
+        if (treeNode == null) {
+            return false;
+        }
+        if (!treeNode.getClass().equals(this.getClass())) {
+            return false;
+        }
+        ContentNode contentNode = (ContentNode) treeNode;
+
+        return this.getAttributesKeyList().equals(contentNode.getAttributesKeyList())
+                && this.getAttributes().equals(contentNode.getAttributes())
+                && this.getChildren().equals(contentNode.getChildren());
+    }
+
     public Map<String, String> getAttributes() {
         return attributes;
     }

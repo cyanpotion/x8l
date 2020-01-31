@@ -381,15 +381,9 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     public X8lTree(X8lTree original) {
         if (original != null) {
-            try (
-                    StringReader stringReader = new StringReader(original.toString())
-            ) {
-                this.setReader(stringReader);
-                this.setLanguageDealer(original.getLanguageDealer());
-                this.read(this.getReader(), this.getLanguageDealer());
-            } catch (IOException e) {
-                throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
-            }
+            this.setReader(original.getReader());
+            this.setLanguageDealer(original.getLanguageDealer());
+            this.root = original.getRoot().copy();
         }
     }
 
@@ -575,6 +569,14 @@ public class X8lTree implements AutoCloseable, Serializable {
         return save(this);
     }
 
+
+    /**
+     * Notice that X8lTree.equals do not compare X8lTree.reader.
+     * If two X8lTrees only differ in reader, then return true.
+     *
+     * @param object the object to compare
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         if (object == null) {
@@ -583,7 +585,10 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (!(object instanceof X8lTree)) {
             return false;
         }
-        return this.toString().equals(object.toString());
+        X8lTree x8lTree = (X8lTree) object;
+
+        return this.getRoot().equals(x8lTree.getRoot())
+                && this.getLanguageDealer().equals(x8lTree.getLanguageDealer());
     }
 
     @Override
@@ -657,5 +662,9 @@ public class X8lTree implements AutoCloseable, Serializable {
 
     public void setReader(Reader reader) {
         this.reader = reader;
+    }
+
+    public X8lTree copy() {
+        return new X8lTree(this);
     }
 }

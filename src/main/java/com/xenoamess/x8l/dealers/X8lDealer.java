@@ -37,7 +37,17 @@ import java.io.Writer;
  *
  * @author XenoAmess
  */
-public class X8lDealer implements AbstractLanguageDealer {
+public final class X8lDealer implements AbstractLanguageDealer {
+    /*
+     * no need to build more X8lDealer instances.
+     * please just use X8lDealer.INSTANCE
+     * if you want to extend it,
+     * please just copy the codes and make your own AbstractLanguageDealer class.
+     */
+    private X8lDealer() {
+
+    }
+
     public static final X8lDealer INSTANCE = new X8lDealer();
 
     @Override

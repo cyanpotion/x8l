@@ -57,7 +57,18 @@ import java.util.List;
  *
  * @author XenoAmess
  */
-public class XmlDealer implements AbstractLanguageDealer {
+public final class XmlDealer implements AbstractLanguageDealer {
+    /*
+     * no need to build more XmlDealer instances.
+     * please just use XmlDealer.INSTANCE
+     * if you want to extend it,
+     * please just copy the codes and make your own AbstractLanguageDealer class.
+     */
+    private XmlDealer() {
+
+    }
+
+
     public static final String STRING_MAMELESS = "_nameless";
 
     public static final XmlDealer INSTANCE = new XmlDealer();
@@ -86,8 +97,8 @@ public class XmlDealer implements AbstractLanguageDealer {
      * "illegal" here means illegal to xml, not for x8l.
      * for example, [ is illegal.(JsonDealer.ARRAY_ID_ATTRIBUTE)
      *
-     * @param source
-     * @return
+     * @param source original Strings to filer
+     * @return filtered Strings
      */
     public static List<String> filterIllegalChars(List<String> source) {
         List<String> res = new ArrayList<>();
