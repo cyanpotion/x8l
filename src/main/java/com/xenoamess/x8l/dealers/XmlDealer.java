@@ -34,6 +34,7 @@ import org.dom4j.tree.DefaultText;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ import java.util.List;
  *
  * @author XenoAmess
  */
-public final class XmlDealer implements AbstractLanguageDealer {
+public final class XmlDealer implements AbstractLanguageDealer, Serializable {
     /*
      * no need to build more XmlDealer instances.
      * please just use XmlDealer.INSTANCE
@@ -311,5 +312,9 @@ public final class XmlDealer implements AbstractLanguageDealer {
     @Override
     public String toString() {
         return this.getClass().getCanonicalName();
+    }
+
+    private Object readResolve() {
+        return INSTANCE;
     }
 }

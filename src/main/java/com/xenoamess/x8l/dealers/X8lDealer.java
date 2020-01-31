@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 
 /**
@@ -37,7 +38,7 @@ import java.io.Writer;
  *
  * @author XenoAmess
  */
-public final class X8lDealer implements AbstractLanguageDealer {
+public final class X8lDealer implements AbstractLanguageDealer, Serializable {
     /*
      * no need to build more X8lDealer instances.
      * please just use X8lDealer.INSTANCE
@@ -177,5 +178,9 @@ public final class X8lDealer implements AbstractLanguageDealer {
     @Override
     public String toString() {
         return this.getClass().getCanonicalName();
+    }
+
+    private Object readResolve() {
+        return INSTANCE;
     }
 }

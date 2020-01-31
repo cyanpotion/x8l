@@ -110,7 +110,7 @@ public class BenchMark {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
              BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
-             Reader reader = new InputStreamReader(bufferedInputStream);
+             Reader reader = new InputStreamReader(bufferedInputStream)
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);

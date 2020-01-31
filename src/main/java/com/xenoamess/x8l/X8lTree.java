@@ -147,7 +147,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
 
         try (
-                Writer writer = Files.newBufferedWriter(path);
+                Writer writer = Files.newBufferedWriter(path)
         ) {
             x8lTree.write(writer);
         }
@@ -197,7 +197,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
         try (
                 OutputStream outputStream = fileObject.getContent().getOutputStream();
-                Writer writer = new OutputStreamWriter(outputStream);
+                Writer writer = new OutputStreamWriter(outputStream)
         ) {
             x8lTree.write(writer);
         }
@@ -316,7 +316,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         X8lTree x8lTree = null;
         try (
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                Reader reader = new InputStreamReader(bufferedInputStream);
+                Reader reader = new InputStreamReader(bufferedInputStream)
         ) {
             x8lTree = load(reader, dealer);
         }
@@ -334,7 +334,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static void save(OutputStream outputStream, X8lTree x8lTree) throws IOException {
         try (
                 BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-                Writer writer = new OutputStreamWriter(bufferedOutputStream);
+                Writer writer = new OutputStreamWriter(bufferedOutputStream)
         ) {
             x8lTree.write(writer);
         }
@@ -587,8 +587,8 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
         X8lTree x8lTree = (X8lTree) object;
 
-        return this.getRoot().equals(x8lTree.getRoot())
-                && this.getLanguageDealer().equals(x8lTree.getLanguageDealer());
+        return this.getLanguageDealer().equals(x8lTree.getLanguageDealer())
+                && this.getRoot().equals(x8lTree.getRoot());
     }
 
     @Override

@@ -36,10 +36,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class XmlDealerTest {
     @Test
+    @Deprecated
     public void naiveWriteTest() throws IOException {
         X8lTree tree = new X8lTest().prepare();
         try (StringWriter writer = new StringWriter()) {
-            new XmlDealer().naiveWrite(writer, tree.getRoot());
+            XmlDealer.INSTANCE.naiveWrite(writer, tree.getRoot());
             System.out.println(writer);
             assertNotEquals(writer.toString(), "");
         }

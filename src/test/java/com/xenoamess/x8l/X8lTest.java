@@ -250,8 +250,13 @@ public class X8lTest {
         X8lTree cloneTree = (X8lTree) ois.readObject();
         String diff = StringUtils.difference(tree.toString(), cloneTree.toString());
         assertEquals("", diff);
+
+        assertEquals(tree.toString(), cloneTree.toString());
         assertEquals(tree, cloneTree);
+
+        assertEquals(tree.getRoot().toString(), cloneTree.getRoot().toString());
         assertEquals(tree.getRoot(), cloneTree.getRoot());
+
         ois.close();
     }
 

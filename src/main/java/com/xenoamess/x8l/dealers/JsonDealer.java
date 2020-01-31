@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,7 +63,7 @@ import java.util.Map;
  *
  * @author XenoAmess
  */
-public final class JsonDealer implements AbstractLanguageDealer {
+public final class JsonDealer implements AbstractLanguageDealer, Serializable {
     /*
      * no need to build more JsonDealer instances.
      * please just use JsonDealer.INSTANCE
@@ -276,5 +277,9 @@ public final class JsonDealer implements AbstractLanguageDealer {
     @Override
     public String toString() {
         return this.getClass().getCanonicalName();
+    }
+
+    private Object readResolve() {
+        return INSTANCE;
     }
 }
