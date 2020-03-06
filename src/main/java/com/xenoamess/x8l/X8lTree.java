@@ -494,7 +494,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
 
-    public static String transcode(String originalString) {
+    public static String transcodeText(String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
@@ -513,11 +513,11 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param originalString originalS tring
      * @return transCoded String
      */
-    public static String transcodeWithWhitespace(String originalString) {
+    public static String transcodeKeyAndValue(String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
-            if (chr == '<' || chr == '>' || chr == '%' || Character.isWhitespace(chr)) {
+            if (chr == '=' || chr == '<' || chr == '>' || chr == '%' || Character.isWhitespace(chr)) {
                 stringBuilder.append('%');
             }
             stringBuilder.append(chr);

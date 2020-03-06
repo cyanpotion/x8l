@@ -69,11 +69,11 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
                     } else {
                         writer.append(' ');
                     }
-                    writer.append(X8lTree.transcodeWithWhitespace(key));
+                    writer.append(X8lTree.transcodeKeyAndValue(key));
                     String value = contentNode.getAttributes().get(key);
                     if (!StringUtils.isEmpty(value)) {
                         writer.append("=");
-                        writer.append(X8lTree.transcodeWithWhitespace(value));
+                        writer.append(X8lTree.transcodeKeyAndValue(value));
                     }
                 }
                 writer.append('>');
@@ -84,7 +84,7 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
             }
         } else if (treeNode instanceof TextNode) {
             TextNode textNode = (TextNode) treeNode;
-            writer.append(X8lTree.transcode(textNode.getTextContent()));
+            writer.append(X8lTree.transcodeText(textNode.getTextContent()));
         } else if (treeNode instanceof CommentNode) {
             CommentNode commentNode = (CommentNode) treeNode;
             writer.append('<');
