@@ -49,9 +49,9 @@
         <commons-vfs2.version>2.6.0</commons-vfs2.version>
         <dom4j.version>2.1.1</dom4j.version>
         <guava.version>28.1-jre</guava.version>
-        <jackson.version>2.10.2</jackson.version>
+        <jackson.version>2.10.3</jackson.version>
         <joml.version>1.9.19</joml.version>
-        <log4j.version>2.13.0</log4j.version>
+        <log4j.version>2.13.1</log4j.version>
         <lwjgl.version>3.2.3</lwjgl.version>
         <slf4j.version>1.7.30</slf4j.version>
         <steamworks4j.version>1.8.0</steamworks4j.version>
@@ -59,7 +59,7 @@
         <!---->
         <!---->
         <!--home made libraries versions-->
-        <commonx.version>0.10.8</commonx.version>
+        <commonx.version>0.10.10</commonx.version>
         <multi_language.version>0.44.3</multi_language.version>
         <x8l.version>0.50.0</x8l.version>
         <SDL_GameControllerDB_Util.version>1.1.20191011
