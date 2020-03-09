@@ -32,6 +32,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 /**
+ * AbstractTreeNode
+ * parent of all TreeNode types.
+ *
  * @author XenoAmess
  */
 public abstract class AbstractTreeNode implements AutoCloseable {

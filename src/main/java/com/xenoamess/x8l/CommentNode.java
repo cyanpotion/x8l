@@ -25,6 +25,9 @@
 package com.xenoamess.x8l;
 
 /**
+ * CommentNode
+ * CommentNode means some nodes with content.
+ *
  * @author XenoAmess
  */
 public class CommentNode extends AbstractTreeNode {

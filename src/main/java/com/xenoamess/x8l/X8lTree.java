@@ -43,6 +43,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
+ * X8lTree
+ * X8lTree struct
+ *
  * @author XenoAmess
  */
 public class X8lTree implements AutoCloseable, Serializable {

@@ -33,6 +33,9 @@ import java.io.Serializable;
 import java.io.Writer;
 
 /**
+ * AbstractLanguageDealer
+ * base class of all LanguageDealers
+ *
  * @author XenoAmess
  */
 public interface AbstractLanguageDealer extends Serializable {

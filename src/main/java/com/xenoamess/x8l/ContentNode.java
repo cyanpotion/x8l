@@ -34,6 +34,9 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
+ * ContentNode
+ * ContentNode means some nodes with content.
+ *
  * @author XenoAmess
  */
 public class ContentNode extends AbstractTreeNode {

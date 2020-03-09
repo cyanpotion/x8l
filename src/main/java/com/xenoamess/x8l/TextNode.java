@@ -25,6 +25,9 @@
 package com.xenoamess.x8l;
 
 /**
+ * TextNode
+ * TextNode means some nodes with text.
+ *
  * @author XenoAmess
  */
 public class TextNode extends AbstractTreeNode {
