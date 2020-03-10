@@ -63,18 +63,20 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
             } else {
                 writer.append('<');
                 boolean firstAttribute = true;
-                for (String key : contentNode.getAttributesKeyList()) {
-                    if (firstAttribute) {
-                        firstAttribute = false;
-                    } else {
-                        writer.append(' ');
-                    }
+                for (int i = 0; i < contentNode.getAttributesKeyList().size(); i++) {
+                    String key = contentNode.getAttributesKeyList().get(i);
+//                    if (firstAttribute) {
+//                        firstAttribute = false;
+//                    } else {
+//                        writer.append(' ');
+//                    }
                     writer.append(X8lTree.transcodeKeyAndValue(key));
                     String value = contentNode.getAttributes().get(key);
                     if (!StringUtils.isEmpty(value)) {
                         writer.append("=");
                         writer.append(X8lTree.transcodeKeyAndValue(value));
                     }
+                    writer.append(contentNode.getAttributeSegments().get(i));
                 }
                 writer.append('>');
                 for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {

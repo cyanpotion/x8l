@@ -41,12 +41,13 @@ import java.util.function.Function;
  */
 public class ContentNode extends AbstractTreeNode {
     public static final String DEFAULT_ATTRIBUTE_VALUE = "";
+    public static final String DEFAULT_SEGMENT_VALUE = " ";
 
     private final List<AbstractTreeNode> children = new ArrayList<>();
     private final Map<String, String> attributes = new HashMap<>();
     private final List<String> attributesKeyList = new ArrayList<>();
 
-    private final List<String> attributeSegment = new ArrayList<>();
+    private final List<String> attributeSegments = new ArrayList<>();
 
     public ContentNode(ContentNode parent) {
         super(parent);
@@ -56,15 +57,22 @@ public class ContentNode extends AbstractTreeNode {
         super(parent, index);
     }
 
-
-    public void addAttribute(String key, String value) {
+    public void addAttribute(String key, String value, String segment) {
         if (value == null) {
             value = DEFAULT_ATTRIBUTE_VALUE;
+        }
+        if (segment == null) {
+            segment = DEFAULT_SEGMENT_VALUE;
         }
         if (!this.getAttributes().containsKey(key)) {
             getAttributesKeyList().add(key);
         }
         getAttributes().put(key, value);
+        getAttributeSegments().add(segment);
+    }
+
+    public void addAttribute(String key, String value) {
+        this.addAttribute(key, value, null);
     }
 
 
@@ -142,6 +150,8 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public void removeAttribute(String attributeString) {
+        int index = this.getAttributesKeyList().indexOf(attributeString);
+        getAttributeSegments().remove(index);
         this.getAttributes().remove(attributeString);
         this.getAttributesKeyList().remove(attributeString);
     }
@@ -169,7 +179,23 @@ public class ContentNode extends AbstractTreeNode {
         this.getAttributesKeyList().clear();
     }
 
+    public void trimAttributeSegments() {
+        for (int i = 0; i < this.getAttributeSegments().size(); i++) {
+            this.getAttributeSegments().replaceAll(
+                    s -> DEFAULT_SEGMENT_VALUE
+            );
+        }
+        if (!this.getAttributeSegments().isEmpty()) {
+            this.getAttributeSegments().set(
+                    this.getAttributeSegments().size() - 1
+                    , ""
+            );
+        }
+    }
+
     public void trim() {
+        trimAttributeSegments();
+
         List<AbstractTreeNode> newChildren = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
             //it is done in this way to make sure that:
@@ -191,6 +217,8 @@ public class ContentNode extends AbstractTreeNode {
     }
 
     public void trimForce() {
+        trimAttributeSegments();
+
         List<AbstractTreeNode> newChildren = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
             //it is done in this way to make sure that:
@@ -221,6 +249,22 @@ public class ContentNode extends AbstractTreeNode {
         this.getChildren().addAll(newChildren);
     }
 
+    public void formatAttributeSegments(int space) {
+        this.trimAttributeSegments();
+        if (this.getAttributesKeyList().size() <= 3) {
+            return;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < space; i++) {
+            stringBuilder.append("    ");
+        }
+        String segment1 = "\n" + stringBuilder.toString() + " ";
+        for (int i = 0; i < this.getAttributesKeyList().size() - 1; i++) {
+            this.getAttributeSegments().set(i, segment1);
+        }
+        String segment2 = "\n" + stringBuilder.toString();
+        this.getAttributeSegments().set(this.getAttributesKeyList().size() - 1, segment2);
+    }
 
     @Override
     public void format(int space) {
@@ -460,4 +504,7 @@ public class ContentNode extends AbstractTreeNode {
         return attributesKeyList;
     }
 
+    public List<String> getAttributeSegments() {
+        return attributeSegments;
+    }
 }
