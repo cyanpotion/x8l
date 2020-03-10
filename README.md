@@ -1,11 +1,27 @@
 # x8l
-Make a new markup language named x8l which can replace xml in most areas but always use smaller size.
-
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xenoamess/x8l/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xenoamess/x8l)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/cyanpotion/x8l.svg?branch=master)](https://travis-ci.org/cyanpotion/x8l)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cyanpotion_x8l&metric=alert_status)](https://sonarcloud.io/dashboard?id=cyanpotion_x8l)
 <!--[![Build status](https://ci.appveyor.com/api/projects/status/594i6j3y8w8o2a69?svg=true)](https://ci.appveyor.com/project/XenoAmess/x8l)-->
+
+<p>
+  <b>
+      X8l format is a type of data format, it is designed to be replace of xml/json in most cases when you need the data be shorter(while remains readability).
+  </b>
+</p>
+<br/>
+<p>
+  <b>
+      See <a href="https://plugins.jetbrains.com/plugin/13915-x8l">plugin on Jetbrains plugin storage</a><br/>
+      See <a href="https://github.com/XenoAmess/x8l_idea_plugin">plugin on github</a><br/>
+      See <a href="https://github.com/cyanpotion/x8l">X8l Grammar/SDK</a><br/>
+  </b>
+</p>
+<br/>
+<p><img src="https://raw.githubusercontent.com/XenoAmess/x8l_idea_plugin/master/pictures/screenshot.png" width="1080" height="720" alt="screenshot.png"/></p>
+<br/>
+<p><a href="https://github.com/XenoAmess/x8l_idea_plugin/issues">Send Feedback</a></p>
 
 ## aim of x8l
 when I deal with markup languages I just find that some of them are unnecessarily swollen.

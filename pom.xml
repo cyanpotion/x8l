@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>Make a new markup language named x8l which can replace xml in
-        most areas but always use smaller size.
+    <description>X8l format is a type of data format,
+        it is designed to be replace of xml/json in most cases when you need the data be shorter(while remains
+        readability).
     </description>
     <url>https://github.com/cyanpotion/x8l</url>
     <licenses>
