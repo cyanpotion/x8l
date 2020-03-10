@@ -258,7 +258,7 @@ public class ContentNode extends AbstractTreeNode {
         for (int i = 0; i < space; i++) {
             stringBuilder.append("    ");
         }
-        String segment1 = "\n" + stringBuilder.toString() + " ";
+        String segment1 = "\n" + stringBuilder.toString() + "   ";
         for (int i = 0; i < this.getAttributesKeyList().size() - 1; i++) {
             this.getAttributeSegments().set(i, segment1);
         }
