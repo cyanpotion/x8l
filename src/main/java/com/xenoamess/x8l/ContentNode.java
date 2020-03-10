@@ -268,6 +268,7 @@ public class ContentNode extends AbstractTreeNode {
 
     @Override
     public void format(int space) {
+        formatAttributeSegments(space);
         //notice that space can less than 0 here.
         //thus this loop can never be changed to String.repeat().
         //please ignore the warning about that.

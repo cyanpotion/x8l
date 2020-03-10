@@ -175,6 +175,9 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
                 stringBuilder.append(nowChar);
             }
         }
+        if (!nowNode.getAttributeSegments().isEmpty()) {
+            nowNode.getAttributeSegments().set(nowNode.getAttributeSegments().size() - 1, "");
+        }
     }
 
     @Override
