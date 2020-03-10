@@ -46,6 +46,8 @@ public class ContentNode extends AbstractTreeNode {
     private final Map<String, String> attributes = new HashMap<>();
     private final List<String> attributesKeyList = new ArrayList<>();
 
+    private final List<String> attributeSegment = new ArrayList<>();
+
     public ContentNode(ContentNode parent) {
         super(parent);
     }
@@ -67,19 +69,79 @@ public class ContentNode extends AbstractTreeNode {
 
 
     public void addAttribute(String attributeString) {
-        int index = attributeString.indexOf('=');
-        if (index == -1) {
-            this.addAttribute(attributeString, null);
-        } else {
-            this.addAttribute(attributeString.substring(0, index), attributeString.substring(index + 1));
+//        int index = attributeString.indexOf('=');
+//        if (index == -1) {
+//            this.addAttribute(attributeString, null);
+//        } else {
+//            this.addAttribute(attributeString.substring(0, index), attributeString.substring(index + 1));
+//        }
+        this.addAttribute(attributeString, null);
+    }
+
+    public void addAttributeFromTranscodedExpression(String attributeExpressionString) {
+        int index1 = 0;
+        final int len = attributeExpressionString.length();
+
+        out1:
+        for (; index1 < len; index1++) {
+            char nowChar = attributeExpressionString.charAt(index1);
+            switch (nowChar) {
+                case '%':
+                    index1++;
+                    break;
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
+                case '=':
+                    break out1;
+                default:
+                    break;
+            }
         }
+
+        int index2 = index1 + 1;
+
+        out2:
+        for (; index2 < len; index2++) {
+            char nowChar = attributeExpressionString.charAt(index2);
+            switch (nowChar) {
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
+                    break out2;
+                default:
+                    break;
+            }
+        }
+
+        int index3 = index2 + 1;
+
+        out3:
+        for (; index3 < len; index3++) {
+            char nowChar = attributeExpressionString.charAt(index3);
+            switch (nowChar) {
+                case '%':
+                    index3++;
+                    break;
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
+                    break out3;
+                default:
+                    break;
+            }
+        }
+
+        this.addAttribute(
+                X8lTree.transcodeKeyAndValue(StringUtils.substring(attributeExpressionString, 0, index1)),
+                X8lTree.transcodeKeyAndValue(StringUtils.substring(attributeExpressionString, index2, index3))
+        );
     }
 
     public void removeAttribute(String attributeString) {
-        int index = attributeString.indexOf('=');
-        if (index != -1) {
-            attributeString = attributeString.substring(0, index);
-        }
         this.getAttributes().remove(attributeString);
         this.getAttributesKeyList().remove(attributeString);
     }

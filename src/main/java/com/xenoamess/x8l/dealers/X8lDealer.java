@@ -113,7 +113,7 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
             nowChar = (char) nowInt;
             if (nowInt == -1) {
                 if (nowNode == contentNode && !inAttributeArea && !inCommentArea) {
-                    new TextNode(nowNode, stringBuilder.toString());
+                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                     break;
                 } else {
                     throw new X8lGrammarException("Unexpected stop of x8l file.");
@@ -125,7 +125,7 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
                 lastCharIsModulus = true;
             } else if (inCommentArea) {
                 if (nowChar == '>') {
-                    new CommentNode(nowNode, stringBuilder.toString());
+                    new CommentNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                     stringBuilder = new StringBuilder();
                     inCommentArea = false;
                 } else {
@@ -143,19 +143,19 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
                         inCommentArea = true;
                     }
                 } else {
-                    new TextNode(nowNode, stringBuilder.toString());
+                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                     stringBuilder = new StringBuilder();
                     nowNode = new ContentNode(nowNode);
                     inAttributeArea = true;
                 }
             } else if (nowChar == '>') {
                 if (!inAttributeArea) {
-                    new TextNode(nowNode, stringBuilder.toString());
+                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                     stringBuilder = new StringBuilder();
                     nowNode = nowNode.getParent();
                 } else {
                     if (stringBuilder.length() != 0) {
-                        nowNode.addAttribute(stringBuilder.toString());
+                        nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
                         stringBuilder = new StringBuilder();
                     }
                     inAttributeArea = false;
@@ -163,7 +163,7 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
             } else if (Character.isWhitespace(nowChar)) {
                 if (inAttributeArea) {
                     if (stringBuilder.length() != 0) {
-                        nowNode.addAttribute(stringBuilder.toString());
+                        nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
                         stringBuilder = new StringBuilder();
                     }
                 } else {
