@@ -198,7 +198,7 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
         assert (reader != null);
         try {
             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
-            this.read(new ContentNode(contentNode), document.getRootElement());
+            readChildrenArea(contentNode, document);
         } catch (DocumentException e) {
             throw new IOException(e);
         }
@@ -209,8 +209,12 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
         for (Attribute attribute : element.attributes()) {
             contentNode.addAttribute(attribute.getName(), attribute.getValue());
         }
-        for (int i = 0, size = element.nodeCount(); i < size; i++) {
-            Node node = element.node(i);
+        readChildrenArea(contentNode, element);
+    }
+
+    private void readChildrenArea(ContentNode contentNode, Branch branch) {
+        for (int i = 0, size = branch.nodeCount(); i < size; i++) {
+            Node node = branch.node(i);
             if (node instanceof Element) {
                 ContentNode childContentNode = new ContentNode(contentNode);
                 this.read(childContentNode, (Element) node);
@@ -218,6 +222,9 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
                 new TextNode(contentNode, node.getText());
             } else if (node instanceof DefaultComment) {
                 new CommentNode(contentNode, node.getText());
+            } else {
+                System.err.println("Cannot handle this node type: " + node.getClass().getCanonicalName() + " . Will treat it as TextNode.");
+                new TextNode(contentNode, node.getText());
             }
         }
     }
