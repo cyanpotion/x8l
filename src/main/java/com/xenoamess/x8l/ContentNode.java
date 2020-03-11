@@ -40,8 +40,12 @@ import java.util.function.Function;
  * @author XenoAmess
  */
 public class ContentNode extends AbstractTreeNode {
+
     public static final String DEFAULT_ATTRIBUTE_VALUE = "";
+
     public static final String DEFAULT_SEGMENT_VALUE = " ";
+
+    public static final String EMPTY_SEGMENT_VALUE = "";
 
     private final List<AbstractTreeNode> children = new ArrayList<>();
     private final Map<String, String> attributes = new HashMap<>();
@@ -62,12 +66,19 @@ public class ContentNode extends AbstractTreeNode {
             value = DEFAULT_ATTRIBUTE_VALUE;
         }
         if (segment == null) {
-            segment = DEFAULT_SEGMENT_VALUE;
+            segment = EMPTY_SEGMENT_VALUE;
         }
         if (!this.getAttributes().containsKey(key)) {
             getAttributesKeyList().add(key);
         }
         getAttributes().put(key, value);
+
+        if (!getAttributeSegments().isEmpty()) {
+            int size = getAttributeSegments().size();
+            if (getAttributeSegments().get(size - 1).equals(EMPTY_SEGMENT_VALUE)) {
+                getAttributeSegments().set(size - 1, DEFAULT_SEGMENT_VALUE);
+            }
+        }
         getAttributeSegments().add(segment);
     }
 
