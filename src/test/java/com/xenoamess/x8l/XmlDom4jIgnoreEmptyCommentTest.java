@@ -24,29 +24,26 @@
 
 package com.xenoamess.x8l;
 
-import org.apache.commons.io.IOUtils;
 import org.dom4j.*;
 import org.junit.jupiter.api.Test;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XmlDom4jIgnoreEmptyCommentTest {
     @Test
-    public void test() throws IOException, DocumentException {
-        Document document = null;
+    public void test() throws DocumentException {
+        String xmlString = "" +
+                "<a>" +
+                "    <!---->" +
+                "    <!-- -->" +
+                "    <!---->" +
+                "    <!-- -->" +
+                "</a>";
         int nowNodeCount = 0;
-        try (InputStream inputStream = this.getClass().getResource("/XmlToX8lConvertLostCommentNodeTestXml.xml").openStream();
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-        ) {
-            document = DocumentHelper.parseText(IOUtils.toString(bufferedInputStream));
-        }
+        Document document = DocumentHelper.parseText(xmlString);
         for (int i = 0; i < document.getRootElement().nodeCount(); i++) {
             Node nowNode = document.getRootElement().node(i);
-            System.out.println(nowNode.getText());
+            System.out.println(nowNode.asXML());
             if (nowNode instanceof Comment) {
                 nowNodeCount++;
             }
