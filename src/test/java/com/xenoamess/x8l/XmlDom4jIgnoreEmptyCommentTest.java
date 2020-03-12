@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class XmlDom4jIgnoreEmptyCommentTest {
     @Test
     public void test() throws DocumentException {
+        System.out.println(System.getProperty("org.xml.sax.driver"));
         String xmlString = "" +
                 "<a>" +
                 "    <!---->" +
