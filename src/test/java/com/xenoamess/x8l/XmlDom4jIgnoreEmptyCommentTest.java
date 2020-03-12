@@ -25,10 +25,12 @@
 package com.xenoamess.x8l;
 
 import org.dom4j.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 public class XmlDom4jIgnoreEmptyCommentTest {
     @Test
     public void test() throws DocumentException {
