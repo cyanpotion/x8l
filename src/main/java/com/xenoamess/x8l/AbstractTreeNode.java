@@ -24,7 +24,7 @@
 
 package com.xenoamess.x8l;
 
-import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
+import com.xenoamess.x8l.dealers.LanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 
 import java.io.IOException;
@@ -143,7 +143,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * @param languageDealer the languageDealer to deal with this.
      * @throws IOException IOException
      */
-    public void write(Writer writer, AbstractLanguageDealer languageDealer) throws IOException {
+    public void write(Writer writer, LanguageDealer languageDealer) throws IOException {
         languageDealer.write(writer, this);
     }
 

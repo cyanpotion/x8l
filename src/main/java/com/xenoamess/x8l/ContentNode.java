@@ -24,7 +24,7 @@
 
 package com.xenoamess.x8l;
 
-import com.xenoamess.x8l.dealers.AbstractLanguageDealer;
+import com.xenoamess.x8l.dealers.LanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import org.apache.commons.lang3.StringUtils;
 
@@ -129,9 +129,9 @@ public class ContentNode extends AbstractTreeNode {
                 case '\t':
                 case '\r':
                 case '\n':
-                    break out2;
-                default:
                     break;
+                default:
+                    break out2;
             }
         }
 
@@ -155,8 +155,8 @@ public class ContentNode extends AbstractTreeNode {
         }
 
         this.addAttribute(
-                X8lTree.transcodeKeyAndValue(StringUtils.substring(attributeExpressionString, 0, index1)),
-                X8lTree.transcodeKeyAndValue(StringUtils.substring(attributeExpressionString, index2, index3))
+                X8lTree.transcodeKey(StringUtils.substring(attributeExpressionString, 0, index1)),
+                X8lTree.transcodeValue(StringUtils.substring(attributeExpressionString, index2, index3))
         );
     }
 
@@ -434,7 +434,7 @@ public class ContentNode extends AbstractTreeNode {
         this.read(reader, X8lDealer.INSTANCE);
     }
 
-    public void read(Reader reader, AbstractLanguageDealer languageDealer) throws IOException {
+    public void read(Reader reader, LanguageDealer languageDealer) throws IOException {
         languageDealer.read(reader, this);
     }
 

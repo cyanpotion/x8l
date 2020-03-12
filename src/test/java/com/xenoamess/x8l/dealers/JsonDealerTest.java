@@ -80,4 +80,16 @@ public class JsonDealerTest {
 
         }
     }
+
+    @Test
+    public void test2() throws IOException {
+        try (Reader reader = new StringReader("{" +
+                "\"a\":\"1\"" +
+                "/*hahaha*/" +
+                "}"
+        )) {
+            X8lTree tree3 = new X8lTree(reader, JsonDealer.INSTANCE);
+            tree3.read();
+        }
+    }
 }

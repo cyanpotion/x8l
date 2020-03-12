@@ -63,7 +63,7 @@ import java.util.Map;
  *
  * @author XenoAmess
  */
-public final class JsonDealer implements AbstractLanguageDealer, Serializable {
+public final class JsonDealer extends LanguageDealer implements Serializable {
     /*
      * no need to build more JsonDealer instances.
      * please just use JsonDealer.INSTANCE
@@ -71,8 +71,10 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
      * please just copy the codes and make your own AbstractLanguageDealer class.
      */
     private JsonDealer() {
-
+        super();
+        init();
     }
+
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JsonDealer.class);
@@ -104,36 +106,94 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
         return false;
     }
 
-    @Override
-    public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
-        assert (writer != null);
-        int nowIndex = 0;
-        if (treeNode instanceof ContentNode) {
-            ContentNode contentNode = (ContentNode) treeNode;
-            if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
-                ArrayNode arrayNode = getObjectMapper().createArrayNode();
-                nowIndex = this.write(contentNode, arrayNode, nowIndex);
-                getObjectMapper().writeValue(writer, arrayNode);
-            } else {
-                ObjectNode objectNode = getObjectMapper().createObjectNode();
-                nowIndex = this.write(contentNode, objectNode, nowIndex);
-                getObjectMapper().writeValue(writer, objectNode);
-            }
-        } else if (treeNode instanceof TextNode) {
-            TextNode textNode = (TextNode) treeNode;
-            writer.append(textNode.getTextContent());
-        } else if (treeNode instanceof CommentNode) {
-            CommentNode commentNode = (CommentNode) treeNode;
-            writer.append("/*");
-            writer.append(commentNode.getTextContent());
-            writer.append("*/");
-        } else {
-            LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
-        }
+    private void init() {
+        this.registerTreeNodeHandler(
+                ContentNode.class,
+                new AbstractLanguageDealerHandler<ContentNode>() {
+                    @Override
+                    public boolean read(Reader reader, ContentNode contentNode) throws IOException, X8lGrammarException {
+                        assert (reader != null);
+                        JsonNode jsonNode = getObjectMapper().readTree(reader);
+                        if (jsonNode instanceof ObjectNode) {
+                            ObjectNode objectNode = (ObjectNode) jsonNode;
+                            return readInner(contentNode, objectNode);
+                        } else if (jsonNode instanceof ArrayNode) {
+                            ArrayNode arrayNode = (ArrayNode) jsonNode;
+                            return readInner(contentNode, arrayNode);
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, ContentNode contentNode) throws IOException, X8lGrammarException {
+                        if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
+                            ArrayNode arrayNode = getObjectMapper().createArrayNode();
+                            writeInner(contentNode, arrayNode, 0);
+                            getObjectMapper().writeValue(writer, arrayNode);
+                        } else {
+                            ObjectNode objectNode = getObjectMapper().createObjectNode();
+                            writeInner(contentNode, objectNode, 0);
+                            getObjectMapper().writeValue(writer, objectNode);
+                        }
+                        return true;
+                    }
+                }
+        );
+
+        this.registerTreeNodeHandler(
+                TextNode.class,
+                new AbstractLanguageDealerHandler<TextNode>() {
+                    @Override
+                    public boolean read(Reader reader, TextNode textNode) throws IOException, X8lGrammarException {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
+                        writer.write(textNode.getTextContent());
+                        return true;
+                    }
+                }
+        );
+
+        this.registerTreeNodeHandler(
+                CommentNode.class,
+                new AbstractLanguageDealerHandler<CommentNode>() {
+                    @Override
+                    public boolean read(Reader reader, CommentNode commentNode) throws IOException, X8lGrammarException {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, CommentNode commentNode) throws IOException, X8lGrammarException {
+                        writer.append("/*");
+                        writer.append(commentNode.getTextContent());
+                        writer.append("*/");
+                        return true;
+                    }
+                }
+        );
     }
 
+//    public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
+//        assert (writer != null);
+//        int nowIndex = 0;
+//        if (treeNode instanceof ContentNode) {
+//
+//
+//        } else if (treeNode instanceof TextNode) {
+//            TextNode textNode = (TextNode) treeNode;
+//            writer.append(textNode.getTextContent());
+//        } else if (treeNode instanceof CommentNode) {
+//
+//        } else {
+//            LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
+//        }
+//    }
 
-    private int write(ContentNode contentNode, ObjectNode objectNode, int nowIndex) throws IOException {
+
+    private static int writeInner(ContentNode contentNode, ObjectNode objectNode, int nowIndex) throws IOException {
         if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
             LOGGER.error("Json does not allow this here.we just delete it : {}", contentNode.toString());
             return nowIndex;
@@ -152,7 +212,7 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
                 if (contentNode2.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     objectNode.set(contentNode2.getName(), arrayNode2);
-                    nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
+                    nowIndex = writeInner(contentNode2, arrayNode2, nowIndex);
                 }
 //                else if (isSingleNameTextPair(contentNode2)) {
 //                    objectNode.put(
@@ -163,14 +223,8 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
                 else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     objectNode.set(contentNode2.getName(), objectNode2);
-                    nowIndex = this.write(contentNode2, objectNode2, nowIndex);
+                    nowIndex = writeInner(contentNode2, objectNode2, nowIndex);
                 }
-            } else if (treeNode instanceof TextNode) {
-                objectNode.put(TEXT_KEY + nowIndex, ((TextNode) treeNode).getTextContent());
-                nowIndex++;
-            } else if (treeNode instanceof CommentNode) {
-                objectNode.put(COMMENT_KEY + nowIndex, ((CommentNode) treeNode).getTextContent());
-                nowIndex++;
             } else {
                 LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
             }
@@ -179,7 +233,7 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
         return nowIndex;
     }
 
-    private int write(ContentNode contentNode, ArrayNode arrayNode, int nowIndex) throws IOException {
+    private static int writeInner(ContentNode contentNode, ArrayNode arrayNode, int nowIndex) throws IOException {
         if (!contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
             LOGGER.error("Json does not allow this here.we just delete it : {}", contentNode.toString());
             return nowIndex;
@@ -191,7 +245,7 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
                 if (contentNode2.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     arrayNode.add(arrayNode2);
-                    nowIndex = this.write(contentNode2, arrayNode2, nowIndex);
+                    nowIndex = writeInner(contentNode2, arrayNode2, nowIndex);
                 }
 //                else if (isSingleNameTextPair(contentNode2)) {
 //                    arrayNode.add(((TextNode) contentNode2.getChildren().get(0)).getTextContent());
@@ -199,7 +253,7 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
                 else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     arrayNode.add(objectNode2);
-                    nowIndex = this.write(contentNode2, objectNode2, nowIndex);
+                    nowIndex = writeInner(contentNode2, objectNode2, nowIndex);
                 }
             } else if (treeNode instanceof TextNode) {
                 arrayNode.add(((TextNode) treeNode).getTextContent());
@@ -212,22 +266,7 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
     }
 
 
-    @Override
-    public void read(Reader reader, ContentNode contentNode) throws IOException {
-        assert (reader != null);
-        JsonNode jsonNode = getObjectMapper().readTree(reader);
-        if (jsonNode instanceof ObjectNode) {
-            ObjectNode objectNode = (ObjectNode) jsonNode;
-            this.read(contentNode, objectNode);
-        } else if (jsonNode instanceof ArrayNode) {
-            ArrayNode arrayNode = (ArrayNode) jsonNode;
-            this.read(contentNode, arrayNode);
-        } else {
-            throw new X8lGrammarException("JsonDealer can not deal with json who represent this type." + jsonNode.getClass());
-        }
-    }
-
-    private void read(ContentNode contentNode, ObjectNode objectNode) {
+    private static boolean readInner(ContentNode contentNode, ObjectNode objectNode) {
         for (Iterator<Map.Entry<String, JsonNode>> it = objectNode.fields(); it.hasNext(); ) {
             Map.Entry<String, JsonNode> entry = it.next();
             if (ATTRIBUTES_KEY.equals(entry.getKey())) {
@@ -247,17 +286,18 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
             ContentNode childContentNode = new ContentNode(contentNode);
             childContentNode.addAttribute(entry.getKey());
             if (entry.getValue() instanceof ObjectNode) {
-                this.read(childContentNode, (ObjectNode) entry.getValue());
+                readInner(childContentNode, (ObjectNode) entry.getValue());
             } else if (entry.getValue() instanceof ArrayNode) {
                 ArrayNode arrayNode = (ArrayNode) entry.getValue();
-                this.read(childContentNode, arrayNode);
-            } else {
+                readInner(childContentNode, arrayNode);
+            } else if (entry.getValue() instanceof com.fasterxml.jackson.databind.node.TextNode) {
                 new TextNode(childContentNode, entry.getValue().asText());
             }
         }
+        return true;
     }
 
-    private void read(ContentNode contentNode, ArrayNode arrayNode) {
+    private static boolean readInner(ContentNode contentNode, ArrayNode arrayNode) {
         contentNode.addAttribute(ARRAY_ID_ATTRIBUTE);
         for (Iterator<JsonNode> it = arrayNode.elements(); it.hasNext(); ) {
             JsonNode childNode = it.next();
@@ -265,13 +305,14 @@ public final class JsonDealer implements AbstractLanguageDealer, Serializable {
 
 
             if (childNode instanceof ObjectNode) {
-                this.read(childContentNode, (ObjectNode) childNode);
+                readInner(childContentNode, (ObjectNode) childNode);
             } else if (childNode instanceof ArrayNode) {
-                this.read(childContentNode, (ArrayNode) childNode);
-            } else {
+                readInner(childContentNode, (ArrayNode) childNode);
+            } else if (childNode instanceof com.fasterxml.jackson.databind.node.TextNode) {
                 new TextNode(childContentNode, childNode.asText());
             }
         }
+        return true;
     }
 
     @Override

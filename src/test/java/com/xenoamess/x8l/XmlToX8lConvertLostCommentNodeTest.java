@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -55,7 +56,9 @@ public class XmlToX8lConvertLostCommentNodeTest {
         assertNotNull(x8lTree);
 
         String getXmlString = x8lTree.toString();
+        try (FileWriter fileWriter = new FileWriter("out/testPom.out.xml")) {
+            fileWriter.write(getXmlString);
+        }
         assertNotEquals(originalXmlString, getXmlString);
     }
-
 }

@@ -39,6 +39,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
+
 /**
  * Read and output xml.
  * Notice that I can not ensure the output is really an xml, because x8l has loosen rules on things,
@@ -58,7 +60,7 @@ import java.util.List;
  *
  * @author XenoAmess
  */
-public final class XmlDealer implements AbstractLanguageDealer, Serializable {
+public final class XmlDealer extends LanguageDealer implements Serializable {
     /*
      * no need to build more XmlDealer instances.
      * please just use XmlDealer.INSTANCE
@@ -66,32 +68,112 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
      * please just copy the codes and make your own AbstractLanguageDealer class.
      */
     private XmlDealer() {
+        this.registerTreeNodeHandler(
+                RootNode.class,
+                new AbstractLanguageDealerHandler<RootNode>() {
+                    @Override
+                    public boolean read(Reader reader, RootNode rootNode) throws IOException, X8lGrammarException {
+                        try {
+                            Document document = DocumentHelper.parseText(IOUtils.toString(reader));
+                            if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node(0).getName().equals(STRING_MAMELESS)) {
+                                XmlDealer.this.readChildrenArea(rootNode, (Element) document.node(0));
+                            } else {
+                                XmlDealer.this.readChildrenArea(rootNode, document);
+                            }
+                        } catch (DocumentException e) {
+                            throw new IOException(e);
+                        }
+                        return true;
+                    }
 
+                    @Override
+                    public boolean write(Writer writer, RootNode rootNode) throws IOException, X8lGrammarException {
+                        Document document = DocumentHelper.createDocument();
+                        Element element = document.addElement(STRING_MAMELESS);
+                        if (rootNode.getChildren().size() == 1 && rootNode.getChildren().get(0) instanceof ContentNode && "".equals(rootNode.getName())) {
+                            XmlDealer.this.write((ContentNode) rootNode.getChildren().get(0), element);
+                        } else {
+                            XmlDealer.this.write(rootNode, element);
+                        }
+                        document.write(writer);
+                        return true;
+                    }
+                }
+        );
+
+
+        this.registerTreeNodeHandler(
+                ContentNode.class,
+                new AbstractLanguageDealerHandler<ContentNode>() {
+                    @Override
+                    public boolean read(Reader reader, ContentNode contentNode) throws
+                            IOException, X8lGrammarException {
+                        try {
+                            Document document = DocumentHelper.parseText(IOUtils.toString(reader));
+                            XmlDealer.this.read(contentNode, document.getRootElement());
+                        } catch (DocumentException e) {
+                            throw new IOException(e);
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, ContentNode contentNode) throws
+                            IOException, X8lGrammarException {
+                        Document document = DocumentHelper.createDocument();
+                        Element element = document.addElement(STRING_MAMELESS);
+                        XmlDealer.this.write(contentNode, element);
+                        document.write(writer);
+                        return true;
+                    }
+                }
+        );
+
+        this.registerTreeNodeHandler(
+                TextNode.class,
+                new AbstractLanguageDealerHandler<TextNode>() {
+                    @Override
+                    public boolean read(Reader reader, TextNode textNode) throws IOException, X8lGrammarException {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
+                        Document document = DocumentHelper.createDocument();
+                        Element element = document.addElement(STRING_MAMELESS);
+                        element.addText(textNode.getTextContent());
+                        document.write(writer);
+                        return true;
+                    }
+                }
+        );
+
+        this.registerTreeNodeHandler(
+                CommentNode.class,
+                new AbstractLanguageDealerHandler<CommentNode>() {
+                    @Override
+                    public boolean read(Reader reader, CommentNode commentNode) throws
+                            IOException, X8lGrammarException {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, CommentNode commentNode) throws
+                            IOException, X8lGrammarException {
+                        Document document = DocumentHelper.createDocument();
+                        Element element = document.addElement(STRING_MAMELESS);
+                        element.addComment(commentNode.getTextContent());
+                        document.write(writer);
+                        return true;
+                    }
+                }
+        );
     }
 
 
     public static final String STRING_MAMELESS = "_nameless";
 
     public static final XmlDealer INSTANCE = new XmlDealer();
-
-    @Override
-    public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
-        assert (writer != null);
-        Document document = DocumentHelper.createDocument();
-        Element element = document.addElement(STRING_MAMELESS);
-        if (treeNode instanceof ContentNode) {
-            this.write((ContentNode) treeNode, element);
-        } else if (treeNode instanceof TextNode) {
-            TextNode textNode = (TextNode) treeNode;
-            element.addText(textNode.getTextContent());
-        } else if (treeNode instanceof CommentNode) {
-            CommentNode commentNode = (CommentNode) treeNode;
-            element.addComment(commentNode.getTextContent());
-        } else {
-            throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
-        }
-        document.write(writer);
-    }
 
     /**
      * delete attributes which contains illegal char in their key.
@@ -104,7 +186,7 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
     public static List<String> filterIllegalChars(List<String> source) {
         List<String> res = new ArrayList<>();
         for (String au : source) {
-            boolean add = !au.contains(JsonDealer.ARRAY_ID_ATTRIBUTE);
+            boolean add = !au.contains(ARRAY_ID_ATTRIBUTE);
             if (add) {
                 for (char c : au.toCharArray()) {
                     if ((c >= 0x00 && c <= 0x08)
@@ -122,48 +204,28 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
         return res;
     }
 
-    private void write(ContentNode contentNode, Element element) {
+    private static void write(ContentNode contentNode, Element element) {
         boolean firstAttribute = true;
         String nodeName;
         boolean nodeNameless = false;
-        List<String> filteredAttributesKeyList = filterIllegalChars(contentNode.getAttributesKeyList());
-        if (filteredAttributesKeyList.isEmpty()) {
-            //if have no attributes then it is nameless.
+
+        if (ifNameless(contentNode)) {
             nodeName = STRING_MAMELESS;
             nodeNameless = true;
         } else {
-            nodeName = filteredAttributesKeyList.get(0);
-            if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
-                //if "name" has value then it is nameless.
-                nodeName = STRING_MAMELESS;
-                nodeNameless = true;
-            }
-            //else, nodeName be first attribute's key
+            nodeName = contentNode.getAttributesKeyList().get(0);
         }
+
         if (nodeNameless) {
             //if nameless then give it a name.
             element.setName(nodeName);
             firstAttribute = false;
         }
-        if (nodeNameless && contentNode.getChildren().size() == 1) {
-            //if nameless and have only one child,
-            //then does not output this nameless node, and let the child node be here.
-            AbstractTreeNode treeNode = contentNode.getChildren().get(0);
-            if (treeNode instanceof ContentNode) {
-                this.write((ContentNode) treeNode, element);
-            } else if (treeNode instanceof TextNode) {
-                TextNode textNode = (TextNode) treeNode;
-                element.addText(textNode.getTextContent());
-            } else if (treeNode instanceof CommentNode) {
-                CommentNode commentNode = (CommentNode) treeNode;
-                element.addComment(commentNode.getTextContent());
-            } else {
-                throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
-            }
-            return;
-        }
 
-        for (String key : filteredAttributesKeyList) {
+        for (String key : contentNode.getAttributesKeyList()) {
+            if (ARRAY_ID_ATTRIBUTE.equals(key)) {
+                continue;
+            }
             String value = contentNode.getAttributes().get(key);
 
             if (!StringUtils.isEmpty(value)) {
@@ -175,12 +237,15 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
                     element.setName(key);
                 }
             }
-
             firstAttribute = false;
         }
+        writeChildrenArea(contentNode, element);
+    }
+
+    private static void writeChildrenArea(ContentNode contentNode, Element element) {
         for (AbstractTreeNode au : contentNode.getChildren()) {
             if (au instanceof ContentNode) {
-                this.write((ContentNode) au, element.addElement(STRING_MAMELESS));
+                write((ContentNode) au, element.addElement(STRING_MAMELESS));
             } else if (au instanceof TextNode) {
                 TextNode textNode = (TextNode) au;
                 element.addText(textNode.getTextContent());
@@ -193,31 +258,23 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
         }
     }
 
-    @Override
-    public void read(Reader reader, ContentNode contentNode) throws IOException {
-        assert (reader != null);
-        try {
-            Document document = DocumentHelper.parseText(IOUtils.toString(reader));
-            readChildrenArea(contentNode, document);
-        } catch (DocumentException e) {
-            throw new IOException(e);
+    //    @Override
+    private static void read(ContentNode contentNode, Element element) {
+        if (!STRING_MAMELESS.equals(element.getName())) {
+            contentNode.addAttribute(element.getName());
         }
-    }
-
-    private void read(ContentNode contentNode, Element element) {
-        contentNode.addAttribute(element.getName());
         for (Attribute attribute : element.attributes()) {
             contentNode.addAttribute(attribute.getName(), attribute.getValue());
         }
         readChildrenArea(contentNode, element);
     }
 
-    private void readChildrenArea(ContentNode contentNode, Branch branch) {
+    private static void readChildrenArea(ContentNode contentNode, Branch branch) {
         for (int i = 0, size = branch.nodeCount(); i < size; i++) {
             Node node = branch.node(i);
             if (node instanceof Element) {
                 ContentNode childContentNode = new ContentNode(contentNode);
-                this.read(childContentNode, (Element) node);
+                read(childContentNode, (Element) node);
             } else if (node instanceof DefaultText) {
                 new TextNode(contentNode, node.getText());
             } else if (node instanceof DefaultComment) {
@@ -227,6 +284,18 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
                 new TextNode(contentNode, node.getText());
             }
         }
+    }
+
+    public static boolean ifNameless(ContentNode contentNode) {
+        if (contentNode.getAttributesKeyList().isEmpty()) {
+            return true;
+        }
+        String nodeName = contentNode.getAttributesKeyList().get(0);
+        if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
+            //if "name" has value then it is nameless.
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -248,19 +317,13 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
             String nodeName;
             boolean nodeNameless = false;
 
-            if (contentNode.getAttributesKeyList().isEmpty()) {
-                //if have no attributes then it is nameless.
+            if (ifNameless(contentNode)) {
                 nodeName = STRING_MAMELESS;
                 nodeNameless = true;
             } else {
                 nodeName = contentNode.getAttributesKeyList().get(0);
-                if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
-                    //if "name" has value then it is nameless.
-                    nodeName = STRING_MAMELESS;
-                    nodeNameless = true;
-                }
-                //else, nodeName be first attribute's key
             }
+
             if (nodeNameless) {
                 //if nameless then give it a name.
                 writer.append(nodeName);
@@ -274,13 +337,13 @@ public final class XmlDealer implements AbstractLanguageDealer, Serializable {
                 if (!firstAttribute) {
                     writer.append(' ');
                 }
-                writer.append(X8lTree.transcodeKeyAndValue(key));
+                writer.append(X8lTree.transcodeKey(key));
                 String value = contentNode.getAttributes().get(key);
 
                 if (!StringUtils.isEmpty(value)) {
                     writer.append('=');
                     writer.append('"');
-                    writer.append(X8lTree.transcodeKeyAndValue(value));
+                    writer.append(X8lTree.transcodeValue(value));
                     writer.append('"');
                 } else {
                     if (!firstAttribute) {

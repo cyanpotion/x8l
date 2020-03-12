@@ -25,7 +25,6 @@
 package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.*;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ import java.io.Writer;
  *
  * @author XenoAmess
  */
-public final class X8lDealer implements AbstractLanguageDealer, Serializable {
+public final class X8lDealer extends LanguageDealer implements Serializable {
     /*
      * no need to build more X8lDealer instances.
      * please just use X8lDealer.INSTANCE
@@ -46,139 +45,171 @@ public final class X8lDealer implements AbstractLanguageDealer, Serializable {
      * please just copy the codes and make your own AbstractLanguageDealer class.
      */
     private X8lDealer() {
+        this.registerTreeNodeHandler(
+                RootNode.class,
+                new AbstractLanguageDealerHandler<RootNode>() {
+                    @Override
+                    public boolean read(Reader reader, RootNode rootNode) throws IOException, X8lGrammarException {
+                        return X8lDealer.this.getTreeNodeHandler(ContentNode.class).read(reader, rootNode);
+                    }
 
+                    @Override
+                    public boolean write(Writer writer, RootNode rootNode) throws IOException, X8lGrammarException {
+                        for (AbstractTreeNode abstractTreeNode : rootNode.getChildren()) {
+                            abstractTreeNode.write(writer, X8lDealer.this);
+                        }
+                        return true;
+                    }
+                }
+        );
+
+
+        this.registerTreeNodeHandler(
+                ContentNode.class,
+                new AbstractLanguageDealerHandler<ContentNode>() {
+                    @Override
+                    public boolean read(Reader reader, ContentNode contentNode) throws IOException, X8lGrammarException {
+                        assert (reader != null);
+                        contentNode.close();
+                        int nowInt;
+                        ContentNode nowNode = contentNode;
+                        boolean inAttributeArea = false;
+                        boolean inCommentArea = false;
+                        boolean lastCharIsModulus = false;
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        char nowChar;
+                        while (true) {
+                            nowInt = reader.read();
+                            nowChar = (char) nowInt;
+                            if (nowInt == -1) {
+                                if (nowNode == contentNode && !inAttributeArea && !inCommentArea) {
+                                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
+                                    break;
+                                } else {
+                                    throw new X8lGrammarException("Unexpected stop of x8l file.");
+                                }
+                            } else if (lastCharIsModulus) {
+                                stringBuilder.append(nowChar);
+                                lastCharIsModulus = false;
+                            } else if (nowChar == '%') {
+                                lastCharIsModulus = true;
+                            } else if (inCommentArea) {
+                                if (nowChar == '>') {
+                                    new CommentNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
+                                    stringBuilder = new StringBuilder();
+                                    inCommentArea = false;
+                                } else {
+                                    stringBuilder.append(nowChar);
+                                }
+                            } else if (nowChar == '<') {
+                                if (inAttributeArea) {
+                                    if (!nowNode.getAttributes().isEmpty() || stringBuilder.length() != 0) {
+                                        throw new X8lGrammarException("Unexpected < in attribute area of a content node.");
+                                    } else {
+                                        ContentNode nowParent = nowNode.getParent();
+                                        nowNode.close();
+                                        nowNode = nowParent;
+                                        inAttributeArea = false;
+                                        inCommentArea = true;
+                                    }
+                                } else {
+                                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
+                                    stringBuilder = new StringBuilder();
+                                    nowNode = new ContentNode(nowNode);
+                                    inAttributeArea = true;
+                                }
+                            } else if (nowChar == '>') {
+                                if (!inAttributeArea) {
+                                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
+                                    stringBuilder = new StringBuilder();
+                                    nowNode = nowNode.getParent();
+                                } else {
+                                    if (stringBuilder.length() != 0) {
+                                        nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
+                                        stringBuilder = new StringBuilder();
+                                    }
+                                    inAttributeArea = false;
+                                }
+                            } else if (Character.isWhitespace(nowChar)) {
+                                if (inAttributeArea) {
+                                    if (stringBuilder.length() != 0) {
+                                        nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
+                                        stringBuilder = new StringBuilder();
+                                    }
+                                } else {
+                                    stringBuilder.append(nowChar);
+                                }
+                            } else {
+                                stringBuilder.append(nowChar);
+                            }
+                        }
+                        if (!nowNode.getAttributeSegments().isEmpty()) {
+                            nowNode.getAttributeSegments().set(nowNode.getAttributeSegments().size() - 1, "");
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, ContentNode contentNode) throws IOException, X8lGrammarException {
+                        writer.append('<');
+                        for (int i = 0; i < contentNode.getAttributesKeyList().size(); i++) {
+                            String key = contentNode.getAttributesKeyList().get(i);
+                            writer.append(X8lTree.transcodeKey(key));
+                            String value = contentNode.getAttributes().get(key);
+                            if (!StringUtils.isEmpty(value)) {
+                                writer.append("=");
+                                writer.append(X8lTree.transcodeValue(value));
+                            }
+                            writer.append(contentNode.getAttributeSegments().get(i));
+                        }
+                        writer.append('>');
+                        for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {
+                            abstractTreeNode.write(writer, X8lDealer.this);
+                        }
+                        writer.append('>');
+                        return true;
+                    }
+                }
+        );
+
+        this.registerTreeNodeHandler(
+                TextNode.class,
+                new AbstractLanguageDealerHandler<TextNode>() {
+                    @Override
+                    public boolean read(Reader reader, TextNode textNode) throws IOException, X8lGrammarException {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
+                        writer.append(X8lTree.transcodeText(textNode.getTextContent()));
+                        return true;
+                    }
+                }
+        );
+
+        this.registerTreeNodeHandler(
+                CommentNode.class,
+                new AbstractLanguageDealerHandler<CommentNode>() {
+                    @Override
+                    public boolean read(Reader reader, CommentNode commentNode) throws IOException, X8lGrammarException {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean write(Writer writer, CommentNode commentNode) throws IOException, X8lGrammarException {
+                        writer.append('<');
+                        writer.append('<');
+                        writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
+                        writer.append('>');
+                        return true;
+                    }
+                }
+        );
     }
 
     public static final X8lDealer INSTANCE = new X8lDealer();
-
-    @Override
-    public void write(Writer writer, AbstractTreeNode treeNode) throws IOException {
-        assert (writer != null);
-        if (treeNode instanceof ContentNode) {
-            ContentNode contentNode = (ContentNode) treeNode;
-            if (contentNode.getParent() == null) {
-                for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {
-                    abstractTreeNode.write(writer, this);
-                }
-            } else {
-                writer.append('<');
-                boolean firstAttribute = true;
-                for (int i = 0; i < contentNode.getAttributesKeyList().size(); i++) {
-                    String key = contentNode.getAttributesKeyList().get(i);
-//                    if (firstAttribute) {
-//                        firstAttribute = false;
-//                    } else {
-//                        writer.append(' ');
-//                    }
-                    writer.append(X8lTree.transcodeKeyAndValue(key));
-                    String value = contentNode.getAttributes().get(key);
-                    if (!StringUtils.isEmpty(value)) {
-                        writer.append("=");
-                        writer.append(X8lTree.transcodeKeyAndValue(value));
-                    }
-                    writer.append(contentNode.getAttributeSegments().get(i));
-                }
-                writer.append('>');
-                for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {
-                    abstractTreeNode.write(writer, this);
-                }
-                writer.append('>');
-            }
-        } else if (treeNode instanceof TextNode) {
-            TextNode textNode = (TextNode) treeNode;
-            writer.append(X8lTree.transcodeText(textNode.getTextContent()));
-        } else if (treeNode instanceof CommentNode) {
-            CommentNode commentNode = (CommentNode) treeNode;
-            writer.append('<');
-            writer.append('<');
-            writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
-            writer.append('>');
-        } else {
-            throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
-        }
-    }
-
-    @Override
-    public void read(Reader reader, ContentNode contentNode) throws IOException {
-        assert (reader != null);
-        contentNode.close();
-        int nowInt;
-        ContentNode nowNode = contentNode;
-        boolean inAttributeArea = false;
-        boolean inCommentArea = false;
-        boolean lastCharIsModulus = false;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        char nowChar;
-        while (true) {
-            nowInt = reader.read();
-            nowChar = (char) nowInt;
-            if (nowInt == -1) {
-                if (nowNode == contentNode && !inAttributeArea && !inCommentArea) {
-                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
-                    break;
-                } else {
-                    throw new X8lGrammarException("Unexpected stop of x8l file.");
-                }
-            } else if (lastCharIsModulus) {
-                stringBuilder.append(nowChar);
-                lastCharIsModulus = false;
-            } else if (nowChar == '%') {
-                lastCharIsModulus = true;
-            } else if (inCommentArea) {
-                if (nowChar == '>') {
-                    new CommentNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
-                    stringBuilder = new StringBuilder();
-                    inCommentArea = false;
-                } else {
-                    stringBuilder.append(nowChar);
-                }
-            } else if (nowChar == '<') {
-                if (inAttributeArea) {
-                    if (!nowNode.getAttributes().isEmpty() || stringBuilder.length() != 0) {
-                        throw new X8lGrammarException("Unexpected < in attribute area of a content node.");
-                    } else {
-                        ContentNode nowParent = nowNode.getParent();
-                        nowNode.close();
-                        nowNode = nowParent;
-                        inAttributeArea = false;
-                        inCommentArea = true;
-                    }
-                } else {
-                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
-                    stringBuilder = new StringBuilder();
-                    nowNode = new ContentNode(nowNode);
-                    inAttributeArea = true;
-                }
-            } else if (nowChar == '>') {
-                if (!inAttributeArea) {
-                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
-                    stringBuilder = new StringBuilder();
-                    nowNode = nowNode.getParent();
-                } else {
-                    if (stringBuilder.length() != 0) {
-                        nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                    }
-                    inAttributeArea = false;
-                }
-            } else if (Character.isWhitespace(nowChar)) {
-                if (inAttributeArea) {
-                    if (stringBuilder.length() != 0) {
-                        nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                    }
-                } else {
-                    stringBuilder.append(nowChar);
-                }
-            } else {
-                stringBuilder.append(nowChar);
-            }
-        }
-        if (!nowNode.getAttributeSegments().isEmpty()) {
-            nowNode.getAttributeSegments().set(nowNode.getAttributeSegments().size() - 1, "");
-        }
-    }
 
     @Override
     public String toString() {

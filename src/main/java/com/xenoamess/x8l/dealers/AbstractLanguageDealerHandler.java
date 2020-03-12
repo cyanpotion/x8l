@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 XenoAmess
+ * Copyright (c) 2020 XenoAmess
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,30 +25,16 @@
 package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.AbstractTreeNode;
-import com.xenoamess.x8l.ContentNode;
+import com.xenoamess.x8l.X8lGrammarException;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 
-/**
- * AbstractLanguageDealer
- * base class of all LanguageDealers
- *
- * @author XenoAmess
- */
-public interface AbstractLanguageDealer extends Serializable {
+public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
 
-    void write(Writer writer, AbstractTreeNode treeNode) throws IOException;
+    boolean read(Reader reader, T t) throws IOException, X8lGrammarException;
 
-    /**
-     * notice that only ContentNode can read.
-     * notice that
-     *
-     * @param reader      reader to read
-     * @param contentNode contentNode to read to
-     * @throws IOException IOException
-     */
-    void read(Reader reader, ContentNode contentNode) throws IOException;
+    boolean write(Writer writer, T t) throws IOException, X8lGrammarException;
 }
