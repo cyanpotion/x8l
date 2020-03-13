@@ -111,7 +111,8 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 ContentNode.class,
                 new AbstractLanguageDealerHandler<ContentNode>() {
                     @Override
-                    public boolean read(Reader reader, ContentNode contentNode) throws IOException, X8lGrammarException {
+                    public boolean read(Reader reader, ContentNode contentNode) throws IOException,
+                            X8lGrammarException {
                         assert (reader != null);
                         JsonNode jsonNode = getObjectMapper().readTree(reader);
                         if (jsonNode instanceof ObjectNode) {
@@ -126,7 +127,8 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                     }
 
                     @Override
-                    public boolean write(Writer writer, ContentNode contentNode) throws IOException, X8lGrammarException {
+                    public boolean write(Writer writer, ContentNode contentNode) throws IOException,
+                            X8lGrammarException {
                         if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                             ArrayNode arrayNode = getObjectMapper().createArrayNode();
                             writeInner(contentNode, arrayNode, 0);
@@ -161,12 +163,14 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 CommentNode.class,
                 new AbstractLanguageDealerHandler<CommentNode>() {
                     @Override
-                    public boolean read(Reader reader, CommentNode commentNode) throws IOException, X8lGrammarException {
+                    public boolean read(Reader reader, CommentNode commentNode) throws IOException,
+                            X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, CommentNode commentNode) throws IOException, X8lGrammarException {
+                    public boolean write(Writer writer, CommentNode commentNode) throws IOException,
+                            X8lGrammarException {
                         writer.append("/*");
                         writer.append(commentNode.getTextContent());
                         writer.append("*/");
@@ -225,6 +229,12 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                     objectNode.set(contentNode2.getName(), objectNode2);
                     nowIndex = writeInner(contentNode2, objectNode2, nowIndex);
                 }
+            } else if (treeNode instanceof TextNode) {
+                objectNode.put(TEXT_KEY + nowIndex, ((TextNode) treeNode).getTextContent());
+                nowIndex++;
+            } else if (treeNode instanceof CommentNode) {
+                objectNode.put(COMMENT_KEY + nowIndex, ((CommentNode) treeNode).getTextContent());
+                nowIndex++;
             } else {
                 LOGGER.error("Json does not allow this here.we just delete it : {}", treeNode.toString());
             }
@@ -273,7 +283,8 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 JsonNode attributeJsonNode = entry.getValue();
                 for (Iterator<Map.Entry<String, JsonNode>> attributeJsonNodeIterator = attributeJsonNode.fields(); attributeJsonNodeIterator.hasNext(); ) {
                     Map.Entry<String, JsonNode> attributeJsonNodeEntry = attributeJsonNodeIterator.next();
-                    contentNode.addAttribute(attributeJsonNodeEntry.getKey(), attributeJsonNodeEntry.getValue().asText());
+                    contentNode.addAttribute(attributeJsonNodeEntry.getKey(),
+                            attributeJsonNodeEntry.getValue().asText());
                 }
                 continue;
             } else if (entry.getKey().startsWith(TEXT_KEY)) {
@@ -301,15 +312,15 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
         contentNode.addAttribute(ARRAY_ID_ATTRIBUTE);
         for (Iterator<JsonNode> it = arrayNode.elements(); it.hasNext(); ) {
             JsonNode childNode = it.next();
-            ContentNode childContentNode = new ContentNode(contentNode);
-
 
             if (childNode instanceof ObjectNode) {
+                ContentNode childContentNode = new ContentNode(contentNode);
                 readInner(childContentNode, (ObjectNode) childNode);
             } else if (childNode instanceof ArrayNode) {
+                ContentNode childContentNode = new ContentNode(contentNode);
                 readInner(childContentNode, (ArrayNode) childNode);
             } else if (childNode instanceof com.fasterxml.jackson.databind.node.TextNode) {
-                new TextNode(childContentNode, childNode.asText());
+                new TextNode(contentNode, childNode.asText());
             }
         }
         return true;

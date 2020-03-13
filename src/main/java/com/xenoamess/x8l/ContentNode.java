@@ -68,18 +68,21 @@ public class ContentNode extends AbstractTreeNode {
         if (segment == null) {
             segment = EMPTY_SEGMENT_VALUE;
         }
-        if (!this.getAttributes().containsKey(key)) {
+        boolean addKey = !this.getAttributes().containsKey(key);
+        if (addKey) {
             getAttributesKeyList().add(key);
         }
         getAttributes().put(key, value);
 
-        if (!getAttributeSegments().isEmpty()) {
-            int size = getAttributeSegments().size();
-            if (getAttributeSegments().get(size - 1).equals(EMPTY_SEGMENT_VALUE)) {
-                getAttributeSegments().set(size - 1, DEFAULT_SEGMENT_VALUE);
+        if (addKey) {
+            if (!getAttributeSegments().isEmpty()) {
+                int size = getAttributeSegments().size();
+                if (getAttributeSegments().get(size - 1).equals(EMPTY_SEGMENT_VALUE)) {
+                    getAttributeSegments().set(size - 1, DEFAULT_SEGMENT_VALUE);
+                }
             }
+            getAttributeSegments().add(segment);
         }
-        getAttributeSegments().add(segment);
     }
 
     public void addAttribute(String key, String value) {
