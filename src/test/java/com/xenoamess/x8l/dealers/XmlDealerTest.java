@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class XmlDealerTest {
@@ -85,5 +86,33 @@ public class XmlDealerTest {
                 return null;
             });
         }
+    }
+
+    @Test
+    public void testXmlNamelessRoot() throws IOException {
+        String trees[] = new String[]{
+                "<a>b>"
+                , "<< ><a>b>"
+                , "a<a>b>"
+//                , IOUtils.toString(this.getClass().getResource("/testPom.xml"))
+        };
+
+        for (String tree : trees) {
+            testXmlNamelessRootSingle(tree);
+        }
+    }
+
+    public void testXmlNamelessRootSingle(String x8lString) {
+        X8lTree x8lTree = X8lTree.load(x8lString);
+        x8lTree.setLanguageDealer(XmlDealer.INSTANCE);
+        String xmlString = X8lTree.save(x8lTree);
+        X8lTree x8lTree2 = X8lTree.load(xmlString, XmlDealer.INSTANCE);
+        x8lTree2.setLanguageDealer(X8lDealer.INSTANCE);
+        String x8lString2 = X8lTree.save(x8lTree2);
+        System.out.println("1:");
+        System.out.println(x8lString);
+        System.out.println("2:");
+        System.out.println(xmlString);
+        assertEquals(x8lString, x8lString2);
     }
 }

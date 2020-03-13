@@ -75,7 +75,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     public boolean read(Reader reader, RootNode rootNode) throws IOException, X8lGrammarException {
                         try {
                             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
-                            if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node(0).getName().equals(STRING_MAMELESS)) {
+                            if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node(0).getName().equals(STRING_NAMELESS)) {
                                 XmlDealer.this.readChildrenArea(rootNode, (Element) document.node(0));
                             } else {
                                 XmlDealer.this.readChildrenArea(rootNode, document);
@@ -89,10 +89,23 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean write(Writer writer, RootNode rootNode) throws IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_MAMELESS);
-                        if (rootNode.getChildren().size() == 1 && rootNode.getChildren().get(0) instanceof ContentNode && "".equals(rootNode.getName())) {
-                            XmlDealer.this.write((ContentNode) rootNode.getChildren().get(0), element);
+                        List<ContentNode> contentNodes = rootNode.getContentNodesFromChildren();
+                        if (ifSingleRootNode(rootNode) != null) {
+                            for (AbstractTreeNode au : rootNode.getChildren()) {
+                                if (au instanceof ContentNode) {
+                                    XmlDealer.this.write((ContentNode) au, document.addElement(STRING_NAMELESS));
+                                } else if (au instanceof TextNode) {
+//                                    TextNode textNode = (TextNode) au;
+//                                    document.add(textNode.getTextContent());
+                                } else if (au instanceof CommentNode) {
+                                    CommentNode commentNode = (CommentNode) au;
+                                    document.addComment(commentNode.getTextContent());
+                                } else {
+                                    throw new NotImplementedException("not implemented for this class : " + au.getClass());
+                                }
+                            }
                         } else {
+                            Element element = document.addElement(STRING_NAMELESS);
                             XmlDealer.this.write(rootNode, element);
                         }
                         document.write(writer);
@@ -121,7 +134,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     public boolean write(Writer writer, ContentNode contentNode) throws
                             IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_MAMELESS);
+                        Element element = document.addElement(STRING_NAMELESS);
                         XmlDealer.this.write(contentNode, element);
                         document.write(writer);
                         return true;
@@ -140,7 +153,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_MAMELESS);
+                        Element element = document.addElement(STRING_NAMELESS);
                         element.addText(textNode.getTextContent());
                         document.write(writer);
                         return true;
@@ -161,7 +174,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     public boolean write(Writer writer, CommentNode commentNode) throws
                             IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_MAMELESS);
+                        Element element = document.addElement(STRING_NAMELESS);
                         element.addComment(commentNode.getTextContent());
                         document.write(writer);
                         return true;
@@ -171,7 +184,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
     }
 
 
-    public static final String STRING_MAMELESS = "_nameless";
+    public static final String STRING_NAMELESS = "_nameless";
 
     public static final XmlDealer INSTANCE = new XmlDealer();
 
@@ -210,7 +223,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         boolean nodeNameless = false;
 
         if (ifNameless(contentNode)) {
-            nodeName = STRING_MAMELESS;
+            nodeName = STRING_NAMELESS;
             nodeNameless = true;
         } else {
             nodeName = contentNode.getAttributesKeyList().get(0);
@@ -245,7 +258,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
     private static void writeChildrenArea(ContentNode contentNode, Element element) {
         for (AbstractTreeNode au : contentNode.getChildren()) {
             if (au instanceof ContentNode) {
-                write((ContentNode) au, element.addElement(STRING_MAMELESS));
+                write((ContentNode) au, element.addElement(STRING_NAMELESS));
             } else if (au instanceof TextNode) {
                 TextNode textNode = (TextNode) au;
                 element.addText(textNode.getTextContent());
@@ -260,7 +273,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
 
     //    @Override
     private static void read(ContentNode contentNode, Element element) {
-        if (!STRING_MAMELESS.equals(element.getName())) {
+        if (!STRING_NAMELESS.equals(element.getName())) {
             contentNode.addAttribute(element.getName());
         }
         for (Attribute attribute : element.attributes()) {
@@ -280,7 +293,8 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             } else if (node instanceof DefaultComment) {
                 new CommentNode(contentNode, node.getText());
             } else {
-                System.err.println("Cannot handle this node type: " + node.getClass().getCanonicalName() + " . Will treat it as TextNode.");
+                System.err.println("Cannot handle this node type: " + node.getClass().getCanonicalName() + " . Will " +
+                        "treat it as TextNode.");
                 new TextNode(contentNode, node.getText());
             }
         }
@@ -318,7 +332,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             boolean nodeNameless = false;
 
             if (ifNameless(contentNode)) {
-                nodeName = STRING_MAMELESS;
+                nodeName = STRING_NAMELESS;
                 nodeNameless = true;
             } else {
                 nodeName = contentNode.getAttributesKeyList().get(0);
@@ -378,6 +392,44 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
         }
     }
+
+    public static ContentNode ifSingleRootNode(ContentNode contentNode) {
+        int count = 0;
+        ContentNode res = null;
+        for (AbstractTreeNode au : contentNode.getChildren()) {
+            if (au instanceof TextNode) {
+                if (!StringUtils.isBlank((((TextNode) au).getTextContent()))) {
+                    return null;
+                }
+            }
+            if (au instanceof ContentNode) {
+                res = (ContentNode) au;
+                count++;
+                if (count > 1) {
+                    return null;
+                }
+            }
+        }
+        return res;
+    }
+
+//    public static ContentNode ifSingleDocument(Document document) {
+//        int count = 0;
+//        ContentNode res = null;
+//        for (AbstractTreeNode au : contentNode.getChildren()) {
+//            if (au instanceof TextNode) {
+//                return null;
+//            }
+//            if (au instanceof ContentNode) {
+//                res = (ContentNode) au;
+//                count++;
+//                if (count > 1) {
+//                    return null;
+//                }
+//            }
+//        }
+//        return res;
+//    }
 
     @Override
     public String toString() {
