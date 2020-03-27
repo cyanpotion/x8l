@@ -48,7 +48,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-vfs2.version>2.6.0</commons-vfs2.version>
         <dom4j.version>2.1.1</dom4j.version>
-        <jackson.version>2.10.3</jackson.version>
+        <jackson.version>2.11.0.rc1</jackson.version>
         <log4j.version>2.13.1</log4j.version>
         <slf4j.version>1.7.30</slf4j.version>
         <!---->
@@ -58,7 +58,7 @@
         <!---->
         <!---->
         <!--maven plugins versions-->
-        <junit-jupiter.version>5.6.0</junit-jupiter.version>
+        <junit-jupiter.version>5.6.1</junit-jupiter.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
