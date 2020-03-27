@@ -32,9 +32,30 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 
+/**
+ * @author XenoAmess
+ */
 public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
 
+    /**
+     * read AbstractTreeNode
+     *
+     * @param reader reader
+     * @param t      AbstractTreeNode to read
+     * @return if read succeed
+     * @throws IOException
+     * @throws X8lGrammarException
+     */
     boolean read(Reader reader, T t) throws IOException, X8lGrammarException;
 
+    /**
+     * write AbstractTreeNode
+     *
+     * @param writer writer
+     * @param t      AbstractTreeNode to write
+     * @return if write succeed
+     * @throws IOException
+     * @throws X8lGrammarException
+     */
     boolean write(Writer writer, T t) throws IOException, X8lGrammarException;
 }

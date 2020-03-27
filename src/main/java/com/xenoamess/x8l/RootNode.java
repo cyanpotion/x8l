@@ -24,6 +24,9 @@
 
 package com.xenoamess.x8l;
 
+/**
+ * @author XenoAmess
+ */
 public class RootNode extends ContentNode {
     public RootNode(ContentNode parent) {
         super(parent);

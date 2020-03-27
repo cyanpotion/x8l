@@ -91,12 +91,6 @@ public class ContentNode extends AbstractTreeNode {
 
 
     public void addAttribute(String attributeString) {
-//        int index = attributeString.indexOf('=');
-//        if (index == -1) {
-//            this.addAttribute(attributeString, null);
-//        } else {
-//            this.addAttribute(attributeString.substring(0, index), attributeString.substring(index + 1));
-//        }
         this.addAttribute(attributeString, null);
     }
 
@@ -263,9 +257,11 @@ public class ContentNode extends AbstractTreeNode {
         this.getChildren().addAll(newChildren);
     }
 
+    private static int MAXIMAL_IGNORE_FORMAT_ATTRIBUTE_NUM = 3;
+
     public void formatAttributeSegments(int space) {
         this.trimAttributeSegments();
-        if (this.getAttributesKeyList().size() <= 3) {
+        if (this.getAttributesKeyList().size() <= MAXIMAL_IGNORE_FORMAT_ATTRIBUTE_NUM) {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -280,6 +276,7 @@ public class ContentNode extends AbstractTreeNode {
         this.getAttributeSegments().set(this.getAttributesKeyList().size() - 1, segment2);
     }
 
+    @SuppressWarnings("AlibabaAvoidComplexCondition")
     @Override
     public void format(int space) {
         formatAttributeSegments(space);
@@ -300,6 +297,7 @@ public class ContentNode extends AbstractTreeNode {
             abstractTreeNode.format(space + 1);
         }
 
+        //noinspection AlibabaAvoidComplexCondition
         if (this.getChildren().size() > 1 || (this.getChildren().size() == 1 && !(this.getChildren().get(0) instanceof TextNode))) {
             List<AbstractTreeNode> newChildren = new ArrayList<>();
             for (AbstractTreeNode abstractTreeNode : this.getChildren()) {

@@ -41,7 +41,7 @@ public class XmlToX8lConvertLostCommentNodeTest {
     public void test() throws IOException {
         String originalXmlString = null;
         try (InputStream inputStream = this.getClass().getResource("/testPom.xml").openStream();
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)
         ) {
             originalXmlString = IOUtils.toString(bufferedInputStream);
         }
@@ -49,7 +49,7 @@ public class XmlToX8lConvertLostCommentNodeTest {
 
         X8lTree x8lTree;
         try (InputStream inputStream = this.getClass().getResource("/testPom.xml").openStream();
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)
         ) {
             x8lTree = X8lTree.load(bufferedInputStream, XmlDealer.INSTANCE);
         }

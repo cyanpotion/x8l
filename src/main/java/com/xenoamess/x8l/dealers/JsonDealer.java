@@ -64,7 +64,7 @@ import java.util.Map;
  * @author XenoAmess
  */
 public final class JsonDealer extends LanguageDealer implements Serializable {
-    /*
+    /**
      * no need to build more JsonDealer instances.
      * please just use JsonDealer.INSTANCE
      * if you want to extend it,
@@ -147,7 +147,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 TextNode.class,
                 new AbstractLanguageDealerHandler<TextNode>() {
                     @Override
-                    public boolean read(Reader reader, TextNode textNode) throws IOException, X8lGrammarException {
+                    public boolean read(Reader reader, TextNode textNode) throws X8lGrammarException {
                         return false;
                     }
 
@@ -163,8 +163,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 CommentNode.class,
                 new AbstractLanguageDealerHandler<CommentNode>() {
                     @Override
-                    public boolean read(Reader reader, CommentNode commentNode) throws IOException,
-                            X8lGrammarException {
+                    public boolean read(Reader reader, CommentNode commentNode) throws X8lGrammarException {
                         return false;
                     }
 
@@ -256,11 +255,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     arrayNode.add(arrayNode2);
                     nowIndex = writeInner(contentNode2, arrayNode2, nowIndex);
-                }
-//                else if (isSingleNameTextPair(contentNode2)) {
-//                    arrayNode.add(((TextNode) contentNode2.getChildren().get(0)).getTextContent());
-//                }
-                else {
+                } else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     arrayNode.add(objectNode2);
                     nowIndex = writeInner(contentNode2, objectNode2, nowIndex);

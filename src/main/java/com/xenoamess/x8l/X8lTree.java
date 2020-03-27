@@ -52,16 +52,20 @@ public class X8lTree implements AutoCloseable, Serializable {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(X8lTree.class);
 
+    static String STRING_JSON = "json";
+    static String STRING_XML = "xml";
+    static String STRING_X8L = "x8l";
+
     private LanguageDealer languageDealer = X8lDealer.INSTANCE;
 
     @AsFinalField
     private transient RootNode root = new RootNode(null);
     private transient Reader reader;
 
-    private static final List<LanguageDealer> languageDealerList = new ArrayList<>();
+    private static final List<LanguageDealer> LANGUAGE_DEALER_LIST = new ArrayList<>();
 
     public static void addToLanguageDealerList(LanguageDealer languageDealer) {
-        languageDealerList.add(languageDealer);
+        LANGUAGE_DEALER_LIST.add(languageDealer);
     }
 
     static {
@@ -71,27 +75,27 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static List<LanguageDealer> getLanguageDealerListCopy() {
-        return new ArrayList<>(languageDealerList);
+        return new ArrayList<>(LANGUAGE_DEALER_LIST);
     }
 
     public static List<LanguageDealer> suspectDealer(String nameString, List<LanguageDealer> originalList) {
         List<LanguageDealer> res = new ArrayList<>(originalList);
-        if (nameString.endsWith("json") || nameString.endsWith("json".toUpperCase())) {
+        if (nameString.endsWith(STRING_JSON) || nameString.endsWith(STRING_JSON.toUpperCase())) {
             res.remove(JsonDealer.INSTANCE);
             res.add(0, JsonDealer.INSTANCE);
-        } else if (nameString.endsWith("xml") || nameString.endsWith("xml".toUpperCase())) {
+        } else if (nameString.endsWith(STRING_XML) || nameString.endsWith(STRING_XML.toUpperCase())) {
             res.remove(XmlDealer.INSTANCE);
             res.add(0, XmlDealer.INSTANCE);
-        } else if (nameString.endsWith("x8l") || nameString.endsWith("x8l".toUpperCase())) {
+        } else if (nameString.endsWith(STRING_X8L) || nameString.endsWith(STRING_X8L.toUpperCase())) {
             res.remove(X8lDealer.INSTANCE);
             res.add(0, X8lDealer.INSTANCE);
-        } else if (nameString.contains("json")) {
+        } else if (nameString.contains(STRING_JSON)) {
             res.remove(JsonDealer.INSTANCE);
             res.add(0, JsonDealer.INSTANCE);
-        } else if (nameString.contains("xml")) {
+        } else if (nameString.contains(STRING_XML)) {
             res.remove(XmlDealer.INSTANCE);
             res.add(0, XmlDealer.INSTANCE);
-        } else if (nameString.contains("x8l")) {
+        } else if (nameString.contains(STRING_X8L)) {
             res.remove(X8lDealer.INSTANCE);
             res.add(0, X8lDealer.INSTANCE);
         }
@@ -242,7 +246,9 @@ public class X8lTree implements AutoCloseable, Serializable {
         return load(file, suspectDealer(file.getName(), getLanguageDealerListCopy()));
     }
 
+    @SuppressWarnings("AlibabaAvoidComplexCondition")
     public static void save(File file, X8lTree x8lTree) throws IOException {
+        //noinspection AlibabaAvoidComplexCondition
         if (file == null || (file.exists() && !file.isFile())) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
@@ -261,9 +267,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    /*
-     * String
-     */
     public static X8lTree load(String string, LanguageDealer dealer) {
         X8lTree res = null;
         try (
@@ -287,7 +290,8 @@ public class X8lTree implements AutoCloseable, Serializable {
                 res.parse();
                 return res;
             } catch (Exception e) {
-                LOGGER.debug("Try to use a dealer to load a X8lTree but failed. dealer:{}, treeString:{}", dealer, string, e);
+                LOGGER.debug("Try to use a dealer to load a X8lTree but failed. dealer:{}, treeString:{}", dealer,
+                        string, e);
             }
         }
         return res;

@@ -36,12 +36,12 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class transcodeAndTranscodeBackTest {
-    private static String strictTests[] = new String[]{
+    private static final String[] strictTests = new String[]{
             "<a>b>"
             , "<< ><a>b>"
             , "a<a>b>"
     };
-    private static String loseTests[];
+    private static String[] loseTests;
 
     static {
         try {
@@ -55,7 +55,7 @@ public class transcodeAndTranscodeBackTest {
     }
 
     @Test
-    public void transcodeAndTranscodeBackTest() throws IOException {
+    public void transcodeAndTranscodeBackTest() {
 
         for (String tree : strictTests) {
             transcodeAndTranscodeBackTestSingle(tree, XmlDealer.INSTANCE);

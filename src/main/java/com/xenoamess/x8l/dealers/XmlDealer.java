@@ -61,7 +61,7 @@ import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
  * @author XenoAmess
  */
 public final class XmlDealer extends LanguageDealer implements Serializable {
-    /*
+    /**
      * no need to build more XmlDealer instances.
      * please just use XmlDealer.INSTANCE
      * if you want to extend it,
@@ -76,9 +76,9 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                         try {
                             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
                             if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node(0).getName().equals(STRING_NAMELESS)) {
-                                XmlDealer.this.readChildrenArea(rootNode, (Element) document.node(0));
+                                readChildrenArea(rootNode, (Element) document.node(0));
                             } else {
-                                XmlDealer.this.readChildrenArea(rootNode, document);
+                                readChildrenArea(rootNode, document);
                             }
                         } catch (DocumentException e) {
                             throw new IOException(e);
@@ -93,10 +93,9 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                         if (ifSingleRootNode(rootNode) != null) {
                             for (AbstractTreeNode au : rootNode.getChildren()) {
                                 if (au instanceof ContentNode) {
-                                    XmlDealer.this.write((ContentNode) au, document.addElement(STRING_NAMELESS));
+                                    XmlDealer.write((ContentNode) au, document.addElement(STRING_NAMELESS));
                                 } else if (au instanceof TextNode) {
-//                                    TextNode textNode = (TextNode) au;
-//                                    document.add(textNode.getTextContent());
+                                    //do nothing
                                 } else if (au instanceof CommentNode) {
                                     CommentNode commentNode = (CommentNode) au;
                                     document.addComment(commentNode.getTextContent());
@@ -106,7 +105,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                             }
                         } else {
                             Element element = document.addElement(STRING_NAMELESS);
-                            XmlDealer.this.write(rootNode, element);
+                            XmlDealer.write(rootNode, element);
                         }
                         document.write(writer);
                         return true;
@@ -123,7 +122,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                             IOException, X8lGrammarException {
                         try {
                             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
-                            XmlDealer.this.read(contentNode, document.getRootElement());
+                            XmlDealer.read(contentNode, document.getRootElement());
                         } catch (DocumentException e) {
                             throw new IOException(e);
                         }
@@ -135,7 +134,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                             IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
                         Element element = document.addElement(STRING_NAMELESS);
-                        XmlDealer.this.write(contentNode, element);
+                        XmlDealer.write(contentNode, element);
                         document.write(writer);
                         return true;
                     }
@@ -146,7 +145,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 TextNode.class,
                 new AbstractLanguageDealerHandler<TextNode>() {
                     @Override
-                    public boolean read(Reader reader, TextNode textNode) throws IOException, X8lGrammarException {
+                    public boolean read(Reader reader, TextNode textNode) throws X8lGrammarException {
                         return false;
                     }
 
@@ -166,7 +165,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 new AbstractLanguageDealerHandler<CommentNode>() {
                     @Override
                     public boolean read(Reader reader, CommentNode commentNode) throws
-                            IOException, X8lGrammarException {
+                            X8lGrammarException {
                         return false;
                     }
 
@@ -196,12 +195,14 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
      * @param source original Strings to filer
      * @return filtered Strings
      */
+    @SuppressWarnings("AlibabaAvoidComplexCondition")
     public static List<String> filterIllegalChars(List<String> source) {
         List<String> res = new ArrayList<>();
         for (String au : source) {
             boolean add = !au.contains(ARRAY_ID_ATTRIBUTE);
             if (add) {
                 for (char c : au.toCharArray()) {
+                    //noinspection AlibabaAvoidComplexCondition
                     if ((c >= 0x00 && c <= 0x08)
                             || (c >= 0x0b && c <= 0x0c)
                             || (c >= 0x0e && c <= 0x1f)) {
@@ -271,7 +272,6 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         }
     }
 
-    //    @Override
     private static void read(ContentNode contentNode, Element element) {
         if (!STRING_NAMELESS.equals(element.getName())) {
             contentNode.addAttribute(element.getName());
