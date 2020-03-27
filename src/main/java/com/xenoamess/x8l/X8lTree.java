@@ -688,6 +688,11 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.reader = reader;
     }
 
+    /**
+     * make a deep copy of this X8lTree.
+     *
+     * @return a deep copy of this
+     */
     public X8lTree copy() {
         return X8lTree.load(this.toString(), this.languageDealer);
     }

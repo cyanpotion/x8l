@@ -177,7 +177,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     /**
      * make a deep copy of this node.
      *
-     * @return then copy of this
+     * @return a deep copy of this
      */
     public abstract AbstractTreeNode copy();
 
