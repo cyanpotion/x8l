@@ -257,7 +257,7 @@ public class ContentNode extends AbstractTreeNode {
         this.getChildren().addAll(newChildren);
     }
 
-    private static int MAXIMAL_IGNORE_FORMAT_ATTRIBUTE_NUM = 3;
+    private static final int MAXIMAL_IGNORE_FORMAT_ATTRIBUTE_NUM = 3;
 
     public void formatAttributeSegments(int space) {
         this.trimAttributeSegments();

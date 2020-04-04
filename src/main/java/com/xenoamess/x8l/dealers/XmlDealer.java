@@ -305,11 +305,8 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             return true;
         }
         String nodeName = contentNode.getAttributesKeyList().get(0);
-        if (!StringUtils.isEmpty(contentNode.getAttributes().get(nodeName))) {
-            //if "name" has value then it is nameless.
-            return true;
-        }
-        return false;
+        //if "name" has value then it is nameless.
+        return !StringUtils.isEmpty(contentNode.getAttributes().get(nodeName));
     }
 
     /**
