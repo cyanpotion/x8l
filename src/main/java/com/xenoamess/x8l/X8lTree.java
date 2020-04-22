@@ -506,7 +506,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
-            if (chr == '<' || chr == '>' || chr == '%') {
+            if (chr == '<' || chr == '>' || chr == '%' || chr == '&') {
                 stringBuilder.append('%');
             }
             stringBuilder.append(chr);

@@ -171,8 +171,15 @@ public class ContentNode extends AbstractTreeNode {
         for (Map.Entry<String, String> au : getAttributes().entrySet()) {
             System.out.println(au.getKey() + " = " + au.getValue());
         }
-        for (AbstractTreeNode au : this.getChildren()) {
-            au.show();
+        boolean lastChildIsTextNode = false;
+        boolean nowChildIsTextNode;
+        for (AbstractTreeNode nowChild : this.getChildren()) {
+            nowChildIsTextNode = nowChild instanceof TextNode;
+            if (lastChildIsTextNode && nowChildIsTextNode) {
+                System.out.println('&');
+            }
+            lastChildIsTextNode = nowChildIsTextNode;
+            nowChild.show();
         }
     }
 
