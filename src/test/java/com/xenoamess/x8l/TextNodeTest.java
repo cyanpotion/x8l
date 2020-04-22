@@ -24,6 +24,7 @@
 
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.dealers.X8lDealer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,5 +84,10 @@ public class TextNodeTest {
         assertEquals(tree2.toString(), "1&2");
         t2.changeParentAndRegister(tree2.getRoot(), 1);
         assertEquals(tree2.toString(), "1&2");
+    }
+
+    @Test
+    public void testTextNodeSeparator() {
+        assertEquals(X8lTree.load("<>textA&textB&textC>", X8lDealer.INSTANCE).getRoot().getContentNodesFromChildren().get(0).getChildren().size(), 3);
     }
 }

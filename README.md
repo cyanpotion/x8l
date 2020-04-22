@@ -157,6 +157,11 @@ that means these are 3 different nodes:
 
 if you want to delete all text node with "empty char" content,you can use X8lTree.trim().
 
+if you want to have several TextNode continuously, use `&` for separator:
+```text
+<>textA&textB&textC>
+```
+
 that is the basic tutorial.
 
 you can now run the testCases in com.xenoamess.x8l.X8lTest and see the output of the tree of this readme.
