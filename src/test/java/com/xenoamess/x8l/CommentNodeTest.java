@@ -26,8 +26,7 @@ package com.xenoamess.x8l;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author XenoAmess
@@ -42,24 +41,24 @@ public class CommentNodeTest {
         tree = new X8lTree();
         t1 = new CommentNode(tree.getRoot(), "1");
         t2 = new CommentNode(tree.getRoot(), 1, "2");
-        assert (tree.getRoot().getChildren().indexOf(t1) < tree.getRoot().getChildren().indexOf(t2));
-        assert (tree.toString().equals("<<1><<2>"));
+        assertTrue(tree.getRoot().getChildren().indexOf(t1) < tree.getRoot().getChildren().indexOf(t2));
+        assertEquals(tree.toString(), "<<1><<2>");
         System.out.println(tree);
 
         tree = new X8lTree();
         t1 = new CommentNode(tree.getRoot(), "1");
         t2 = new CommentNode(tree.getRoot(), 0, "2");
-        assert (tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
-        assert (tree.toString().equals("<<2><<1>"));
+        assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
+        assertEquals(tree.toString(), "<<2><<1>");
         System.out.println(tree);
 
         try {
             tree = new X8lTree();
             t1 = new CommentNode(tree.getRoot(), "1");
             t2 = new CommentNode(tree.getRoot(), 2, "2");
-            assert (tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
+            assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
             System.out.println(tree);
-            assert (false);
+            assertTrue(false);
         } catch (IndexOutOfBoundsException e) {
         }
 

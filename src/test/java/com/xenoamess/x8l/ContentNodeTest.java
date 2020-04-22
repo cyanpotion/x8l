@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author XenoAmess
@@ -44,8 +45,8 @@ public class ContentNodeTest {
         while (!contentNode.getAttributes().isEmpty()) {
             String key = contentNode.getAttributesKeyList().get(0);
             contentNode.removeAttribute(key);
-            assert (!contentNode.getAttributes().containsKey(key));
-            assert (!contentNode.getAttributesKeyList().contains(key));
+            assertTrue(!contentNode.getAttributes().containsKey(key));
+            assertTrue(!contentNode.getAttributesKeyList().contains(key));
         }
 
         List<TextNode> textNodes = contentNode.getTextNodesFromChildren();

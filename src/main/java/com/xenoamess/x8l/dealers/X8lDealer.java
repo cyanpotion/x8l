@@ -56,8 +56,18 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
 
                     @Override
                     public boolean write(Writer writer, RootNode rootNode) throws IOException, X8lGrammarException {
-                        for (AbstractTreeNode abstractTreeNode : rootNode.getChildren()) {
-                            abstractTreeNode.write(writer, X8lDealer.this);
+                        boolean lastChildIsTextNode = false;
+                        boolean nowChildIsTextNode;
+
+                        for (AbstractTreeNode nowChild : rootNode.getChildren()) {
+
+                            nowChildIsTextNode = nowChild instanceof TextNode;
+                            if (lastChildIsTextNode && nowChildIsTextNode) {
+                                writer.append('&');
+                            }
+                            lastChildIsTextNode = nowChildIsTextNode;
+
+                            nowChild.write(writer, X8lDealer.this);
                         }
                         return true;
                     }
@@ -179,14 +189,14 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                         boolean lastChildIsTextNode = false;
                         boolean nowChildIsTextNode;
                         for (AbstractTreeNode nowChild : contentNode.getChildren()) {
+
                             nowChildIsTextNode = nowChild instanceof TextNode;
                             if (lastChildIsTextNode && nowChildIsTextNode) {
                                 writer.append('&');
                             }
+                            lastChildIsTextNode = nowChildIsTextNode;
 
                             nowChild.write(writer, X8lDealer.this);
-
-                            lastChildIsTextNode = nowChildIsTextNode;
                         }
                         writer.append('>');
                         return true;

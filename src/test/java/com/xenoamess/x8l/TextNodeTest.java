@@ -26,8 +26,7 @@ package com.xenoamess.x8l;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author XenoAmess
@@ -42,24 +41,24 @@ public class TextNodeTest {
         tree = new X8lTree();
         t1 = new TextNode(tree.getRoot(), "1");
         t2 = new TextNode(tree.getRoot(), 1, "2");
-        assert (tree.getRoot().getChildren().indexOf(t1) < tree.getRoot().getChildren().indexOf(t2));
-        assert (tree.toString().equals("12"));
+        assertTrue(tree.getRoot().getChildren().indexOf(t1) < tree.getRoot().getChildren().indexOf(t2));
+        assertEquals(tree.toString(), "1&2");
         System.out.println(tree);
 
         tree = new X8lTree();
         t1 = new TextNode(tree.getRoot(), "1");
         t2 = new TextNode(tree.getRoot(), 0, "2");
-        assert (tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
-        assert (tree.toString().equals("21"));
+        assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
+        assertEquals(tree.toString(), "2&1");
         System.out.println(tree);
 
         try {
             tree = new X8lTree();
             t1 = new TextNode(tree.getRoot(), "1");
             t2 = new TextNode(tree.getRoot(), 2, "2");
-            assert (tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
+            assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
             System.out.println(tree);
-            assert (false);
+            assertTrue(false);
         } catch (IndexOutOfBoundsException e) {
         }
 
@@ -79,10 +78,10 @@ public class TextNodeTest {
         assertEquals(tree2.toString(), "1");
         t2.changeParentAndRegister(tree2.getRoot(), 0);
         assertEquals(tree1.toString(), "");
-        assertEquals(tree2.toString(), "21");
+        assertEquals(tree2.toString(), "2&1");
         t2.changeParentAndRegister(tree2.getRoot(), 1);
-        assertEquals(tree2.toString(), "12");
+        assertEquals(tree2.toString(), "1&2");
         t2.changeParentAndRegister(tree2.getRoot(), 1);
-        assertEquals(tree2.toString(), "12");
+        assertEquals(tree2.toString(), "1&2");
     }
 }
