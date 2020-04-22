@@ -316,6 +316,8 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 readInner(childContentNode, (ArrayNode) childNode);
             } else if (childNode instanceof com.fasterxml.jackson.databind.node.TextNode) {
                 new TextNode(contentNode, childNode.asText());
+            } else {
+                new TextNode(contentNode, childNode.asText());
             }
         }
         return true;

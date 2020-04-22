@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.Stack;
 
 /**
  * the dealer to deal with x8l format.
@@ -75,9 +76,9 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                         contentNode.close();
                         int nowInt;
                         ContentNode nowNode = contentNode;
-                        boolean inAttributeArea = false;
-                        boolean inCommentArea = false;
                         boolean lastCharIsModulus = false;
+                        Stack<X8lStatusEnum> statusEnumStack = new Stack<>();
+                        X8lStatusEnum nowStatus = X8lStatusEnum.ContentArea;
 
                         StringBuilder stringBuilder = new StringBuilder();
                         char nowChar;
@@ -85,7 +86,7 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                             nowInt = reader.read();
                             nowChar = (char) nowInt;
                             if (nowInt == -1) {
-                                if (nowNode == contentNode && !inAttributeArea && !inCommentArea) {
+                                if (nowNode == contentNode && nowStatus == X8lStatusEnum.ContentArea && statusEnumStack.isEmpty()) {
                                     new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                                     break;
                                 } else {
@@ -96,16 +97,16 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                                 lastCharIsModulus = false;
                             } else if (nowChar == '%') {
                                 lastCharIsModulus = true;
-                            } else if (inCommentArea) {
+                            } else if (nowStatus == X8lStatusEnum.CommentArea) {
                                 if (nowChar == '>') {
                                     new CommentNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                                     stringBuilder = new StringBuilder();
-                                    inCommentArea = false;
+                                    nowStatus = statusEnumStack.pop();
                                 } else {
                                     stringBuilder.append(nowChar);
                                 }
                             } else if (nowChar == '<') {
-                                if (inAttributeArea) {
+                                if (nowStatus == X8lStatusEnum.AttributeArea) {
                                     if (!nowNode.getAttributes().isEmpty() || stringBuilder.length() != 0) {
                                         throw new X8lGrammarException("Unexpected < in attribute area of a content " +
                                                 "node.");
@@ -113,17 +114,17 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                                         ContentNode nowParent = nowNode.getParent();
                                         nowNode.close();
                                         nowNode = nowParent;
-                                        inAttributeArea = false;
-                                        inCommentArea = true;
+                                        nowStatus = X8lStatusEnum.CommentArea;
                                     }
                                 } else {
                                     new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                                     stringBuilder = new StringBuilder();
                                     nowNode = new ContentNode(nowNode);
-                                    inAttributeArea = true;
+                                    statusEnumStack.push(nowStatus);
+                                    nowStatus = X8lStatusEnum.AttributeArea;
                                 }
                             } else if (nowChar == '>') {
-                                if (!inAttributeArea) {
+                                if (nowStatus != X8lStatusEnum.AttributeArea) {
                                     new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
                                     stringBuilder = new StringBuilder();
                                     nowNode = nowNode.getParent();
@@ -132,14 +133,21 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                                         nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
                                         stringBuilder = new StringBuilder();
                                     }
-                                    inAttributeArea = false;
+                                    nowStatus = statusEnumStack.pop();
                                 }
                             } else if (Character.isWhitespace(nowChar)) {
-                                if (inAttributeArea) {
+                                if (nowStatus == X8lStatusEnum.AttributeArea) {
                                     if (stringBuilder.length() != 0) {
                                         nowNode.addAttributeFromTranscodedExpression(stringBuilder.toString());
                                         stringBuilder = new StringBuilder();
                                     }
+                                } else {
+                                    stringBuilder.append(nowChar);
+                                }
+                            } else if (nowChar == '&') {
+                                if (nowStatus == X8lStatusEnum.ContentArea) {
+                                    new TextNode(nowNode, X8lTree.untranscode(stringBuilder.toString()));
+                                    stringBuilder = new StringBuilder();
                                 } else {
                                     stringBuilder.append(nowChar);
                                 }
@@ -168,8 +176,17 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                             writer.append(contentNode.getAttributeSegments().get(i));
                         }
                         writer.append('>');
-                        for (AbstractTreeNode abstractTreeNode : contentNode.getChildren()) {
-                            abstractTreeNode.write(writer, X8lDealer.this);
+                        boolean lastChildIsTextNode = false;
+                        boolean nowChildIsTextNode;
+                        for (AbstractTreeNode nowChild : contentNode.getChildren()) {
+                            nowChildIsTextNode = nowChild instanceof TextNode;
+                            if (lastChildIsTextNode && nowChildIsTextNode) {
+                                writer.append('&');
+                            }
+
+                            nowChild.write(writer, X8lDealer.this);
+
+                            lastChildIsTextNode = nowChildIsTextNode;
                         }
                         writer.append('>');
                         return true;
@@ -225,4 +242,19 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
     private Object readResolve() {
         return INSTANCE;
     }
+}
+
+enum X8lStatusEnum {
+    /**
+     * in attribute area of ContentNode.
+     */
+    AttributeArea,
+    /**
+     * in CommentNode.
+     */
+    CommentArea,
+    /**
+     * in content area of ContentNode.
+     */
+    ContentArea,
 }
