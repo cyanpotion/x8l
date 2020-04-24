@@ -25,12 +25,15 @@
 package com.xenoamess.x8l;
 
 import com.xenoamess.commons.as_final_field.AsFinalField;
+import com.xenoamess.x8l.databind.X8lDataBeanFieldScheme;
 import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.LanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +42,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -52,33 +56,35 @@ public class X8lTree implements AutoCloseable, Serializable {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(X8lTree.class);
 
-    static String STRING_JSON = "json";
-    static String STRING_XML = "xml";
-    static String STRING_X8L = "x8l";
+    public static String STRING_JSON = "json";
+    public static String STRING_XML = "xml";
+    public static String STRING_X8L = "x8l";
 
-    private LanguageDealer languageDealer = X8lDealer.INSTANCE;
+    private @NotNull LanguageDealer languageDealer = X8lDealer.INSTANCE;
 
     @AsFinalField
-    private transient RootNode root = new RootNode(null);
+    private transient @NotNull RootNode root = new RootNode(null);
     private transient Reader reader;
 
-    private static final List<LanguageDealer> LANGUAGE_DEALER_LIST = new ArrayList<>();
+    private static final List<LanguageDealer> LANGUAGE_DEALER_LIST =
+            new ArrayList<>(
+                    Arrays.asList(
+                            X8lDealer.INSTANCE,
+                            JsonDealer.INSTANCE,
+                            XmlDealer.INSTANCE
+                    )
+            );
 
-    public static void addToLanguageDealerList(LanguageDealer languageDealer) {
+    public static void addToLanguageDealerList(@NotNull LanguageDealer languageDealer) {
         LANGUAGE_DEALER_LIST.add(languageDealer);
     }
 
-    static {
-        addToLanguageDealerList(X8lDealer.INSTANCE);
-        addToLanguageDealerList(JsonDealer.INSTANCE);
-        addToLanguageDealerList(XmlDealer.INSTANCE);
-    }
-
-    public static List<LanguageDealer> getLanguageDealerListCopy() {
+    public static @NotNull List<LanguageDealer> getLanguageDealerListCopy() {
         return new ArrayList<>(LANGUAGE_DEALER_LIST);
     }
 
-    public static List<LanguageDealer> suspectDealer(String nameString, List<LanguageDealer> originalList) {
+    public static @NotNull List<LanguageDealer> suspectDealer(@NotNull String nameString,
+                                                              @NotNull List<LanguageDealer> originalList) {
         List<LanguageDealer> res = new ArrayList<>(originalList);
         if (nameString.endsWith(STRING_JSON) || nameString.endsWith(STRING_JSON.toUpperCase())) {
             res.remove(JsonDealer.INSTANCE);
@@ -102,7 +108,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public RootNode getRoot() {
+    public @NotNull RootNode getRoot() {
         return root;
     }
 
@@ -110,7 +116,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * Path
      */
 
-    public static X8lTree load(Path path, LanguageDealer dealer) throws IOException {
+    public static @NotNull X8lTree load(@Nullable Path path, @NotNull LanguageDealer dealer) throws IOException {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
@@ -123,7 +129,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(Path path, List<LanguageDealer> possibleDealerList) throws IOException {
+    public static @NotNull X8lTree load(@Nullable Path path, @NotNull List<LanguageDealer> possibleDealerList) throws IOException {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
@@ -136,14 +142,14 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(Path path) throws IOException {
+    public static @NotNull X8lTree load(@Nullable Path path) throws IOException {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
         return load(path, suspectDealer(path.toString(), getLanguageDealerListCopy()));
     }
 
-    public static void save(Path path, X8lTree x8lTree) throws IOException {
+    public static void save(@Nullable Path path, @NotNull X8lTree x8lTree) throws IOException {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
@@ -163,7 +169,10 @@ public class X8lTree implements AutoCloseable, Serializable {
      * FileObject
      */
 
-    public static X8lTree load(FileObject fileObject, LanguageDealer dealer) throws IOException {
+    public static @NotNull X8lTree load(
+            @Nullable FileObject fileObject,
+            @NotNull LanguageDealer dealer
+    ) throws IOException {
         if (fileObject == null || !fileObject.exists()) {
             throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
         }
@@ -176,7 +185,10 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(FileObject fileObject, List<LanguageDealer> possibleDealerList) throws IOException {
+    public static @NotNull X8lTree load(
+            @Nullable FileObject fileObject,
+            @NotNull List<LanguageDealer> possibleDealerList
+    ) throws IOException {
         if (fileObject == null || !fileObject.exists()) {
             throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
         }
@@ -189,14 +201,14 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(FileObject fileObject) throws IOException {
+    public static @NotNull X8lTree load(@Nullable FileObject fileObject) throws IOException {
         if (fileObject == null || !fileObject.exists()) {
             throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
         }
         return load(fileObject, suspectDealer(fileObject.getName().getBaseName(), getLanguageDealerListCopy()));
     }
 
-    public static void save(FileObject fileObject, X8lTree x8lTree) throws IOException {
+    public static @NotNull void save(@Nullable FileObject fileObject, @NotNull X8lTree x8lTree) throws IOException {
         if (fileObject == null) {
             throw new FileNotFoundException("null");
         }
@@ -213,7 +225,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * File
      */
 
-    public static X8lTree load(File file, LanguageDealer dealer) throws IOException {
+    public static @NotNull X8lTree load(@Nullable File file, @NotNull LanguageDealer dealer) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
@@ -226,7 +238,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(File file, List<LanguageDealer> possibleDealerList) throws IOException {
+    public static @NotNull X8lTree load(@Nullable File file, @NotNull List<LanguageDealer> possibleDealerList) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
@@ -239,7 +251,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(File file) throws IOException {
+    public static @NotNull X8lTree load(@Nullable File file) throws IOException {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
@@ -247,7 +259,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     @SuppressWarnings("AlibabaAvoidComplexCondition")
-    public static void save(File file, X8lTree x8lTree) throws IOException {
+    public static void save(@Nullable File file, @NotNull X8lTree x8lTree) throws IOException {
         //noinspection AlibabaAvoidComplexCondition
         if (file == null || (file.exists() && !file.isFile())) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
@@ -267,7 +279,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public static X8lTree load(String string, LanguageDealer dealer) {
+    public static @NotNull X8lTree load(@NotNull String string, @NotNull LanguageDealer dealer) {
         X8lTree res = null;
         try (
                 StringReader stringReader = new StringReader(string)
@@ -280,7 +292,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(String string, List<LanguageDealer> possibleDealerList) {
+    public static @NotNull X8lTree load(@NotNull String string, @NotNull List<LanguageDealer> possibleDealerList) {
         X8lTree res = null;
         for (LanguageDealer dealer : possibleDealerList) {
             try (
@@ -297,11 +309,11 @@ public class X8lTree implements AutoCloseable, Serializable {
         return res;
     }
 
-    public static X8lTree load(String string) {
+    public static @NotNull X8lTree load(@NotNull String string) {
         return load(string, getLanguageDealerListCopy());
     }
 
-    public static String save(X8lTree x8lTree) {
+    public static @NotNull String save(@NotNull X8lTree x8lTree) {
         String res = "";
         try (
                 StringWriter stringWriter = new StringWriter()
@@ -318,7 +330,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * Stream
      */
 
-    public static X8lTree load(InputStream inputStream, LanguageDealer dealer) throws IOException {
+    public static @NotNull X8lTree load(@NotNull InputStream inputStream, @NotNull LanguageDealer dealer) throws IOException {
         X8lTree x8lTree = null;
         try (
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
@@ -329,15 +341,16 @@ public class X8lTree implements AutoCloseable, Serializable {
         return x8lTree;
     }
 
-    public static X8lTree load(InputStream inputStream, List<LanguageDealer> possibleDealerList) throws IOException {
+    public static @NotNull X8lTree load(@NotNull InputStream inputStream,
+                                        @NotNull List<LanguageDealer> possibleDealerList) throws IOException {
         return load(IOUtils.toString(inputStream, StandardCharsets.UTF_8), possibleDealerList);
     }
 
-    public static X8lTree load(InputStream inputStream) throws IOException {
+    public static @NotNull X8lTree load(@NotNull InputStream inputStream) throws IOException {
         return load(IOUtils.toString(inputStream, StandardCharsets.UTF_8));
     }
 
-    public static void save(OutputStream outputStream, X8lTree x8lTree) throws IOException {
+    public static void save(@NotNull OutputStream outputStream, @NotNull X8lTree x8lTree) throws IOException {
         try (
                 BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
                 Writer writer = new OutputStreamWriter(bufferedOutputStream)
@@ -347,24 +360,24 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     /*
-     * Reader, Writer
+     * Reader,Writer
      */
 
-    public static X8lTree load(Reader reader, LanguageDealer dealer) throws IOException {
+    public static @NotNull X8lTree load(@NotNull Reader reader, @NotNull LanguageDealer dealer) throws IOException {
         X8lTree x8lTree = new X8lTree(reader, dealer);
         x8lTree.parse();
         return x8lTree;
     }
 
-    public static X8lTree load(Reader reader, List<LanguageDealer> possibleDealerList) throws IOException {
+    public static @NotNull X8lTree load(@NotNull Reader reader, @NotNull List<LanguageDealer> possibleDealerList) throws IOException {
         return load(IOUtils.toString(reader), possibleDealerList);
     }
 
-    public static X8lTree load(Reader reader) throws IOException {
+    public static @NotNull X8lTree load(@NotNull Reader reader) throws IOException {
         return load(IOUtils.toString(reader));
     }
 
-    public static void save(Writer writer, X8lTree x8lTree) throws IOException {
+    public static void save(@NotNull Writer writer, @NotNull X8lTree x8lTree) throws IOException {
         x8lTree.write(writer);
     }
 
@@ -372,12 +385,12 @@ public class X8lTree implements AutoCloseable, Serializable {
         this(null, X8lDealer.INSTANCE);
     }
 
-    public X8lTree(Reader reader, LanguageDealer languageDealer) {
+    public X8lTree(@Nullable Reader reader, @NotNull LanguageDealer languageDealer) {
         this.setReader(reader);
         this.setLanguageDealer(languageDealer);
     }
 
-    public X8lTree(Reader reader, LanguageDealer languageDealer, boolean readItNow) throws IOException {
+    public X8lTree(@Nullable Reader reader, @NotNull LanguageDealer languageDealer, boolean readItNow) throws IOException {
         this.setReader(reader);
         this.setLanguageDealer(languageDealer);
         if (readItNow) {
@@ -385,11 +398,13 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
     }
 
-    public X8lTree(X8lTree original) {
+    public X8lTree(@Nullable X8lTree original) {
+        this.setReader(null);
         if (original != null) {
-            this.setReader(null);
             this.setLanguageDealer(original.getLanguageDealer());
             this.root.copy(original.copy().root);
+        } else {
+            this.setLanguageDealer(X8lDealer.INSTANCE);
         }
     }
 
@@ -414,11 +429,11 @@ public class X8lTree implements AutoCloseable, Serializable {
         read(this.getReader());
     }
 
-    public void read(Reader reader) throws IOException {
+    public void read(@NotNull Reader reader) throws IOException {
         read(reader, this.getLanguageDealer());
     }
 
-    public void read(LanguageDealer languageDealer) throws IOException {
+    public void read(@NotNull LanguageDealer languageDealer) throws IOException {
         read(this.getReader(), languageDealer);
     }
 
@@ -429,12 +444,12 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param languageDealer languageDealer
      * @throws IOException IOException
      */
-    public void read(Reader reader, LanguageDealer languageDealer) throws IOException {
+    public void read(@NotNull Reader reader, @NotNull LanguageDealer languageDealer) throws IOException {
         this.getRoot().read(reader, languageDealer);
     }
 
 
-    public void write(Writer writer) throws IOException {
+    public void write(@NotNull Writer writer) throws IOException {
         this.write(writer, this.getLanguageDealer());
     }
 
@@ -445,7 +460,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param languageDealer languageDealer
      * @throws IOException IOException
      */
-    public void write(Writer writer, LanguageDealer languageDealer) throws IOException {
+    public void write(@NotNull Writer writer, @NotNull LanguageDealer languageDealer) throws IOException {
         this.getRoot().write(writer, languageDealer);
         writer.close();
     }
@@ -467,7 +482,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      *
      * @return the original X8lTree is trimmed and then returned.
      */
-    public X8lTree trim() {
+    public @NotNull X8lTree trim() {
         this.getRoot().trim();
         return this;
     }
@@ -479,7 +494,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      *
      * @return the original X8lTree is trimmed and then returned.
      */
-    public X8lTree trimForce() {
+    public @NotNull X8lTree trimForce() {
         this.getRoot().trimForce();
         return this;
     }
@@ -495,14 +510,14 @@ public class X8lTree implements AutoCloseable, Serializable {
      *
      * @return the original X8lTree is formatted and then returned.
      */
-    public X8lTree format() {
+    public @NotNull X8lTree format() {
         this.trim();
         this.getRoot().format(-1);
         return this;
     }
 
 
-    public static String transcodeText(String originalString) {
+    public static @NotNull String transcodeText(@NotNull String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
@@ -521,7 +536,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param originalString originalS tring
      * @return transCoded String
      */
-    public static String transcodeKey(String originalString) {
+    public static @NotNull String transcodeKey(@NotNull String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
@@ -540,7 +555,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param originalString originalS tring
      * @return transCoded String
      */
-    public static String transcodeValue(String originalString) {
+    public static @NotNull String transcodeValue(@NotNull String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
@@ -559,7 +574,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param originalString originalS tring
      * @return transCoded String
      */
-    public static String transcodeComment(String originalString) {
+    public static @NotNull String transcodeComment(@NotNull String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < originalString.length(); i++) {
             char chr = originalString.charAt(i);
@@ -572,7 +587,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
 
-    public static String untranscode(String transcodedString) {
+    public static @NotNull String untranscode(@NotNull String transcodedString) {
         StringBuilder stringBuilder = new StringBuilder();
         boolean lastCharIsModulus = false;
         for (int i = 0; i < transcodedString.length(); i++) {
@@ -590,7 +605,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return save(this);
     }
 
@@ -627,7 +642,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @throws IOException            IOException
      * @throws ClassNotFoundException ClassNotFoundException
      */
-    private void readObject(ObjectInputStream objectInputStream)
+    private void readObject(@NotNull ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
         objectInputStream.defaultReadObject();
         if (this.root == null) {
@@ -644,7 +659,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param objectOutputStream objectOutputStream
      * @throws IOException IOException
      */
-    private void writeObject(ObjectOutputStream objectOutputStream)
+    private void writeObject(@NotNull ObjectOutputStream objectOutputStream)
             throws IOException {
         objectOutputStream.defaultWriteObject();
         try (Writer writer = new OutputStreamWriter(objectOutputStream)) {
@@ -659,32 +674,32 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param patch patch tree.
      * @see ContentNode
      */
-    public void append(X8lTree patch) {
+    public void append(@Nullable X8lTree patch) {
         if (patch == null) {
             return;
         }
         this.getRoot().appendAll(patch.getRoot().getChildren());
     }
 
-    public <T> List<T> applyToAllNodes(Function<AbstractTreeNode, T> function) {
+    public <T> @NotNull List<T> applyToAllNodes(@NotNull Function<AbstractTreeNode, T> function) {
         ArrayList<T> res = new ArrayList<>();
         this.getRoot().applyToAllNodes(res, function);
         return res;
     }
 
-    public LanguageDealer getLanguageDealer() {
+    public @NotNull LanguageDealer getLanguageDealer() {
         return languageDealer;
     }
 
-    public void setLanguageDealer(LanguageDealer languageDealer) {
+    public void setLanguageDealer(@NotNull LanguageDealer languageDealer) {
         this.languageDealer = languageDealer;
     }
 
-    public Reader getReader() {
+    public @Nullable Reader getReader() {
         return reader;
     }
 
-    public void setReader(Reader reader) {
+    public void setReader(@Nullable Reader reader) {
         this.reader = reader;
     }
 
@@ -693,7 +708,30 @@ public class X8lTree implements AutoCloseable, Serializable {
      *
      * @return a deep copy of this
      */
-    public X8lTree copy() {
+    public @NotNull X8lTree copy() {
         return X8lTree.load(this.toString(), this.languageDealer);
+    }
+
+    //---fetch---
+
+    public @NotNull List<Object> fetch(@NotNull String x8lPath) {
+        return this.getRoot().fetch(x8lPath);
+    }
+
+    public <T> @NotNull List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
+        return this.getRoot().fetch(x8lPath, tClass);
+    }
+
+    public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+                                       @NotNull String x8lPath) {
+        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPath);
+    }
+
+    public <T> @NotNull List<T> fetch(
+            @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+            @NotNull String x8lPath,
+            @NotNull Class<T> tClass
+    ) {
+        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPath, tClass);
     }
 }

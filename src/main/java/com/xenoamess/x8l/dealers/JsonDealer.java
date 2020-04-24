@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xenoamess.x8l.*;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +87,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
     public static final JsonDealer INSTANCE = new JsonDealer();
     private static ObjectMapper objectMapper;
 
-    private static ObjectMapper getObjectMapper() {
+    private static @NotNull ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
             ObjectMapper localObjectMapper = new ObjectMapper();
             localObjectMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
@@ -95,7 +96,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
         return objectMapper;
     }
 
-    public static boolean isSingleNameTextPair(ContentNode contentNode) {
+    public static boolean isSingleNameTextPair(@NotNull ContentNode contentNode) {
         if (contentNode.getAttributes().size() == 1) {
             String name = contentNode.getName();
             return !StringUtils.isBlank(name)
@@ -111,9 +112,8 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 ContentNode.class,
                 new AbstractLanguageDealerHandler<ContentNode>() {
                     @Override
-                    public boolean read(Reader reader, ContentNode contentNode) throws IOException,
+                    public boolean read(@NotNull Reader reader, @NotNull ContentNode contentNode) throws IOException,
                             X8lGrammarException {
-                        assert (reader != null);
                         JsonNode jsonNode = getObjectMapper().readTree(reader);
                         if (jsonNode instanceof ObjectNode) {
                             ObjectNode objectNode = (ObjectNode) jsonNode;
@@ -127,7 +127,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                     }
 
                     @Override
-                    public boolean write(Writer writer, ContentNode contentNode) throws IOException,
+                    public boolean write(@NotNull Writer writer, @NotNull ContentNode contentNode) throws IOException,
                             X8lGrammarException {
                         if (contentNode.getAttributes().containsKey(ARRAY_ID_ATTRIBUTE)) {
                             ArrayNode arrayNode = getObjectMapper().createArrayNode();
@@ -147,12 +147,13 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 TextNode.class,
                 new AbstractLanguageDealerHandler<TextNode>() {
                     @Override
-                    public boolean read(Reader reader, TextNode textNode) throws X8lGrammarException {
+                    public boolean read(@NotNull Reader reader, @NotNull TextNode textNode) throws X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
+                    public boolean write(@NotNull Writer writer, @NotNull TextNode textNode) throws IOException,
+                            X8lGrammarException {
                         writer.write(textNode.getTextContent());
                         return true;
                     }
@@ -163,12 +164,12 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                 CommentNode.class,
                 new AbstractLanguageDealerHandler<CommentNode>() {
                     @Override
-                    public boolean read(Reader reader, CommentNode commentNode) throws X8lGrammarException {
+                    public boolean read(@NotNull Reader reader, @NotNull CommentNode commentNode) throws X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, CommentNode commentNode) throws IOException,
+                    public boolean write(@NotNull Writer writer, @NotNull CommentNode commentNode) throws IOException,
                             X8lGrammarException {
                         writer.append("/*");
                         writer.append(commentNode.getTextContent());

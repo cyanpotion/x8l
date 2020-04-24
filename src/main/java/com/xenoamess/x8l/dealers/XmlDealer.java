@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.dom4j.*;
 import org.dom4j.tree.DefaultComment;
 import org.dom4j.tree.DefaultText;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -72,7 +73,8 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 RootNode.class,
                 new AbstractLanguageDealerHandler<RootNode>() {
                     @Override
-                    public boolean read(Reader reader, RootNode rootNode) throws IOException, X8lGrammarException {
+                    public boolean read(@NotNull Reader reader, @NotNull RootNode rootNode) throws IOException,
+                            X8lGrammarException {
                         try {
                             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
                             if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node(0).getName().equals(STRING_NAMELESS)) {
@@ -87,7 +89,8 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     }
 
                     @Override
-                    public boolean write(Writer writer, RootNode rootNode) throws IOException, X8lGrammarException {
+                    public boolean write(@NotNull Writer writer, @NotNull RootNode rootNode) throws IOException,
+                            X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
                         List<ContentNode> contentNodes = rootNode.getContentNodesFromChildren();
                         if (ifSingleRootNode(rootNode) != null) {
@@ -118,7 +121,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 ContentNode.class,
                 new AbstractLanguageDealerHandler<ContentNode>() {
                     @Override
-                    public boolean read(Reader reader, ContentNode contentNode) throws
+                    public boolean read(@NotNull Reader reader, @NotNull ContentNode contentNode) throws
                             IOException, X8lGrammarException {
                         try {
                             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
@@ -130,7 +133,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     }
 
                     @Override
-                    public boolean write(Writer writer, ContentNode contentNode) throws
+                    public boolean write(@NotNull Writer writer, @NotNull ContentNode contentNode) throws
                             IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
                         Element element = document.addElement(STRING_NAMELESS);
@@ -145,12 +148,13 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 TextNode.class,
                 new AbstractLanguageDealerHandler<TextNode>() {
                     @Override
-                    public boolean read(Reader reader, TextNode textNode) throws X8lGrammarException {
+                    public boolean read(@NotNull Reader reader, @NotNull TextNode textNode) throws X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
+                    public boolean write(@NotNull Writer writer, @NotNull TextNode textNode) throws IOException,
+                            X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
                         Element element = document.addElement(STRING_NAMELESS);
                         element.addText(textNode.getTextContent());
@@ -164,13 +168,13 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 CommentNode.class,
                 new AbstractLanguageDealerHandler<CommentNode>() {
                     @Override
-                    public boolean read(Reader reader, CommentNode commentNode) throws
+                    public boolean read(@NotNull Reader reader, @NotNull CommentNode commentNode) throws
                             X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, CommentNode commentNode) throws
+                    public boolean write(@NotNull Writer writer, @NotNull CommentNode commentNode) throws
                             IOException, X8lGrammarException {
                         Document document = DocumentHelper.createDocument();
                         Element element = document.addElement(STRING_NAMELESS);

@@ -22,41 +22,32 @@
  * SOFTWARE.
  */
 
-package com.xenoamess.x8l.dealers;
+package com.xenoamess.x8l.databind;
 
-import com.xenoamess.x8l.AbstractTreeNode;
-import com.xenoamess.x8l.X8lGrammarException;
-import org.jetbrains.annotations.NotNull;
+public class TestDataBean3 implements X8lDataBean {
+    public TestDataBean3() {
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
+    }
 
-/**
- * @author XenoAmess
- */
-public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
+    @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
+    private Object nodea;
 
-    /**
-     * read AbstractTreeNode
-     *
-     * @param reader reader
-     * @param t      AbstractTreeNode to read
-     * @return if read succeed
-     * @throws IOException reader.read
-     * @throws X8lGrammarException when grammar wrong
-     */
-    boolean read(@NotNull Reader reader, @NotNull T t) throws IOException, X8lGrammarException;
+    @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
+    private String value;
 
-    /**
-     * write AbstractTreeNode
-     *
-     * @param writer writer
-     * @param t      AbstractTreeNode to write
-     * @return if write succeed
-     * @throws IOException writer.write
-     * @throws X8lGrammarException when grammar wrong
-     */
-    boolean write(@NotNull Writer writer, @NotNull T t) throws IOException, X8lGrammarException;
+    public Object getNodea() {
+        return nodea;
+    }
+
+    public void setNodea(Object nodea) {
+        this.nodea = nodea;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

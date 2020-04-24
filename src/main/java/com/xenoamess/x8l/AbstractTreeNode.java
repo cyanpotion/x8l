@@ -24,12 +24,17 @@
 
 package com.xenoamess.x8l;
 
+import com.xenoamess.x8l.databind.X8lDataBeanFieldScheme;
+import com.xenoamess.x8l.databind.x8lpath.X8lPathUtil;
 import com.xenoamess.x8l.dealers.LanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
+import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 
 /**
  * AbstractTreeNode
@@ -187,5 +192,38 @@ public abstract class AbstractTreeNode implements AutoCloseable {
 
     public void setParent(ContentNode parent) {
         this.parent = parent;
+    }
+
+    //---fetch---
+
+    public @NotNull List<Object> fetch(@NotNull String x8lPath) {
+        return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPath);
+    }
+
+    public <T> @NotNull List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
+        return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPath, tClass);
+    }
+
+    public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+                                       @NotNull String x8lPath) {
+        switch (x8lDataBeanFieldScheme) {
+            case X8LPATH:
+                return X8lPathUtil.fetch(this, x8lPath);
+            default:
+                throw new NotImplementedException("" + x8lDataBeanFieldScheme.name() + " is not implemented yet");
+        }
+    }
+
+    public <T> @NotNull List<T> fetch(
+            @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+            @NotNull String x8lPath,
+            @NotNull Class<T> tClass
+    ) {
+        switch (x8lDataBeanFieldScheme) {
+            case X8LPATH:
+                return X8lPathUtil.fetch(this, x8lPath, tClass);
+            default:
+                return null;
+        }
     }
 }

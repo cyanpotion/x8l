@@ -22,41 +22,24 @@
  * SOFTWARE.
  */
 
-package com.xenoamess.x8l.dealers;
-
-import com.xenoamess.x8l.AbstractTreeNode;
-import com.xenoamess.x8l.X8lGrammarException;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
+package com.xenoamess.x8l.databind;
 
 /**
+ * X8lDataBeanFieldScheme
+ * scheme type of used.
+ * @see X8lDataBeanFieldMark
  * @author XenoAmess
  */
-public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
+
+public enum X8lDataBeanFieldScheme {
+    /**
+     * using x8lpath.
+     * @see com.xenoamess.x8l.databind.x8lpath.X8lPathUtil
+     */
+    X8LPATH,
 
     /**
-     * read AbstractTreeNode
-     *
-     * @param reader reader
-     * @param t      AbstractTreeNode to read
-     * @return if read succeed
-     * @throws IOException reader.read
-     * @throws X8lGrammarException when grammar wrong
+     * not implemented yet.
      */
-    boolean read(@NotNull Reader reader, @NotNull T t) throws IOException, X8lGrammarException;
-
-    /**
-     * write AbstractTreeNode
-     *
-     * @param writer writer
-     * @param t      AbstractTreeNode to write
-     * @return if write succeed
-     * @throws IOException writer.write
-     * @throws X8lGrammarException when grammar wrong
-     */
-    boolean write(@NotNull Writer writer, @NotNull T t) throws IOException, X8lGrammarException;
+    XPATH,
 }

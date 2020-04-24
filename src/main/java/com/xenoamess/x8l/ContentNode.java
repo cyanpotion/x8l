@@ -27,6 +27,7 @@ package com.xenoamess.x8l;
 import com.xenoamess.x8l.dealers.LanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -309,7 +310,13 @@ public class ContentNode extends AbstractTreeNode {
             List<AbstractTreeNode> newChildren = new ArrayList<>();
             for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
                 if (space != -1) {
-                    newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
+                    if (abstractTreeNode instanceof TextNode) {
+                        ((TextNode) abstractTreeNode).setTextContent(
+                                "\n" + spaceString2 + ((TextNode) abstractTreeNode).getTextContent()
+                        );
+                    } else {
+                        newChildren.add(new TextNode(null, "\n" + spaceString2).changeParent(this));
+                    }
                 } else {
                     space = 0;
                 }
@@ -438,11 +445,11 @@ public class ContentNode extends AbstractTreeNode {
     }
 
 
-    public void read(Reader reader) throws IOException {
+    public void read(@NotNull Reader reader) throws IOException {
         this.read(reader, X8lDealer.INSTANCE);
     }
 
-    public void read(Reader reader, LanguageDealer languageDealer) throws IOException {
+    public void read(@NotNull Reader reader, @NotNull LanguageDealer languageDealer) throws IOException {
         languageDealer.read(reader, this);
     }
 
@@ -527,4 +534,73 @@ public class ContentNode extends AbstractTreeNode {
     public List<String> getAttributeSegments() {
         return attributeSegments;
     }
+
+    /**
+     * treat this node as an array who contains only TextNodes, and return their text content.
+     * @return String array of TextNode's text content
+     */
+    public List<String> asStringList() {
+//          example:
+//          <a>1&2&3>
+//          ->
+//          string array [1,2,3]
+
+        List<TextNode> textNodes = this.getTextNodesFromChildren();
+        List<String> res = new ArrayList<>(textNodes.size());
+        for (TextNode au : textNodes) {
+            res.add(au.getTextContent());
+        }
+        return res;
+    }
+
+    /**
+     * treat this node as an array who contains only TextNodes, and return their text content, trimmed.
+     * @return String array of TextNode's text content, trimmed.
+     */
+    public List<String> asStringListTrimmed() {
+        List<TextNode> textNodes = this.getTextNodesFromChildren();
+        List<String> res = new ArrayList<>(textNodes.size());
+        for (TextNode au : textNodes) {
+            res.add(au.getTextContent().trim());
+        }
+        return res;
+    }
+
+    /**
+     * treat this node as a String Map.
+     * @return String map
+     */
+    public Map<String, String> asStringMap() {
+//         example:
+//         <a>
+//           <he>1>
+//           <she>0>
+//           <it>-1>
+//         >
+//         ->
+//         string map [he=1,she=2,it=-1]
+//        /
+
+        List<ContentNode> contentNodes = this.getContentNodesFromChildren();
+        Map<String, String> res = new HashMap<>(contentNodes.size());
+        for (ContentNode au : contentNodes) {
+            res.put(au.getName(), au.getTextNodesFromChildren(1).get(0).getTextContent());
+        }
+        return res;
+    }
+
+    /**
+     * treat this node as a String Map, trimmed.
+     * @return String map, trimmed.
+     */
+    public Map<String, String> asStringMapTrimmed() {
+        List<ContentNode> contentNodes = this.getContentNodesFromChildren();
+        Map<String, String> res = new HashMap<>(contentNodes.size());
+        for (ContentNode au : contentNodes) {
+            res.put(au.getName(), au.getTextNodesFromChildren(1).get(0).getTextContent().trim());
+        }
+        return res;
+    }
+
+
 }

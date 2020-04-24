@@ -26,6 +26,7 @@ package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -50,12 +51,14 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                 RootNode.class,
                 new AbstractLanguageDealerHandler<RootNode>() {
                     @Override
-                    public boolean read(Reader reader, RootNode rootNode) throws IOException, X8lGrammarException {
+                    public boolean read(@NotNull Reader reader, @NotNull RootNode rootNode) throws IOException,
+                            X8lGrammarException {
                         return X8lDealer.this.getTreeNodeHandler(ContentNode.class).read(reader, rootNode);
                     }
 
                     @Override
-                    public boolean write(Writer writer, RootNode rootNode) throws IOException, X8lGrammarException {
+                    public boolean write(@NotNull Writer writer, @NotNull RootNode rootNode) throws IOException,
+                            X8lGrammarException {
                         boolean lastChildIsTextNode = false;
                         boolean nowChildIsTextNode;
 
@@ -80,9 +83,8 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                 new AbstractLanguageDealerHandler<ContentNode>() {
                     @SuppressWarnings("AlibabaMethodTooLong")
                     @Override
-                    public boolean read(Reader reader, ContentNode contentNode) throws IOException,
+                    public boolean read(@NotNull Reader reader, @NotNull ContentNode contentNode) throws IOException,
                             X8lGrammarException {
-                        assert (reader != null);
                         contentNode.close();
                         int nowInt;
                         ContentNode nowNode = contentNode;
@@ -172,7 +174,7 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                     }
 
                     @Override
-                    public boolean write(Writer writer, ContentNode contentNode) throws IOException,
+                    public boolean write(@NotNull Writer writer, @NotNull ContentNode contentNode) throws IOException,
                             X8lGrammarException {
                         writer.append('<');
                         for (int i = 0; i < contentNode.getAttributesKeyList().size(); i++) {
@@ -208,12 +210,13 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                 TextNode.class,
                 new AbstractLanguageDealerHandler<TextNode>() {
                     @Override
-                    public boolean read(Reader reader, TextNode textNode) throws X8lGrammarException {
+                    public boolean read(@NotNull Reader reader, @NotNull TextNode textNode) throws X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, TextNode textNode) throws IOException, X8lGrammarException {
+                    public boolean write(@NotNull Writer writer, @NotNull TextNode textNode) throws IOException,
+                            X8lGrammarException {
                         writer.append(X8lTree.transcodeText(textNode.getTextContent()));
                         return true;
                     }
@@ -224,13 +227,13 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                 CommentNode.class,
                 new AbstractLanguageDealerHandler<CommentNode>() {
                     @Override
-                    public boolean read(Reader reader, CommentNode commentNode) throws
+                    public boolean read(@NotNull Reader reader, @NotNull CommentNode commentNode) throws
                             X8lGrammarException {
                         return false;
                     }
 
                     @Override
-                    public boolean write(Writer writer, CommentNode commentNode) throws IOException,
+                    public boolean write(@NotNull Writer writer, @NotNull CommentNode commentNode) throws IOException,
                             X8lGrammarException {
                         writer.append('<');
                         writer.append('<');
@@ -245,11 +248,11 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
     public static final X8lDealer INSTANCE = new X8lDealer();
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return this.getClass().getCanonicalName();
     }
 
-    private Object readResolve() {
+    private @NotNull Object readResolve() {
         return INSTANCE;
     }
 }

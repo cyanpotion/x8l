@@ -22,41 +22,17 @@
  * SOFTWARE.
  */
 
-package com.xenoamess.x8l.dealers;
+package com.xenoamess.x8l.databind;
 
-import com.xenoamess.x8l.AbstractTreeNode;
-import com.xenoamess.x8l.X8lGrammarException;
+import com.xenoamess.x8l.X8lTree;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
+public interface X8lDataBean {
+    static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass, @NotNull X8lTree x8lTree) {
+        return X8lDataBeanUtil.buildFromX8lTree(tClass, x8lTree);
+    }
 
-/**
- * @author XenoAmess
- */
-public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
-
-    /**
-     * read AbstractTreeNode
-     *
-     * @param reader reader
-     * @param t      AbstractTreeNode to read
-     * @return if read succeed
-     * @throws IOException reader.read
-     * @throws X8lGrammarException when grammar wrong
-     */
-    boolean read(@NotNull Reader reader, @NotNull T t) throws IOException, X8lGrammarException;
-
-    /**
-     * write AbstractTreeNode
-     *
-     * @param writer writer
-     * @param t      AbstractTreeNode to write
-     * @return if write succeed
-     * @throws IOException writer.write
-     * @throws X8lGrammarException when grammar wrong
-     */
-    boolean write(@NotNull Writer writer, @NotNull T t) throws IOException, X8lGrammarException;
+    default <T extends X8lDataBean> void loadFromX8lTree(@NotNull X8lTree x8lTree) {
+        X8lDataBeanUtil.loadFromX8lTree(this, x8lTree);
+    }
 }

@@ -25,6 +25,8 @@
 package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.AbstractTreeNode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -42,7 +44,7 @@ public class LanguageDealer implements Serializable {
 
     private final Map<Class, AbstractLanguageDealerHandler> treeNodeHandlerMap = new HashMap<>();
 
-    public <T extends AbstractTreeNode> AbstractLanguageDealerHandler<T> getTreeNodeHandler(Class<T> tClass) {
+    public <T extends AbstractTreeNode> @Nullable AbstractLanguageDealerHandler<T> getTreeNodeHandler(@Nullable Class<T> tClass) {
         AbstractLanguageDealerHandler handler = null;
         Class nowClass = tClass;
         while (handler == null && nowClass != null) {
@@ -52,20 +54,23 @@ public class LanguageDealer implements Serializable {
         return handler;
     }
 
-    public <T extends AbstractTreeNode> AbstractLanguageDealerHandler<T> registerTreeNodeHandler(Class<T> tClass, AbstractLanguageDealerHandler<T> handler) {
+    public <T extends AbstractTreeNode> AbstractLanguageDealerHandler<T> registerTreeNodeHandler(@NotNull Class<T> tClass,
+                                                                                                 @NotNull AbstractLanguageDealerHandler<T> handler) {
         return treeNodeHandlerMap.put(tClass, handler);
     }
 
-    public <T extends AbstractTreeNode> boolean read(Reader reader, T abstractTreeNode) throws IOException {
-        AbstractLanguageDealerHandler<T> handler = (AbstractLanguageDealerHandler<T>) this.getTreeNodeHandler(abstractTreeNode.getClass());
+    public <T extends AbstractTreeNode> boolean read(@NotNull Reader reader, @NotNull T abstractTreeNode) throws IOException {
+        AbstractLanguageDealerHandler<T> handler =
+                (AbstractLanguageDealerHandler<T>) this.getTreeNodeHandler(abstractTreeNode.getClass());
         if (handler == null) {
             return false;
         }
         return handler.read(reader, abstractTreeNode);
     }
 
-    public <T extends AbstractTreeNode> boolean write(Writer writer, T abstractTreeNode) throws IOException {
-        AbstractLanguageDealerHandler<T> handler = (AbstractLanguageDealerHandler<T>) this.getTreeNodeHandler(abstractTreeNode.getClass());
+    public <T extends AbstractTreeNode> boolean write(@NotNull Writer writer, @NotNull T abstractTreeNode) throws IOException {
+        AbstractLanguageDealerHandler<T> handler =
+                (AbstractLanguageDealerHandler<T>) this.getTreeNodeHandler(abstractTreeNode.getClass());
         if (handler == null) {
             return false;
         }
