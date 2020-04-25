@@ -35,6 +35,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+/**
+ * @author XenoAmess
+ */
 public class X8lDataBeanUtil {
     public static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass,
                                                                       @NotNull X8lTree x8lTree) {

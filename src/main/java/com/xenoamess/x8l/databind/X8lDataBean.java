@@ -27,11 +27,27 @@ package com.xenoamess.x8l.databind;
 import com.xenoamess.x8l.X8lTree;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author XenoAmess
+ */
 public interface X8lDataBean {
+    /**
+     * build a X8lDataBean from a X8lTree.
+     *
+     * @param tClass class of X8lDataBean
+     * @param x8lTree X8lTree
+     * @param <T> class of X8lDataBean
+     * @return the built X8lDataBean.
+     */
     static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass, @NotNull X8lTree x8lTree) {
         return X8lDataBeanUtil.buildFromX8lTree(tClass, x8lTree);
     }
 
+    /**
+     * load fields from a X8lTree.
+     *
+     * @param x8lTree X8lTree
+     */
     default <T extends X8lDataBean> void loadFromX8lTree(@NotNull X8lTree x8lTree) {
         X8lDataBeanUtil.loadFromX8lTree(this, x8lTree);
     }

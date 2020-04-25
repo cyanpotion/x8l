@@ -58,6 +58,8 @@ import java.util.List;
  * range [,b]: index from 0 to b, both inclusive.
  * range [a,]: index from a to limit, both inclusive.
  * range [a]: equals to range [a-a].
+ *
+ * @author XenoAmess
  */
 public class X8lPathUtil {
     private static final List EMPTY = new LinkedList();
