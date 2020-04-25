@@ -41,10 +41,13 @@ public @interface X8lDataBeanFieldMark {
     @NotNull
     X8lDataBeanFieldScheme scheme() default X8lDataBeanFieldScheme.X8LPATH;
 
+    @Nullable
+    String functionName() default "";
+
     @NotNull
     String path();
 
-    @Nullable
+    @NotNull
     Class parser() default X8lDataBeanDefaultParser.class;
 }
 

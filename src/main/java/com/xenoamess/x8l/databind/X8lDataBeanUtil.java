@@ -27,6 +27,7 @@ package com.xenoamess.x8l.databind;
 import com.xenoamess.x8l.X8lGrammarException;
 import com.xenoamess.x8l.X8lTree;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,9 +59,13 @@ public class X8lDataBeanUtil {
 
             Class fieldClass = field.getType();
 
-
             List<Object> list = x8lTree.fetch(x8lDataBeanFieldScheme, path);
-            String functionName = "get" + fieldClass.getSimpleName();
+
+            String functionName = x8lDataBeanFieldMark.functionName();
+            if (StringUtils.isBlank(functionName)) {
+                functionName = "get" + fieldClass.getSimpleName();
+            }
+
             Object result;
             try {
                 result = parserClass.getDeclaredMethod(functionName, List.class).invoke(null, list);
