@@ -287,10 +287,9 @@ public class X8lPathUtil {
                     if (name != null) {
                         break;
                     }
-                    name = operation;
                     resultList.addAll(
                             subList(
-                                    ((ContentNode) originalNode).getContentNodesFromChildrenThatNameIs(name,
+                                    ((ContentNode) originalNode).getContentNodesFromChildrenThatNameIs(operation,
                                             endIndexInclusive + 1),
                                     beginIndexInclusive,
                                     endIndexInclusive
