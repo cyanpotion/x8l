@@ -544,13 +544,7 @@ public class ContentNode extends AbstractTreeNode {
 //          <a>1&2&3>
 //          ->
 //          string array [1,2,3]
-
-        List<TextNode> textNodes = this.getTextNodesFromChildren();
-        List<String> res = new ArrayList<>(textNodes.size());
-        for (TextNode au : textNodes) {
-            res.add(au.getTextContent());
-        }
-        return res;
+        return this.asStringCollectionFill(new ArrayList<>(this.getTextNodesFromChildren().size()));
     }
 
     /**
@@ -558,12 +552,24 @@ public class ContentNode extends AbstractTreeNode {
      * @return String array of TextNode's text content, trimmed.
      */
     public List<String> asStringListTrimmed() {
+        return this.asStringCollectionTrimmedFill(new ArrayList<>(this.getTextNodesFromChildren().size()));
+    }
+
+
+    public <T extends Collection<String>> T asStringCollectionFill(T collection) {
         List<TextNode> textNodes = this.getTextNodesFromChildren();
-        List<String> res = new ArrayList<>(textNodes.size());
         for (TextNode au : textNodes) {
-            res.add(au.getTextContent().trim());
+            collection.add(au.getTextContent());
         }
-        return res;
+        return collection;
+    }
+
+    public <T extends Collection<String>> T asStringCollectionTrimmedFill(T collection) {
+        List<TextNode> textNodes = this.getTextNodesFromChildren();
+        for (TextNode au : textNodes) {
+            collection.add(au.getTextContent().trim());
+        }
+        return collection;
     }
 
     /**
@@ -581,12 +587,7 @@ public class ContentNode extends AbstractTreeNode {
 //         string map [he=1,she=2,it=-1]
 //        /
 
-        List<ContentNode> contentNodes = this.getContentNodesFromChildren();
-        Map<String, String> res = new HashMap<>(contentNodes.size());
-        for (ContentNode au : contentNodes) {
-            res.put(au.getName(), au.getTextNodesFromChildren(1).get(0).getTextContent());
-        }
-        return res;
+        return this.asStringMap(new HashMap<>(this.getContentNodesFromChildren().size()));
     }
 
     /**
@@ -594,13 +595,31 @@ public class ContentNode extends AbstractTreeNode {
      * @return String map, trimmed.
      */
     public Map<String, String> asStringMapTrimmed() {
-        List<ContentNode> contentNodes = this.getContentNodesFromChildren();
-        Map<String, String> res = new HashMap<>(contentNodes.size());
-        for (ContentNode au : contentNodes) {
-            res.put(au.getName(), au.getTextNodesFromChildren(1).get(0).getTextContent().trim());
-        }
-        return res;
+        return this.asStringMapTrimmed(new HashMap<>(this.getContentNodesFromChildren().size()));
     }
 
+    /**
+     * treat this node as a String Map.
+     * @return String map
+     */
+    public <T extends Map<String, String>> T asStringMap(T map) {
+        List<ContentNode> contentNodes = this.getContentNodesFromChildren();
+        for (ContentNode au : contentNodes) {
+            map.put(au.getName(), au.getTextNodesFromChildren(1).get(0).getTextContent());
+        }
+        return map;
+    }
+
+    /**
+     * treat this node as a String Map, trimmed.
+     * @return String map, trimmed.
+     */
+    public <T extends Map<String, String>> T asStringMapTrimmed(T map) {
+        List<ContentNode> contentNodes = this.getContentNodesFromChildren();
+        for (ContentNode au : contentNodes) {
+            map.put(au.getName().trim(), au.getTextNodesFromChildren(1).get(0).getTextContent().trim());
+        }
+        return map;
+    }
 
 }
