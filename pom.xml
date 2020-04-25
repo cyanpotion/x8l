@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess</groupId>
     <artifactId>x8l</artifactId>
-    <version>2.2.0</version>
+    <version>2.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>X8l format is a type of data format,
@@ -305,12 +305,6 @@
             <artifactId>log4j-bom</artifactId>
             <version>${log4j.version}</version>
             <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>com.xenoamess.p3c</groupId>
-            <artifactId>p3c-pmd</artifactId>
-            <version>[2.0.2.3x-SNAPSHOT,)</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
