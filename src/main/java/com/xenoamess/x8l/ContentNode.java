@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 
@@ -537,24 +538,67 @@ public class ContentNode extends AbstractTreeNode {
 
     /**
      * treat this node as an array who contains only TextNodes, and return their text content.
-     * @return String array of TextNode's text content
+     * @return String array list of TextNode's text content
      */
     public List<String> asStringList() {
 //          example:
 //          <a>1&2&3>
 //          ->
 //          string array [1,2,3]
-        return this.asStringCollectionFill(new ArrayList<>(this.getTextNodesFromChildren().size()));
+        return this.asStringCollectionFill(new ArrayList<>(this.getChildren().size()));
     }
 
     /**
      * treat this node as an array who contains only TextNodes, and return their text content, trimmed.
-     * @return String array of TextNode's text content, trimmed.
+     * @return String array list of TextNode's text content, trimmed.
      */
     public List<String> asStringListTrimmed() {
-        return this.asStringCollectionTrimmedFill(new ArrayList<>(this.getTextNodesFromChildren().size()));
+        return this.asStringCollectionTrimmedFill(new ArrayList<>(this.getChildren().size()));
     }
 
+    /**
+     * treat this node as an array who contains only TextNodes, and return their text content.
+     * @return String set of TextNode's text content
+     */
+    public HashSet<String> asStringSet() {
+//          example:
+//          <a>1&2&3>
+//          ->
+//          string array [1,2,3]
+        return this.asStringCollectionFill(new HashSet<>(this.getChildren().size()));
+    }
+
+    /**
+     * treat this node as an array who contains only TextNodes, and return their text content, trimmed.
+     * @return String set of TextNode's text content, trimmed.
+     */
+    public HashSet<String> asStringSetTrimmed() {
+        return this.asStringCollectionTrimmedFill(new HashSet<>(this.getChildren().size()));
+    }
+
+    public <T extends Collection<String>> T asStringCollection(Class<T> collectionClass) {
+        try {
+            try {
+                return asStringCollectionFill(collectionClass.getConstructor(Integer.TYPE).newInstance());
+            } catch (Exception e) {
+                return asStringCollectionFill(collectionClass.getConstructor().newInstance());
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new X8lGrammarException("asStringCollection fails!", e);
+        }
+    }
+
+    public <T extends Collection<String>> T asStringCollectionTrimmed(Class<T> collectionClass) {
+        try {
+            try {
+                return asStringCollectionTrimmedFill(collectionClass.getConstructor(Integer.TYPE).newInstance());
+            } catch (Exception e) {
+                return asStringCollectionTrimmedFill(collectionClass.getConstructor().newInstance());
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new X8lGrammarException("asStringCollection fails!", e);
+        }
+    }
 
     public <T extends Collection<String>> T asStringCollectionFill(T collection) {
         List<TextNode> textNodes = this.getTextNodesFromChildren();
@@ -587,7 +631,7 @@ public class ContentNode extends AbstractTreeNode {
 //         string map [he=1,she=2,it=-1]
 //        /
 
-        return this.asStringMap(new HashMap<>(this.getContentNodesFromChildren().size()));
+        return this.asStringMap(new HashMap<>(this.getChildren().size()));
     }
 
     /**
@@ -595,7 +639,7 @@ public class ContentNode extends AbstractTreeNode {
      * @return String map, trimmed.
      */
     public Map<String, String> asStringMapTrimmed() {
-        return this.asStringMapTrimmed(new HashMap<>(this.getContentNodesFromChildren().size()));
+        return this.asStringMapTrimmed(new HashMap<>(this.getChildren().size()));
     }
 
     /**
