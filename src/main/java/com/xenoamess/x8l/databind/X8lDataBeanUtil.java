@@ -27,7 +27,7 @@ package com.xenoamess.x8l.databind;
 import com.xenoamess.x8l.X8lGrammarException;
 import com.xenoamess.x8l.X8lTree;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 

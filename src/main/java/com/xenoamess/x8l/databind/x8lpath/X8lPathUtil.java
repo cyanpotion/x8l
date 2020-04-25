@@ -25,7 +25,7 @@
 package com.xenoamess.x8l.databind.x8lpath;
 
 import com.xenoamess.x8l.*;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
