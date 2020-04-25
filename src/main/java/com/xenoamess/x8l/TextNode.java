@@ -82,6 +82,11 @@ public class TextNode extends AbstractTreeNode {
         return textContent.equals(((TextNode) treeNode).textContent);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     public String getTextContent() {
         return textContent;
     }
