@@ -265,7 +265,6 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
      * @return singleton instance of this class.
      */
     @SuppressWarnings("SameReturnValue")
-    @SuppressWarnings("SameReturnValue")
     private @NotNull Object readResolve() {
         return INSTANCE;
     }

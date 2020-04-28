@@ -348,7 +348,6 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
      * @return singleton instance of this class.
      */
     @SuppressWarnings("SameReturnValue")
-    @SuppressWarnings("SameReturnValue")
     private Object readResolve() {
         return INSTANCE;
     }
