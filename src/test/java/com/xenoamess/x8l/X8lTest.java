@@ -44,6 +44,7 @@ public class X8lTest {
 
     public X8lTree prepare() throws IOException {
         System.out.println(PackageVersion.VERSION);
+        //noinspection ResultOfMethodCallIgnored
         new File("out").mkdir();
         String inputString = "<<here goes a basic demo of x8l>\n" +
                 "<<first,a comment is like this>  \n" +
@@ -176,6 +177,7 @@ public class X8lTest {
         System.out.println("BuildFinished");
         tree.show();
 
+        //noinspection ResultOfMethodCallIgnored
         new File("out").mkdirs();
 
         X8lTree.save(new File("out/output.x8l"), tree);

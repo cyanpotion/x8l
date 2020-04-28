@@ -53,7 +53,12 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean read(@NotNull Reader reader, @NotNull RootNode rootNode) throws IOException,
                             X8lGrammarException {
-                        return X8lDealer.this.getTreeNodeHandler(ContentNode.class).read(reader, rootNode);
+                        AbstractLanguageDealerHandler<ContentNode> handler =
+                                X8lDealer.this.getTreeNodeHandler(ContentNode.class);
+                        if (handler == null) {
+                            return false;
+                        }
+                        return handler.read(reader, rootNode);
                     }
 
                     @Override

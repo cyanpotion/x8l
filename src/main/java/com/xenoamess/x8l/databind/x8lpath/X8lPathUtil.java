@@ -70,6 +70,7 @@ public class X8lPathUtil {
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
     ) {
+        //noinspection rawtypes
         List fetched = fetch(originalNode, x8lPath);
         List<T> res = new ArrayList<>(fetched.size());
         for (Object object : fetched) {
@@ -85,7 +86,7 @@ public class X8lPathUtil {
             @NotNull AbstractTreeNode originalNode,
             @NotNull String x8lPath
     ) {
-        List<AbstractTreeNode> list = new LinkedList<AbstractTreeNode>();
+        List<AbstractTreeNode> list = new LinkedList<>();
         list.add(originalNode);
         return fetch(list, x8lPath);
     }
@@ -173,9 +174,8 @@ public class X8lPathUtil {
             }
         }
 
-        if (operation != null) {
-            operation = X8lTree.untranscode(operation);
-        }
+        operation = X8lTree.untranscode(operation);
+
         if (name != null) {
             name = X8lTree.untranscode(name);
         }

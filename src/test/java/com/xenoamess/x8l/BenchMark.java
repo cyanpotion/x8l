@@ -97,6 +97,7 @@ public class BenchMark {
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, XmlDealer.INSTANCE, true);
+            //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".x8l")));
@@ -114,6 +115,7 @@ public class BenchMark {
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);
+            //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +

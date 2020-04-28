@@ -97,14 +97,15 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                             for (AbstractTreeNode au : rootNode.getChildren()) {
                                 if (au instanceof ContentNode) {
                                     XmlDealer.write((ContentNode) au, document.addElement(STRING_NAMELESS));
-                                } else if (au instanceof TextNode) {
-                                    //do nothing
-                                } else if (au instanceof CommentNode) {
-                                    CommentNode commentNode = (CommentNode) au;
-                                    document.addComment(commentNode.getTextContent());
-                                } else {
-                                    throw new NotImplementedException("not implemented for this class : " + au.getClass());
-                                }
+                                } else //noinspection StatementWithEmptyBody
+                                    if (au instanceof TextNode) {
+                                        //do nothing
+                                    } else if (au instanceof CommentNode) {
+                                        CommentNode commentNode = (CommentNode) au;
+                                        document.addComment(commentNode.getTextContent());
+                                    } else {
+                                        throw new NotImplementedException("not implemented for this class : " + au.getClass());
+                                    }
                             }
                         } else {
                             Element element = document.addElement(STRING_NAMELESS);
@@ -205,7 +206,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             boolean add = !au.contains(ARRAY_ID_ATTRIBUTE);
             if (add) {
                 for (char c : au.toCharArray()) {
-                    //noinspection AlibabaAvoidComplexCondition
+                    //noinspection ConstantConditions
                     if ((c >= 0x00 && c <= 0x08)
                             || (c >= 0x0b && c <= 0x0c)
                             || (c >= 0x0e && c <= 0x1f)) {

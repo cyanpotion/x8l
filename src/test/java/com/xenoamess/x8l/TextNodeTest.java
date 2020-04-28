@@ -53,15 +53,13 @@ public class TextNodeTest {
         assertEquals(tree.toString(), "2&1");
         System.out.println(tree);
 
-        try {
-            tree = new X8lTree();
-            t1 = new TextNode(tree.getRoot(), "1");
-            t2 = new TextNode(tree.getRoot(), 2, "2");
-            assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
-            System.out.println(tree);
-            fail();
-        } catch (IndexOutOfBoundsException e) {
-        }
+        assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> {
+                    X8lTree tree1 = new X8lTree();
+                    TextNode t21 = new TextNode(tree1.getRoot(), 2, "2");
+                }
+        );
 
         assertNotEquals(new TextNode(null, null), new CommentNode(null, null));
         assertEquals(new TextNode(null, null), new TextNode(null, null));

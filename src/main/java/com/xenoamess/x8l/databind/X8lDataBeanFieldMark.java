@@ -47,7 +47,7 @@ public @interface X8lDataBeanFieldMark {
     @NotNull
     String path();
 
-    @NotNull
+    @SuppressWarnings("rawtypes") @NotNull
     Class parser() default X8lDataBeanDefaultParser.class;
 }
 

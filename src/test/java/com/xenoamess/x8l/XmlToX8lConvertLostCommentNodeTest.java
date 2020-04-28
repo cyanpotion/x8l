@@ -32,6 +32,7 @@ import java.io.BufferedInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,11 +40,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class XmlToX8lConvertLostCommentNodeTest {
     @Test
     public void test() throws IOException {
-        String originalXmlString = null;
+        String originalXmlString;
         try (InputStream inputStream = this.getClass().getResource("/testPom.xml").openStream();
              BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)
         ) {
-            originalXmlString = IOUtils.toString(bufferedInputStream);
+            originalXmlString = IOUtils.toString(bufferedInputStream, StandardCharsets.UTF_8);
         }
         assertNotNull(originalXmlString);
 

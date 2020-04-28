@@ -41,7 +41,7 @@ import java.util.List;
 public class X8lDataBeanUtil {
     public static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass,
                                                                       @NotNull X8lTree x8lTree) {
-        T t = null;
+        T t;
         try {
             t = tClass.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

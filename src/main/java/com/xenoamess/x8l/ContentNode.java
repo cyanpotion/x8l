@@ -584,7 +584,7 @@ public class ContentNode extends AbstractTreeNode {
     public <T extends Collection<String>> T asStringCollection(Class<T> collectionClass) {
         try {
             try {
-                return asStringCollectionFill(collectionClass.getConstructor(Integer.TYPE).newInstance());
+                return asStringCollectionFill(collectionClass.getConstructor(Integer.TYPE).newInstance(this.getChildren().size()));
             } catch (Exception e) {
                 return asStringCollectionFill(collectionClass.getConstructor().newInstance());
             }
@@ -596,7 +596,7 @@ public class ContentNode extends AbstractTreeNode {
     public <T extends Collection<String>> T asStringCollectionTrimmed(Class<T> collectionClass) {
         try {
             try {
-                return asStringCollectionTrimmedFill(collectionClass.getConstructor(Integer.TYPE).newInstance());
+                return asStringCollectionTrimmedFill(collectionClass.getConstructor(Integer.TYPE).newInstance(this.getChildren().size()));
             } catch (Exception e) {
                 return asStringCollectionTrimmedFill(collectionClass.getConstructor().newInstance());
             }

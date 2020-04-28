@@ -32,6 +32,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,8 +47,12 @@ public class transcodeAndTranscodeBackTest {
     static {
         try {
             loseTests = new String[]{
-                    IOUtils.toString(transcodeAndTranscodeBackTest.class.getResource("/RpgModuleDemoSettings.x8l"))
-
+                    IOUtils.toString(
+                            transcodeAndTranscodeBackTest.class.getResource(
+                                    "/RpgModuleDemoSettings.x8l"
+                            ),
+                            StandardCharsets.UTF_8
+                    )
             };
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,7 +60,7 @@ public class transcodeAndTranscodeBackTest {
     }
 
     @Test
-    public void transcodeAndTranscodeBackTest() {
+    public void transcodeAndTranscodeBackTestMain() {
 
         for (String tree : strictTests) {
             transcodeAndTranscodeBackTestSingle(tree, XmlDealer.INSTANCE);

@@ -3,4 +3,9 @@
         MethodTooLongRule&
         AvoidComplexConditionRule
     >
+    <rule_class_pair_blacklist>
+        <CommentNode>EqualsHashCodeRule>
+        <ContentNode>EqualsHashCodeRule>
+        <TextNode>EqualsHashCodeRule>
+    >
 >

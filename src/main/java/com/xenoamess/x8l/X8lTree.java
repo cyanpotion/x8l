@@ -120,7 +120,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
-        X8lTree res = null;
+        X8lTree res;
         try (
                 Reader reader = Files.newBufferedReader(path)
         ) {
@@ -133,7 +133,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (path == null || !Files.isReadable(path)) {
             throw new FileNotFoundException(path == null ? "null" : path.toString());
         }
-        X8lTree res = null;
+        X8lTree res;
         try (
                 Reader reader = Files.newBufferedReader(path)
         ) {
@@ -176,7 +176,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (fileObject == null || !fileObject.exists()) {
             throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
         }
-        X8lTree res = null;
+        X8lTree res;
         try (
                 InputStream inputStream = fileObject.getContent().getInputStream()
         ) {
@@ -192,7 +192,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (fileObject == null || !fileObject.exists()) {
             throw new FileNotFoundException(fileObject == null ? "null" : fileObject.toString());
         }
-        X8lTree res = null;
+        X8lTree res;
         try (
                 InputStream inputStream = fileObject.getContent().getInputStream()
         ) {
@@ -208,7 +208,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return load(fileObject, suspectDealer(fileObject.getName().getBaseName(), getLanguageDealerListCopy()));
     }
 
-    public static @NotNull void save(@Nullable FileObject fileObject, @NotNull X8lTree x8lTree) throws IOException {
+    public static void save(@Nullable FileObject fileObject, @NotNull X8lTree x8lTree) throws IOException {
         if (fileObject == null) {
             throw new FileNotFoundException("null");
         }
@@ -229,7 +229,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
-        X8lTree res = null;
+        X8lTree res;
         try (
                 Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
         ) {
@@ -242,7 +242,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (file == null || !file.exists() || !file.isFile()) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
-        X8lTree res = null;
+        X8lTree res;
         try (
                 Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
         ) {
@@ -264,6 +264,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
         if (!file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             file.getParentFile().mkdirs();
             if (!file.createNewFile()) {
                 LOGGER.error("File not exist when check but is already there when try to create it. Will " +
@@ -279,7 +280,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static @NotNull X8lTree load(@NotNull String string, @NotNull LanguageDealer dealer) {
-        X8lTree res = null;
+        X8lTree res;
         try (
                 StringReader stringReader = new StringReader(string)
         ) {
@@ -312,7 +313,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static @NotNull String save(@NotNull X8lTree x8lTree) {
-        String res = "";
+        String res;
         try (
                 StringWriter stringWriter = new StringWriter()
         ) {
@@ -329,7 +330,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      */
 
     public static @NotNull X8lTree load(@NotNull InputStream inputStream, @NotNull LanguageDealer dealer) throws IOException {
-        X8lTree x8lTree = null;
+        X8lTree x8lTree;
         try (
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
                 Reader reader = new InputStreamReader(bufferedInputStream)
@@ -392,7 +393,11 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.setReader(reader);
         this.setLanguageDealer(languageDealer);
         if (readItNow) {
-            this.read(reader, this.getLanguageDealer());
+            if (reader != null) {
+                this.read(reader, this.getLanguageDealer());
+            } else {
+                throw new X8lGrammarException("You pass a null reader and want the tree read it now? No way.");
+            }
         }
     }
 
@@ -424,7 +429,12 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public void read() throws IOException {
-        read(this.getReader());
+        Reader reader = this.getReader();
+        if (reader != null) {
+            read(reader);
+        } else {
+            throw new X8lGrammarException("You cannot read now. Your reader is null.");
+        }
     }
 
     public void read(@NotNull Reader reader) throws IOException {
@@ -432,7 +442,12 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public void read(@NotNull LanguageDealer languageDealer) throws IOException {
-        read(this.getReader(), languageDealer);
+        Reader reader = this.getReader();
+        if (reader != null) {
+            read(reader, languageDealer);
+        } else {
+            throw new X8lGrammarException("You cannot read now. Your reader is null.");
+        }
     }
 
     /**
@@ -465,7 +480,12 @@ public class X8lTree implements AutoCloseable, Serializable {
 
 
     public void parse() throws IOException {
-        this.read(this.getReader());
+        Reader reader = this.getReader();
+        if (reader != null) {
+            this.read(reader);
+        } else {
+            throw new X8lGrammarException("You cannot read now. Your reader is null.");
+        }
     }
 
     /**
@@ -645,7 +665,12 @@ public class X8lTree implements AutoCloseable, Serializable {
     private void readObject(@NotNull ObjectInputStream objectInputStream)
             throws IOException, ClassNotFoundException {
         objectInputStream.defaultReadObject();
+        //noinspection ConstantConditions
         if (this.root == null) {
+            /*
+             * this IS actually possible due to some details of serializing.
+             * so don't delete this if.
+             */
             this.root = new RootNode(null);
         }
         try (Reader reader = new InputStreamReader(objectInputStream)) {

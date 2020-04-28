@@ -71,6 +71,7 @@
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
     </properties>
 
     <profiles>
@@ -159,7 +160,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.4</version>
+            <version>${commons-beanutils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.dom4j</groupId>
