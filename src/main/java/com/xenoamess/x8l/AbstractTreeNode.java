@@ -86,6 +86,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         this.removeParent();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public AbstractTreeNode removeParent() {
         if (this.getParent() != null) {
             this.getParent().removeChild(this);
@@ -127,6 +128,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public AbstractTreeNode changeParentAndRegister(ContentNode contentNode) {
         return this.changeParentAndRegister(contentNode, -1);
     }
@@ -206,6 +208,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
 
     public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
                                        @NotNull String x8lPath) {
+        //noinspection SwitchStatementWithTooFewBranches
         switch (x8lDataBeanFieldScheme) {
             case X8LPATH:
                 return X8lPathUtil.fetch(this, x8lPath);
@@ -219,11 +222,15 @@ public abstract class AbstractTreeNode implements AutoCloseable {
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
     ) {
+        //noinspection SwitchStatementWithTooFewBranches
         switch (x8lDataBeanFieldScheme) {
             case X8LPATH:
                 return X8lPathUtil.fetch(this, x8lPath, tClass);
             default:
-                return null;
+                throw new NotImplementedException(
+                        "Ritht now, " + x8lDataBeanFieldScheme.name()
+                                + " is not implemented yet."
+                );
         }
     }
 }

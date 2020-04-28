@@ -199,7 +199,6 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
      * @param source original Strings to filer
      * @return filtered Strings
      */
-    @SuppressWarnings("AlibabaAvoidComplexCondition")
     public static List<String> filterIllegalChars(List<String> source) {
         List<String> res = new ArrayList<>();
         for (String au : source) {
@@ -437,6 +436,12 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         return this.getClass().getCanonicalName();
     }
 
+    /**
+     * readResolve
+     * @see Serializable
+     * @return singleton instance of this class.
+     */
+    @SuppressWarnings("SameReturnValue")
     private Object readResolve() {
         return INSTANCE;
     }

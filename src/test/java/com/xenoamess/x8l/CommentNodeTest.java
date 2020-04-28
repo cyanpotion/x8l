@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author XenoAmess
  */
 public class CommentNodeTest {
+
     @Test
     public void test() {
         X8lTree tree;
@@ -52,15 +53,13 @@ public class CommentNodeTest {
         assertEquals(tree.toString(), "<<2><<1>");
         System.out.println(tree);
 
-        try {
-            tree = new X8lTree();
-            t1 = new CommentNode(tree.getRoot(), "1");
-            t2 = new CommentNode(tree.getRoot(), 2, "2");
-            assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
-            System.out.println(tree);
-            assertTrue(false);
-        } catch (IndexOutOfBoundsException e) {
-        }
+        final X8lTree atree = new X8lTree();
+        final CommentNode at1 = new CommentNode(tree.getRoot(), "1");
+
+        assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> new CommentNode(atree.getRoot(), 2, "2")
+        );
 
         assertNotEquals(new CommentNode(null, null), new TextNode(null, null));
         t1 = new CommentNode(tree.getRoot(), "1");

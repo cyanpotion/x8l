@@ -59,7 +59,7 @@ public class TextNodeTest {
             t2 = new TextNode(tree.getRoot(), 2, "2");
             assertTrue(tree.getRoot().getChildren().indexOf(t1) > tree.getRoot().getChildren().indexOf(t2));
             System.out.println(tree);
-            assertTrue(false);
+            fail();
         } catch (IndexOutOfBoundsException e) {
         }
 

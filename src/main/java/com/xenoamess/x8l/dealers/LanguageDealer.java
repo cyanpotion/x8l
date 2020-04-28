@@ -42,24 +42,32 @@ import java.util.Map;
  */
 public class LanguageDealer implements Serializable {
 
+    @SuppressWarnings("rawtypes")
     private final Map<Class, AbstractLanguageDealerHandler> treeNodeHandlerMap = new HashMap<>();
 
     public <T extends AbstractTreeNode> @Nullable AbstractLanguageDealerHandler<T> getTreeNodeHandler(@Nullable Class<T> tClass) {
+        //noinspection rawtypes
         AbstractLanguageDealerHandler handler = null;
+        //noinspection rawtypes
         Class nowClass = tClass;
         while (handler == null && nowClass != null) {
             handler = treeNodeHandlerMap.get(nowClass);
             nowClass = nowClass.getSuperclass();
         }
+        //noinspection unchecked
         return handler;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public <T extends AbstractTreeNode> AbstractLanguageDealerHandler<T> registerTreeNodeHandler(@NotNull Class<T> tClass,
                                                                                                  @NotNull AbstractLanguageDealerHandler<T> handler) {
+        //noinspection unchecked
         return treeNodeHandlerMap.put(tClass, handler);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public <T extends AbstractTreeNode> boolean read(@NotNull Reader reader, @NotNull T abstractTreeNode) throws IOException {
+        //noinspection unchecked
         AbstractLanguageDealerHandler<T> handler =
                 (AbstractLanguageDealerHandler<T>) this.getTreeNodeHandler(abstractTreeNode.getClass());
         if (handler == null) {
@@ -68,7 +76,9 @@ public class LanguageDealer implements Serializable {
         return handler.read(reader, abstractTreeNode);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public <T extends AbstractTreeNode> boolean write(@NotNull Writer writer, @NotNull T abstractTreeNode) throws IOException {
+        //noinspection unchecked
         AbstractLanguageDealerHandler<T> handler =
                 (AbstractLanguageDealerHandler<T>) this.getTreeNodeHandler(abstractTreeNode.getClass());
         if (handler == null) {

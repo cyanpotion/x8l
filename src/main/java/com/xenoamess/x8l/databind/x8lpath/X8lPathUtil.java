@@ -62,6 +62,7 @@ import java.util.List;
  * @author XenoAmess
  */
 public class X8lPathUtil {
+    @SuppressWarnings("rawtypes")
     private static final List EMPTY = new LinkedList();
 
     public static <T> @NotNull List<T> fetch(
@@ -73,6 +74,7 @@ public class X8lPathUtil {
         List<T> res = new ArrayList<>(fetched.size());
         for (Object object : fetched) {
             if (tClass.isInstance(object)) {
+                //noinspection unchecked
                 res.add((T) object);
             }
         }
@@ -92,20 +94,24 @@ public class X8lPathUtil {
             @NotNull List<AbstractTreeNode> originalNodes,
             @NotNull String x8lPath
     ) {
-        List<AbstractTreeNode> sourceList = originalNodes;
-        List<Object> resultList = new ArrayList<>();
+        //noinspection rawtypes
+        List sourceList = originalNodes;
+        //noinspection rawtypes
+        List resultList = new ArrayList<>();
         try (StringReader stringReader = new StringReader(x8lPath)) {
             while (true) {
+                //noinspection unchecked
                 boolean finished = fetch(sourceList, stringReader, resultList);
                 if (finished) {
                     break;
                 }
-                sourceList = (List) resultList;
+                sourceList = resultList;
                 resultList = new ArrayList<>();
             }
         } catch (IOException e) {
             throw new X8lGrammarException("fetch fails.", e);
         }
+        //noinspection unchecked
         return resultList;
     }
 
@@ -309,9 +315,11 @@ public class X8lPathUtil {
             int endIndexInclusive
     ) {
         if (original.isEmpty()) {
+            //noinspection unchecked
             return EMPTY;
         }
         if (beginIndexInclusive >= original.size()) {
+            //noinspection unchecked
             return EMPTY;
         }
         if (endIndexInclusive == -1 || endIndexInclusive >= original.size()) {

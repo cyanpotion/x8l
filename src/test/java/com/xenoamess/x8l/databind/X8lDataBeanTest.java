@@ -29,6 +29,7 @@ import com.xenoamess.x8l.X8lTree;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class X8lDataBeanTest {
     static class TestDataBean1 implements X8lDataBean {
@@ -79,15 +80,9 @@ public class X8lDataBeanTest {
         X8lTree x8lTree = X8lTree.load("<a>b>");
         TestDataBean2 testDataBean2 = X8lDataBeanUtil.buildFromX8lTree(TestDataBean2.class, x8lTree);
 
-        assertEquals(
-                null,
-                testDataBean2.nodea
-        );
+        assertNull(testDataBean2.nodea);
 
-        assertEquals(
-                null,
-                testDataBean2.value
-        );
+        assertNull(testDataBean2.value);
     }
 
     //-----

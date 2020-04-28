@@ -73,6 +73,7 @@ public class JsonDealerTest {
                     try {
                         abstractTreeNode.write(writer, tree3.getLanguageDealer());
                     } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                     return null;
                 });

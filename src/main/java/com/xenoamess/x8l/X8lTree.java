@@ -56,9 +56,9 @@ public class X8lTree implements AutoCloseable, Serializable {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(X8lTree.class);
 
-    public static String STRING_JSON = "json";
-    public static String STRING_XML = "xml";
-    public static String STRING_X8L = "x8l";
+    public static final String STRING_JSON = "json";
+    public static final String STRING_XML = "xml";
+    public static final String STRING_X8L = "x8l";
 
     private @NotNull LanguageDealer languageDealer = X8lDealer.INSTANCE;
 
@@ -258,7 +258,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         return load(file, suspectDealer(file.getName(), getLanguageDealerListCopy()));
     }
 
-    @SuppressWarnings("AlibabaAvoidComplexCondition")
     public static void save(@Nullable File file, @NotNull X8lTree x8lTree) throws IOException {
         //noinspection AlibabaAvoidComplexCondition
         if (file == null || (file.exists() && !file.isFile())) {
@@ -287,18 +286,17 @@ public class X8lTree implements AutoCloseable, Serializable {
             res = new X8lTree(stringReader, dealer);
             res.parse();
         } catch (Exception e) {
-            throw new X8lGrammarException("X8lTree.save(X8lTree x8lTree) fails. Really dom't know why.", e);
+            throw new X8lGrammarException("X8lTree.load(X8lTree x8lTree) fails. Really dom't know why.", e);
         }
         return res;
     }
 
     public static @NotNull X8lTree load(@NotNull String string, @NotNull List<LanguageDealer> possibleDealerList) {
-        X8lTree res = null;
         for (LanguageDealer dealer : possibleDealerList) {
             try (
                     StringReader stringReader = new StringReader(string)
             ) {
-                res = new X8lTree(stringReader, dealer);
+                X8lTree res = new X8lTree(stringReader, dealer);
                 res.parse();
                 return res;
             } catch (Exception e) {
@@ -306,7 +304,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                         string, e);
             }
         }
-        return res;
+        throw new X8lGrammarException("Mone of my dealers can parse this. Sorry. details are in the log.");
     }
 
     public static @NotNull X8lTree load(@NotNull String string) {
@@ -482,6 +480,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      *
      * @return the original X8lTree is trimmed and then returned.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public @NotNull X8lTree trim() {
         this.getRoot().trim();
         return this;
@@ -494,6 +493,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      *
      * @return the original X8lTree is trimmed and then returned.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public @NotNull X8lTree trimForce() {
         this.getRoot().trimForce();
         return this;
@@ -681,6 +681,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.getRoot().appendAll(patch.getRoot().getChildren());
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public <T> @NotNull List<T> applyToAllNodes(@NotNull Function<AbstractTreeNode, T> function) {
         ArrayList<T> res = new ArrayList<>();
         this.getRoot().applyToAllNodes(res, function);

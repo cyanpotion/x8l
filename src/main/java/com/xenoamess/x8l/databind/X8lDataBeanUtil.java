@@ -51,6 +51,7 @@ public class X8lDataBeanUtil {
         return t;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends X8lDataBean> void loadFromX8lTree(T t, @NotNull X8lTree x8lTree) {
         Class<T> tClass = (Class<T>) t.getClass();
         List<Field> fields = FieldUtils.getFieldsListWithAnnotation(tClass, X8lDataBeanFieldMark.class);
@@ -58,8 +59,11 @@ public class X8lDataBeanUtil {
             X8lDataBeanFieldMark x8lDataBeanFieldMark = field.getAnnotation(X8lDataBeanFieldMark.class);
             X8lDataBeanFieldScheme x8lDataBeanFieldScheme = x8lDataBeanFieldMark.scheme();
             String path = x8lDataBeanFieldMark.path();
+
+            //noinspection rawtypes
             Class parserClass = x8lDataBeanFieldMark.parser();
 
+            //noinspection rawtypes
             Class fieldClass = field.getType();
 
             List<Object> list = x8lTree.fetch(x8lDataBeanFieldScheme, path);

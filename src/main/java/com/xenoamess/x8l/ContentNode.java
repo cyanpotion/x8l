@@ -285,7 +285,6 @@ public class ContentNode extends AbstractTreeNode {
         this.getAttributeSegments().set(this.getAttributesKeyList().size() - 1, segment2);
     }
 
-    @SuppressWarnings("AlibabaAvoidComplexCondition")
     @Override
     public void format(int space) {
         formatAttributeSegments(space);
@@ -306,8 +305,13 @@ public class ContentNode extends AbstractTreeNode {
             abstractTreeNode.format(space + 1);
         }
 
-        //noinspection AlibabaAvoidComplexCondition
-        if (this.getChildren().size() > 1 || (this.getChildren().size() == 1 && !(this.getChildren().get(0) instanceof TextNode))) {
+        if (
+                this.getChildren().size() > 1
+                        || (
+                        this.getChildren().size() == 1
+                                && !(this.getChildren().get(0) instanceof TextNode)
+                )
+        ) {
             List<AbstractTreeNode> newChildren = new ArrayList<>();
             for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
                 if (space != -1) {
@@ -455,6 +459,7 @@ public class ContentNode extends AbstractTreeNode {
     }
 
 
+    @SuppressWarnings("UnusedReturnValue")
     public <T> List<T> applyToAllNodes(Function<AbstractTreeNode, T> function) {
         ArrayList<T> res = new ArrayList<>();
         this.applyToAllNodes(res, function);

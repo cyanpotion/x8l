@@ -81,7 +81,6 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
         this.registerTreeNodeHandler(
                 ContentNode.class,
                 new AbstractLanguageDealerHandler<ContentNode>() {
-                    @SuppressWarnings("AlibabaMethodTooLong")
                     @Override
                     public boolean read(@NotNull Reader reader, @NotNull ContentNode contentNode) throws IOException,
                             X8lGrammarException {
@@ -252,6 +251,12 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
         return this.getClass().getCanonicalName();
     }
 
+    /**
+     * readResolve
+     * @see Serializable
+     * @return singleton instance of this class.
+     */
+    @SuppressWarnings("SameReturnValue")
     private @NotNull Object readResolve() {
         return INSTANCE;
     }

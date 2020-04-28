@@ -51,6 +51,7 @@ public class XmlDealerTest {
                 try {
                     abstractTreeNode.write(writer, tree.getLanguageDealer());
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
                 return null;
             });
@@ -61,6 +62,7 @@ public class XmlDealerTest {
                 try {
                     abstractTreeNode.write(writer, tree.getLanguageDealer());
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
                 return null;
             });
@@ -71,6 +73,7 @@ public class XmlDealerTest {
                 try {
                     XmlDealer.INSTANCE.naiveWrite(writer, abstractTreeNode);
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
                 return null;
             });
@@ -81,6 +84,7 @@ public class XmlDealerTest {
                 try {
                     abstractTreeNode.write(writer, tree.getLanguageDealer());
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
                 return null;
             });

@@ -81,11 +81,6 @@ public class CommentNode extends AbstractTreeNode {
         return textContent.equals(((CommentNode) treeNode).textContent);
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
     public String getTextContent() {
         return textContent;
     }
