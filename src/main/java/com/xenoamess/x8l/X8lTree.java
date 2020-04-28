@@ -259,7 +259,6 @@ public class X8lTree implements AutoCloseable, Serializable {
     }
 
     public static void save(@Nullable File file, @NotNull X8lTree x8lTree) throws IOException {
-        //noinspection AlibabaAvoidComplexCondition
         if (file == null || (file.exists() && !file.isFile())) {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
