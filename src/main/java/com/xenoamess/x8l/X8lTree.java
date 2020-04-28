@@ -51,7 +51,7 @@ import java.util.function.Function;
  * X8lTree struct
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class X8lTree implements AutoCloseable, Serializable {
     private static final Logger LOGGER =

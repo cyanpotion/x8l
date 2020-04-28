@@ -41,7 +41,7 @@ import java.util.List;
  * parent of all TreeNode types.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public abstract class AbstractTreeNode implements AutoCloseable {
     private ContentNode parent;

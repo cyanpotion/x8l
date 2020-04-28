@@ -60,7 +60,7 @@ import java.util.List;
  * range [a]: equals to range [a-a].
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class X8lPathUtil {
     @SuppressWarnings("rawtypes")

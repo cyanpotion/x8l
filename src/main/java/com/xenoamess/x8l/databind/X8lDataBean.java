@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>X8lDataBean interface.</p>
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public interface X8lDataBean {
     /**

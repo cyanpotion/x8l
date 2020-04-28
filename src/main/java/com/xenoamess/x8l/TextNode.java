@@ -29,7 +29,7 @@ package com.xenoamess.x8l;
  * TextNode means some nodes with text.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class TextNode extends AbstractTreeNode {
     private String textContent;

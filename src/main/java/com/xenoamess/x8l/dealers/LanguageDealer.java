@@ -39,7 +39,7 @@ import java.util.Map;
  * AbstractLanguageDealer
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class LanguageDealer implements Serializable {
 
