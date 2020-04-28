@@ -38,6 +38,7 @@ import java.util.Stack;
  * the dealer to deal with x8l format.
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public final class X8lDealer extends LanguageDealer implements Serializable {
     /**
@@ -249,8 +250,10 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
         );
     }
 
+    /** Constant <code>INSTANCE</code> */
     public static final X8lDealer INSTANCE = new X8lDealer();
 
+    /** {@inheritDoc} */
     @Override
     public @NotNull String toString() {
         return this.getClass().getCanonicalName();
@@ -261,6 +264,7 @@ public final class X8lDealer extends LanguageDealer implements Serializable {
      * @see Serializable
      * @return singleton instance of this class.
      */
+    @SuppressWarnings("SameReturnValue")
     @SuppressWarnings("SameReturnValue")
     private @NotNull Object readResolve() {
         return INSTANCE;

@@ -34,7 +34,10 @@ import java.io.Serializable;
 import java.io.Writer;
 
 /**
+ * <p>AbstractLanguageDealerHandler interface.</p>
+ *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
 
@@ -44,8 +47,8 @@ public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> exten
      * @param reader reader
      * @param t      AbstractTreeNode to read
      * @return if read succeed
-     * @throws IOException reader.read
-     * @throws X8lGrammarException when grammar wrong
+     * @throws java.io.IOException reader.read
+     * @throws com.xenoamess.x8l.X8lGrammarException when grammar wrong
      */
     boolean read(@NotNull Reader reader, @NotNull T t) throws IOException, X8lGrammarException;
 
@@ -55,8 +58,8 @@ public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> exten
      * @param writer writer
      * @param t      AbstractTreeNode to write
      * @return if write succeed
-     * @throws IOException writer.write
-     * @throws X8lGrammarException when grammar wrong
+     * @throws java.io.IOException writer.write
+     * @throws com.xenoamess.x8l.X8lGrammarException when grammar wrong
      */
     boolean write(@NotNull Writer writer, @NotNull T t) throws IOException, X8lGrammarException;
 }

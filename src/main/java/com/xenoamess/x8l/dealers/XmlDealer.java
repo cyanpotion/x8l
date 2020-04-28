@@ -60,6 +60,7 @@ import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
  * If anybody want to refine it, pull request is always welcomed.
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public final class XmlDealer extends LanguageDealer implements Serializable {
     /**
@@ -188,8 +189,10 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
     }
 
 
+    /** Constant <code>STRING_NAMELESS="_nameless"</code> */
     public static final String STRING_NAMELESS = "_nameless";
 
+    /** Constant <code>INSTANCE</code> */
     public static final XmlDealer INSTANCE = new XmlDealer();
 
     /**
@@ -304,6 +307,12 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         }
     }
 
+    /**
+     * <p>ifNameless.</p>
+     *
+     * @param contentNode a {@link com.xenoamess.x8l.ContentNode} object.
+     * @return a boolean.
+     */
     public static boolean ifNameless(ContentNode contentNode) {
         if (contentNode.getAttributesKeyList().isEmpty()) {
             return true;
@@ -320,7 +329,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
      *
      * @param writer   writer
      * @param treeNode treeNode
-     * @throws IOException IOException
+     * @throws java.io.IOException java.io.IOException
      */
     @Deprecated
     public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
@@ -394,6 +403,12 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         }
     }
 
+    /**
+     * <p>ifSingleRootNode.</p>
+     *
+     * @param contentNode a {@link com.xenoamess.x8l.ContentNode} object.
+     * @return a {@link com.xenoamess.x8l.ContentNode} object.
+     */
     public static ContentNode ifSingleRootNode(ContentNode contentNode) {
         int count = 0;
         ContentNode res = null;
@@ -432,6 +447,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
 //        return res;
 //    }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return this.getClass().getCanonicalName();
@@ -442,6 +458,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
      * @see Serializable
      * @return singleton instance of this class.
      */
+    @SuppressWarnings("SameReturnValue")
     @SuppressWarnings("SameReturnValue")
     private Object readResolve() {
         return INSTANCE;

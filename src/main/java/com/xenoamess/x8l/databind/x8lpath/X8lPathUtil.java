@@ -60,11 +60,21 @@ import java.util.List;
  * range [a]: equals to range [a-a].
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class X8lPathUtil {
     @SuppressWarnings("rawtypes")
     private static final List EMPTY = new LinkedList();
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param originalNode a {@link com.xenoamess.x8l.AbstractTreeNode} object.
+     * @param x8lPath a {@link java.lang.String} object.
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
     public static <T> @NotNull List<T> fetch(
             @NotNull AbstractTreeNode originalNode,
             @NotNull String x8lPath,
@@ -82,6 +92,13 @@ public class X8lPathUtil {
         return res;
     }
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param originalNode a {@link com.xenoamess.x8l.AbstractTreeNode} object.
+     * @param x8lPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public static @NotNull List<Object> fetch(
             @NotNull AbstractTreeNode originalNode,
             @NotNull String x8lPath
@@ -91,6 +108,13 @@ public class X8lPathUtil {
         return fetch(list, x8lPath);
     }
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param originalNodes a {@link java.util.List} object.
+     * @param x8lPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public static @NotNull List<Object> fetch(
             @NotNull List<AbstractTreeNode> originalNodes,
             @NotNull String x8lPath
@@ -116,6 +140,15 @@ public class X8lPathUtil {
         return resultList;
     }
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param originalNodes a {@link java.util.List} object.
+     * @param reader a {@link java.io.Reader} object.
+     * @param resultList a {@link java.util.List} object.
+     * @return a boolean.
+     * @throws java.io.IOException if any.
+     */
     public static boolean fetch(
             @NotNull List<AbstractTreeNode> originalNodes,
             @NotNull Reader reader,
@@ -309,6 +342,15 @@ public class X8lPathUtil {
         return finished;
     }
 
+    /**
+     * <p>subList.</p>
+     *
+     * @param original a {@link java.util.List} object.
+     * @param beginIndexInclusive a int.
+     * @param endIndexInclusive a int.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
     public static <T> @NotNull List<T> subList(
             @NotNull List<T> original,
             int beginIndexInclusive,

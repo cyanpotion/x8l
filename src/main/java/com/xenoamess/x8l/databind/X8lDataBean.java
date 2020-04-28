@@ -28,7 +28,10 @@ import com.xenoamess.x8l.X8lTree;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * <p>X8lDataBean interface.</p>
+ *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public interface X8lDataBean {
     /**
@@ -36,7 +39,6 @@ public interface X8lDataBean {
      *
      * @param tClass class of X8lDataBean
      * @param x8lTree X8lTree
-     * @param <T> class of X8lDataBean
      * @return the built X8lDataBean.
      */
     static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass, @NotNull X8lTree x8lTree) {
@@ -47,6 +49,7 @@ public interface X8lDataBean {
      * load fields from a X8lTree.
      *
      * @param x8lTree X8lTree
+     * @param <T> a T object.
      */
     default <T extends X8lDataBean> void loadFromX8lTree(@NotNull X8lTree x8lTree) {
         X8lDataBeanUtil.loadFromX8lTree(this, x8lTree);

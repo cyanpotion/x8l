@@ -40,13 +40,17 @@ import java.util.function.Function;
  * ContentNode means some nodes with content.
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class ContentNode extends AbstractTreeNode {
 
+    /** Constant <code>DEFAULT_ATTRIBUTE_VALUE=""</code> */
     public static final String DEFAULT_ATTRIBUTE_VALUE = "";
 
+    /** Constant <code>DEFAULT_SEGMENT_VALUE=" "</code> */
     public static final String DEFAULT_SEGMENT_VALUE = " ";
 
+    /** Constant <code>EMPTY_SEGMENT_VALUE=""</code> */
     public static final String EMPTY_SEGMENT_VALUE = "";
 
     private final List<AbstractTreeNode> children = new ArrayList<>();
@@ -55,14 +59,32 @@ public class ContentNode extends AbstractTreeNode {
 
     private final List<String> attributeSegments = new ArrayList<>();
 
+    /**
+     * <p>Constructor for ContentNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     */
     public ContentNode(ContentNode parent) {
         super(parent);
     }
 
+    /**
+     * <p>Constructor for ContentNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     * @param index a int.
+     */
     public ContentNode(ContentNode parent, int index) {
         super(parent, index);
     }
 
+    /**
+     * <p>addAttribute.</p>
+     *
+     * @param key a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     * @param segment a {@link java.lang.String} object.
+     */
     public void addAttribute(String key, String value, String segment) {
         if (value == null) {
             value = DEFAULT_ATTRIBUTE_VALUE;
@@ -87,15 +109,31 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+    /**
+     * <p>addAttribute.</p>
+     *
+     * @param key a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     */
     public void addAttribute(String key, String value) {
         this.addAttribute(key, value, null);
     }
 
 
+    /**
+     * <p>addAttribute.</p>
+     *
+     * @param attributeString a {@link java.lang.String} object.
+     */
     public void addAttribute(String attributeString) {
         this.addAttribute(attributeString, null);
     }
 
+    /**
+     * <p>addAttributeFromTranscodedExpression.</p>
+     *
+     * @param attributeExpressionString a {@link java.lang.String} object.
+     */
     public void addAttributeFromTranscodedExpression(String attributeExpressionString) {
         int index1 = 0;
         final int len = attributeExpressionString.length();
@@ -159,6 +197,11 @@ public class ContentNode extends AbstractTreeNode {
         );
     }
 
+    /**
+     * <p>removeAttribute.</p>
+     *
+     * @param attributeString a {@link java.lang.String} object.
+     */
     public void removeAttribute(String attributeString) {
         int index = this.getAttributesKeyList().indexOf(attributeString);
         getAttributeSegments().remove(index);
@@ -166,6 +209,7 @@ public class ContentNode extends AbstractTreeNode {
         this.getAttributesKeyList().remove(attributeString);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void show() {
         super.show();
@@ -185,6 +229,7 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         List<AbstractTreeNode> tmpChildren = new ArrayList<>(this.getChildren());
@@ -196,6 +241,9 @@ public class ContentNode extends AbstractTreeNode {
         this.getAttributesKeyList().clear();
     }
 
+    /**
+     * <p>trimAttributeSegments.</p>
+     */
     public void trimAttributeSegments() {
         for (int i = 0; i < this.getAttributeSegments().size(); i++) {
             this.getAttributeSegments().replaceAll(
@@ -210,6 +258,9 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+    /**
+     * <p>trim.</p>
+     */
     public void trim() {
         trimAttributeSegments();
 
@@ -233,6 +284,9 @@ public class ContentNode extends AbstractTreeNode {
         this.getChildren().addAll(newChildren);
     }
 
+    /**
+     * <p>trimForce.</p>
+     */
     public void trimForce() {
         trimAttributeSegments();
 
@@ -268,6 +322,11 @@ public class ContentNode extends AbstractTreeNode {
 
     private static final int MAXIMAL_IGNORE_FORMAT_ATTRIBUTE_NUM = 3;
 
+    /**
+     * <p>formatAttributeSegments.</p>
+     *
+     * @param space a int.
+     */
     public void formatAttributeSegments(int space) {
         this.trimAttributeSegments();
         if (this.getAttributesKeyList().size() <= MAXIMAL_IGNORE_FORMAT_ATTRIBUTE_NUM) {
@@ -285,6 +344,7 @@ public class ContentNode extends AbstractTreeNode {
         this.getAttributeSegments().set(this.getAttributesKeyList().size() - 1, segment2);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void format(int space) {
         formatAttributeSegments(space);
@@ -334,10 +394,21 @@ public class ContentNode extends AbstractTreeNode {
     }
 
 
+    /**
+     * <p>getTextNodesFromChildren.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<TextNode> getTextNodesFromChildren() {
         return this.getTextNodesFromChildren(0);
     }
 
+    /**
+     * <p>getTextNodesFromChildren.</p>
+     *
+     * @param maxSize a int.
+     * @return a {@link java.util.List} object.
+     */
     public List<TextNode> getTextNodesFromChildren(int maxSize) {
         List<TextNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
@@ -351,10 +422,21 @@ public class ContentNode extends AbstractTreeNode {
         return res;
     }
 
+    /**
+     * <p>getContentNodesFromChildren.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<ContentNode> getContentNodesFromChildren() {
         return this.getContentNodesFromChildren(0);
     }
 
+    /**
+     * <p>getContentNodesFromChildren.</p>
+     *
+     * @param maxSize a int.
+     * @return a {@link java.util.List} object.
+     */
     public List<ContentNode> getContentNodesFromChildren(int maxSize) {
         List<ContentNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
@@ -369,10 +451,21 @@ public class ContentNode extends AbstractTreeNode {
     }
 
 
+    /**
+     * <p>getCommentNodesFromChildren.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<CommentNode> getCommentNodesFromChildren() {
         return this.getCommentNodesFromChildren(0);
     }
 
+    /**
+     * <p>getCommentNodesFromChildren.</p>
+     *
+     * @param maxSize a int.
+     * @return a {@link java.util.List} object.
+     */
     public List<CommentNode> getCommentNodesFromChildren(int maxSize) {
         List<CommentNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
@@ -386,6 +479,11 @@ public class ContentNode extends AbstractTreeNode {
         return res;
     }
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         if (!this.getAttributesKeyList().isEmpty()) {
             return this.getAttributesKeyList().get(0);
@@ -394,10 +492,23 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+    /**
+     * <p>getContentNodesFromChildrenThatNameIs.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public List<ContentNode> getContentNodesFromChildrenThatNameIs(String name) {
         return this.getContentNodesFromChildrenThatNameIs(name, 0);
     }
 
+    /**
+     * <p>getContentNodesFromChildrenThatNameIs.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param maxSize a int.
+     * @return a {@link java.util.List} object.
+     */
     public List<ContentNode> getContentNodesFromChildrenThatNameIs(String name, int maxSize) {
         List<ContentNode> res = new ArrayList<>();
         for (AbstractTreeNode au : this.getChildren()) {
@@ -450,15 +561,35 @@ public class ContentNode extends AbstractTreeNode {
     }
 
 
+    /**
+     * <p>read.</p>
+     *
+     * @param reader a {@link java.io.Reader} object.
+     * @throws java.io.IOException if any.
+     */
     public void read(@NotNull Reader reader) throws IOException {
         this.read(reader, X8lDealer.INSTANCE);
     }
 
+    /**
+     * <p>read.</p>
+     *
+     * @param reader a {@link java.io.Reader} object.
+     * @param languageDealer a {@link com.xenoamess.x8l.dealers.LanguageDealer} object.
+     * @throws java.io.IOException if any.
+     */
     public void read(@NotNull Reader reader, @NotNull LanguageDealer languageDealer) throws IOException {
         languageDealer.read(reader, this);
     }
 
 
+    /**
+     * <p>applyToAllNodes.</p>
+     *
+     * @param function a {@link java.util.function.Function} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public <T> List<T> applyToAllNodes(Function<AbstractTreeNode, T> function) {
         ArrayList<T> res = new ArrayList<>();
@@ -466,6 +597,13 @@ public class ContentNode extends AbstractTreeNode {
         return res;
     }
 
+    /**
+     * <p>applyToAllNodes.</p>
+     *
+     * @param results a {@link java.util.List} object.
+     * @param function a {@link java.util.function.Function} object.
+     * @param <T> a T object.
+     */
     public <T> void applyToAllNodes(List<T> results, Function<AbstractTreeNode, T> function) {
         results.add(function.apply(this));
         for (AbstractTreeNode au : this.getChildren()) {
@@ -479,6 +617,11 @@ public class ContentNode extends AbstractTreeNode {
 
     //---getters and setters
 
+    /**
+     * <p>Getter for the field <code>children</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<AbstractTreeNode> getChildren() {
         return children;
     }
@@ -501,6 +644,7 @@ public class ContentNode extends AbstractTreeNode {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ContentNode copy() {
         ContentNode res = new ContentNode(null);
@@ -514,6 +658,7 @@ public class ContentNode extends AbstractTreeNode {
         return res;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object treeNode) {
         if (treeNode == null) {
@@ -529,20 +674,36 @@ public class ContentNode extends AbstractTreeNode {
                 && this.getChildren().equals(contentNode.getChildren());
     }
 
+    /**
+     * <p>Getter for the field <code>attributes</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, String> getAttributes() {
         return attributes;
     }
 
+    /**
+     * <p>Getter for the field <code>attributesKeyList</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<String> getAttributesKeyList() {
         return attributesKeyList;
     }
 
+    /**
+     * <p>Getter for the field <code>attributeSegments</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<String> getAttributeSegments() {
         return attributeSegments;
     }
 
     /**
      * treat this node as an array who contains only TextNodes, and return their text content.
+     *
      * @return String array list of TextNode's text content
      */
     public List<String> asStringList() {
@@ -555,6 +716,7 @@ public class ContentNode extends AbstractTreeNode {
 
     /**
      * treat this node as an array who contains only TextNodes, and return their text content, trimmed.
+     *
      * @return String array list of TextNode's text content, trimmed.
      */
     public List<String> asStringListTrimmed() {
@@ -563,6 +725,7 @@ public class ContentNode extends AbstractTreeNode {
 
     /**
      * treat this node as an array who contains only TextNodes, and return their text content.
+     *
      * @return String set of TextNode's text content
      */
     public HashSet<String> asStringSet() {
@@ -575,12 +738,20 @@ public class ContentNode extends AbstractTreeNode {
 
     /**
      * treat this node as an array who contains only TextNodes, and return their text content, trimmed.
+     *
      * @return String set of TextNode's text content, trimmed.
      */
     public HashSet<String> asStringSetTrimmed() {
         return this.asStringCollectionTrimmedFill(new HashSet<>(this.getChildren().size()));
     }
 
+    /**
+     * <p>asStringCollection.</p>
+     *
+     * @param collectionClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public <T extends Collection<String>> T asStringCollection(Class<T> collectionClass) {
         try {
             try {
@@ -593,6 +764,13 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+    /**
+     * <p>asStringCollectionTrimmed.</p>
+     *
+     * @param collectionClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public <T extends Collection<String>> T asStringCollectionTrimmed(Class<T> collectionClass) {
         try {
             try {
@@ -605,6 +783,13 @@ public class ContentNode extends AbstractTreeNode {
         }
     }
 
+    /**
+     * <p>asStringCollectionFill.</p>
+     *
+     * @param collection a T object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public <T extends Collection<String>> T asStringCollectionFill(T collection) {
         List<TextNode> textNodes = this.getTextNodesFromChildren();
         for (TextNode au : textNodes) {
@@ -613,6 +798,13 @@ public class ContentNode extends AbstractTreeNode {
         return collection;
     }
 
+    /**
+     * <p>asStringCollectionTrimmedFill.</p>
+     *
+     * @param collection a T object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public <T extends Collection<String>> T asStringCollectionTrimmedFill(T collection) {
         List<TextNode> textNodes = this.getTextNodesFromChildren();
         for (TextNode au : textNodes) {
@@ -623,6 +815,7 @@ public class ContentNode extends AbstractTreeNode {
 
     /**
      * treat this node as a String Map.
+     *
      * @return String map
      */
     public Map<String, String> asStringMap() {
@@ -641,12 +834,20 @@ public class ContentNode extends AbstractTreeNode {
 
     /**
      * treat this node as a String Map, trimmed.
+     *
      * @return String map, trimmed.
      */
     public Map<String, String> asStringMapTrimmed() {
         return this.asStringMapTrimmedFill(new HashMap<>(this.getChildren().size()));
     }
 
+    /**
+     * <p>asStringMapFill.</p>
+     *
+     * @param map a T object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public <T extends Map<String, String>> T asStringMapFill(T map) {
         List<ContentNode> contentNodes = this.getContentNodesFromChildren();
         for (ContentNode au : contentNodes) {
@@ -655,6 +856,13 @@ public class ContentNode extends AbstractTreeNode {
         return map;
     }
 
+    /**
+     * <p>asStringMapTrimmedFill.</p>
+     *
+     * @param map a T object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public <T extends Map<String, String>> T asStringMapTrimmedFill(T map) {
         List<ContentNode> contentNodes = this.getContentNodesFromChildren();
         for (ContentNode au : contentNodes) {

@@ -29,10 +29,17 @@ package com.xenoamess.x8l;
  * TextNode means some nodes with text.
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class TextNode extends AbstractTreeNode {
     private String textContent;
 
+    /**
+     * <p>Constructor for TextNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     * @param textContent a {@link java.lang.String} object.
+     */
     public TextNode(ContentNode parent, String textContent) {
         super(parent);
         if (textContent == null) {
@@ -41,6 +48,13 @@ public class TextNode extends AbstractTreeNode {
         this.setTextContent(textContent);
     }
 
+    /**
+     * <p>Constructor for TextNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     * @param index a int.
+     * @param textContent a {@link java.lang.String} object.
+     */
     public TextNode(ContentNode parent, int index, String textContent) {
         super(parent, index);
         if (textContent == null) {
@@ -50,27 +64,32 @@ public class TextNode extends AbstractTreeNode {
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public void show() {
         super.show();
         System.out.println("textContent : " + this.getTextContent());
     }
 
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         this.setTextContent(null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void format(int space) {
         this.setTextContent(this.getTextContent().trim());
     }
 
+    /** {@inheritDoc} */
     @Override
     public TextNode copy() {
         return new TextNode(null, this.textContent);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object treeNode) {
         if (treeNode == null) {
@@ -82,10 +101,20 @@ public class TextNode extends AbstractTreeNode {
         return textContent.equals(((TextNode) treeNode).textContent);
     }
 
+    /**
+     * <p>Getter for the field <code>textContent</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getTextContent() {
         return textContent;
     }
 
+    /**
+     * <p>Setter for the field <code>textContent</code>.</p>
+     *
+     * @param textContent a {@link java.lang.String} object.
+     */
     public void setTextContent(String textContent) {
         this.textContent = textContent;
     }

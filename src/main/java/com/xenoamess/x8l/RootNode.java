@@ -25,17 +25,32 @@
 package com.xenoamess.x8l;
 
 /**
+ * <p>RootNode class.</p>
+ *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class RootNode extends ContentNode {
+    /**
+     * <p>Constructor for RootNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     */
     public RootNode(ContentNode parent) {
         super(parent);
     }
 
+    /**
+     * <p>Constructor for RootNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     * @param index a int.
+     */
     public RootNode(ContentNode parent, int index) {
         super(parent, index);
     }
 
+    /** {@inheritDoc} */
     @Override
     public RootNode copy() {
         RootNode res = new RootNode(null);
@@ -49,6 +64,11 @@ public class RootNode extends ContentNode {
         return res;
     }
 
+    /**
+     * <p>copy.</p>
+     *
+     * @param original a {@link com.xenoamess.x8l.RootNode} object.
+     */
     public void copy(RootNode original) {
         for (String attributeKey : original.getAttributesKeyList()) {
             String attributeValue = original.getAttributes().get(attributeKey);

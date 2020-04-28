@@ -36,9 +36,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
+ * <p>X8lDataBeanUtil class.</p>
+ *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class X8lDataBeanUtil {
+    /**
+     * <p>buildFromX8lTree.</p>
+     *
+     * @param tClass a {@link java.lang.Class} object.
+     * @param x8lTree a {@link com.xenoamess.x8l.X8lTree} object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass,
                                                                       @NotNull X8lTree x8lTree) {
         T t;
@@ -51,6 +62,13 @@ public class X8lDataBeanUtil {
         return t;
     }
 
+    /**
+     * <p>loadFromX8lTree.</p>
+     *
+     * @param t a T object.
+     * @param x8lTree a {@link com.xenoamess.x8l.X8lTree} object.
+     * @param <T> a T object.
+     */
     @SuppressWarnings("unchecked")
     public static <T extends X8lDataBean> void loadFromX8lTree(T t, @NotNull X8lTree x8lTree) {
         Class<T> tClass = (Class<T>) t.getClass();

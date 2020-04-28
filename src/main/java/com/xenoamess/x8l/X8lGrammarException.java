@@ -25,13 +25,27 @@
 package com.xenoamess.x8l;
 
 /**
+ * <p>X8lGrammarException class.</p>
+ *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class X8lGrammarException extends RuntimeException {
+    /**
+     * <p>Constructor for X8lGrammarException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     */
     public X8lGrammarException(String message) {
         super(message);
     }
 
+    /**
+     * <p>Constructor for X8lGrammarException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     * @param cause a {@link java.lang.Throwable} object.
+     */
     public X8lGrammarException(String message, Throwable cause) {
         super(message, cause);
     }

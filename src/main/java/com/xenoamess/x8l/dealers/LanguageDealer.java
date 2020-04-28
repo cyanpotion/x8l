@@ -39,12 +39,20 @@ import java.util.Map;
  * AbstractLanguageDealer
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public class LanguageDealer implements Serializable {
 
     @SuppressWarnings("rawtypes")
     private final Map<Class, AbstractLanguageDealerHandler> treeNodeHandlerMap = new HashMap<>();
 
+    /**
+     * <p>getTreeNodeHandler.</p>
+     *
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link com.xenoamess.x8l.dealers.AbstractLanguageDealerHandler} object.
+     */
     public <T extends AbstractTreeNode> @Nullable AbstractLanguageDealerHandler<T> getTreeNodeHandler(@Nullable Class<T> tClass) {
         //noinspection rawtypes
         AbstractLanguageDealerHandler handler = null;
@@ -58,6 +66,14 @@ public class LanguageDealer implements Serializable {
         return handler;
     }
 
+    /**
+     * <p>registerTreeNodeHandler.</p>
+     *
+     * @param tClass a {@link java.lang.Class} object.
+     * @param handler a {@link com.xenoamess.x8l.dealers.AbstractLanguageDealerHandler} object.
+     * @param <T> a T object.
+     * @return a {@link com.xenoamess.x8l.dealers.AbstractLanguageDealerHandler} object.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public <T extends AbstractTreeNode> AbstractLanguageDealerHandler<T> registerTreeNodeHandler(@NotNull Class<T> tClass,
                                                                                                  @NotNull AbstractLanguageDealerHandler<T> handler) {
@@ -65,6 +81,15 @@ public class LanguageDealer implements Serializable {
         return treeNodeHandlerMap.put(tClass, handler);
     }
 
+    /**
+     * <p>read.</p>
+     *
+     * @param reader a {@link java.io.Reader} object.
+     * @param abstractTreeNode a T object.
+     * @param <T> a T object.
+     * @return a boolean.
+     * @throws java.io.IOException if any.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public <T extends AbstractTreeNode> boolean read(@NotNull Reader reader, @NotNull T abstractTreeNode) throws IOException {
         //noinspection unchecked
@@ -76,6 +101,15 @@ public class LanguageDealer implements Serializable {
         return handler.read(reader, abstractTreeNode);
     }
 
+    /**
+     * <p>write.</p>
+     *
+     * @param writer a {@link java.io.Writer} object.
+     * @param abstractTreeNode a T object.
+     * @param <T> a T object.
+     * @return a boolean.
+     * @throws java.io.IOException if any.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public <T extends AbstractTreeNode> boolean write(@NotNull Writer writer, @NotNull T abstractTreeNode) throws IOException {
         //noinspection unchecked

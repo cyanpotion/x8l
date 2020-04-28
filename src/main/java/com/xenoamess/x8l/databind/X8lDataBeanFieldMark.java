@@ -33,7 +33,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <p>X8lDataBeanFieldMark class.</p>
+ *
  * @author XenoAmess
+ * @version 2.2.2
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

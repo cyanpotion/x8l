@@ -41,10 +41,16 @@ import java.util.List;
  * parent of all TreeNode types.
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public abstract class AbstractTreeNode implements AutoCloseable {
     private ContentNode parent;
 
+    /**
+     * <p>Constructor for AbstractTreeNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     */
     public AbstractTreeNode(ContentNode parent) {
         this.setParent(parent);
         if (this.getParent() != null) {
@@ -52,6 +58,12 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         }
     }
 
+    /**
+     * <p>Constructor for AbstractTreeNode.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     * @param index a int.
+     */
     public AbstractTreeNode(ContentNode parent, int index) {
         this.setParent(parent);
         if (this.getParent() != null) {
@@ -60,6 +72,9 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     }
 
 
+    /**
+     * <p>show.</p>
+     */
     public void show() {
         System.out.println();
         System.out.println("show!");
@@ -76,6 +91,8 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     public abstract void clear();
 
     /**
+     * {@inheritDoc}
+     *
      * clear the node if need.
      * <p>
      * then, remove this node from parent node.
@@ -86,6 +103,11 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         this.removeParent();
     }
 
+    /**
+     * <p>removeParent.</p>
+     *
+     * @return a {@link com.xenoamess.x8l.AbstractTreeNode} object.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public AbstractTreeNode removeParent() {
         if (this.getParent() != null) {
@@ -128,6 +150,12 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         return this;
     }
 
+    /**
+     * <p>changeParentAndRegister.</p>
+     *
+     * @param contentNode a {@link com.xenoamess.x8l.ContentNode} object.
+     * @return a {@link com.xenoamess.x8l.AbstractTreeNode} object.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public AbstractTreeNode changeParentAndRegister(ContentNode contentNode) {
         return this.changeParentAndRegister(contentNode, -1);
@@ -137,7 +165,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * write this AbstractTreeNode's data to a writer.
      *
      * @param writer the writer to write to.
-     * @throws IOException IOException
+     * @throws java.io.IOException java.io.IOException
      */
     public void write(Writer writer) throws IOException {
         this.write(writer, X8lDealer.INSTANCE);
@@ -148,7 +176,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      *
      * @param writer         the writer to write to.
      * @param languageDealer the languageDealer to deal with this.
-     * @throws IOException IOException
+     * @throws java.io.IOException java.io.IOException
      */
     public void write(Writer writer, LanguageDealer languageDealer) throws IOException {
         languageDealer.write(writer, this);
@@ -162,11 +190,13 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      */
     public abstract void format(int space);
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return this.toString().hashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         String res = "";
@@ -188,24 +218,55 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      */
     public abstract AbstractTreeNode copy();
 
+    /**
+     * <p>Getter for the field <code>parent</code>.</p>
+     *
+     * @return a {@link com.xenoamess.x8l.ContentNode} object.
+     */
     public ContentNode getParent() {
         return parent;
     }
 
+    /**
+     * <p>Setter for the field <code>parent</code>.</p>
+     *
+     * @param parent a {@link com.xenoamess.x8l.ContentNode} object.
+     */
     public void setParent(ContentNode parent) {
         this.parent = parent;
     }
 
     //---fetch---
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public @NotNull List<Object> fetch(@NotNull String x8lPath) {
         return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPath);
     }
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lPath a {@link java.lang.String} object.
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
     public <T> @NotNull List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
         return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPath, tClass);
     }
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPath a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
                                        @NotNull String x8lPath) {
         //noinspection SwitchStatementWithTooFewBranches
@@ -217,6 +278,15 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         }
     }
 
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPath a {@link java.lang.String} object.
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
     public <T> @NotNull List<T> fetch(
             @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
             @NotNull String x8lPath,

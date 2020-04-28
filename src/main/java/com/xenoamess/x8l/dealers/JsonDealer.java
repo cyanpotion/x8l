@@ -63,6 +63,7 @@ import java.util.Map;
  * If anybody want to refine it, pull request is always welcomed.
  *
  * @author XenoAmess
+ * @version 2.2.2
  */
 public final class JsonDealer extends LanguageDealer implements Serializable {
     /**
@@ -80,10 +81,15 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JsonDealer.class);
 
+    /** Constant <code>ARRAY_ID_ATTRIBUTE="["</code> */
     public static final String ARRAY_ID_ATTRIBUTE = "[";
+    /** Constant <code>TEXT_KEY="_text"</code> */
     public static final String TEXT_KEY = "_text";
+    /** Constant <code>COMMENT_KEY="_comment"</code> */
     public static final String COMMENT_KEY = "_comment";
+    /** Constant <code>ATTRIBUTES_KEY="_attributes"</code> */
     public static final String ATTRIBUTES_KEY = "_attributes";
+    /** Constant <code>INSTANCE</code> */
     public static final JsonDealer INSTANCE = new JsonDealer();
     private static ObjectMapper objectMapper;
 
@@ -96,6 +102,12 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
         return objectMapper;
     }
 
+    /**
+     * <p>isSingleNameTextPair.</p>
+     *
+     * @param contentNode a {@link com.xenoamess.x8l.ContentNode} object.
+     * @return a boolean.
+     */
     public static boolean isSingleNameTextPair(@NotNull ContentNode contentNode) {
         if (contentNode.getAttributes().size() == 1) {
             String name = contentNode.getName();
@@ -324,6 +336,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return this.getClass().getCanonicalName();
@@ -334,6 +347,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
      * @see Serializable
      * @return singleton instance of this class.
      */
+    @SuppressWarnings("SameReturnValue")
     @SuppressWarnings("SameReturnValue")
     private Object readResolve() {
         return INSTANCE;

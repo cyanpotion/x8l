@@ -27,10 +27,11 @@ package com.xenoamess.x8l.databind;
 /**
  * X8lDataBeanFieldScheme
  * scheme type of used.
+ *
  * @see X8lDataBeanFieldMark
  * @author XenoAmess
+ * @version 2.2.2
  */
-
 public enum X8lDataBeanFieldScheme {
     /**
      * using x8lpath.

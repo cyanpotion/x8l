@@ -40,6 +40,13 @@ import java.util.Map;
  */
 public class X8lDataBeanDefaultParser {
 
+    /**
+     * <p>getLastFromList.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     public static <T> @Nullable T getLastFromList(@NotNull List<T> list) {
         if (list.isEmpty()) {
             return null;
@@ -47,59 +54,143 @@ public class X8lDataBeanDefaultParser {
         return list.get(list.size() - 1);
     }
 
+    /**
+     * <p>getLastFromListString.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static @NotNull String getLastFromListString(@NotNull List<Object> list) {
         Object object = getLastFromList(list);
         return object == null ? "" : object.toString();
     }
 
+    /**
+     * <p>getint.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a int.
+     */
     public static int getint(@NotNull List<Object> list) {
         return getInteger(getLastFromListString(list));
     }
 
+    /**
+     * <p>getInteger.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.Integer} object.
+     */
     public static @NotNull Integer getInteger(@NotNull List<Object> list) {
         return getint(list);
     }
 
+    /**
+     * <p>getlong.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a long.
+     */
     public static long getlong(@NotNull List<Object> list) {
         return getLong(getLastFromListString(list));
     }
 
+    /**
+     * <p>getLong.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.Long} object.
+     */
     public static @NotNull Long getLong(@NotNull List<Object> list) {
         return getlong(list);
     }
 
+    /**
+     * <p>getboolean.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a boolean.
+     */
     public static boolean getboolean(@NotNull List<Object> list) {
         return getBoolean(getLastFromListString(list));
     }
 
+    /**
+     * <p>getBoolean.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.Boolean} object.
+     */
     public static @NotNull Boolean getBoolean(@NotNull List<Object> list) {
         return getboolean(list);
     }
 
+    /**
+     * <p>getfloat.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a float.
+     */
     public static float getfloat(@NotNull List<Object> list) {
         return getFloat(getLastFromListString(list));
     }
 
+    /**
+     * <p>getFloat.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.Float} object.
+     */
     public static @NotNull Float getFloat(@NotNull List<Object> list) {
         return getfloat(list);
     }
 
+    /**
+     * <p>getdouble.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a double.
+     */
     public static double getdouble(@NotNull List<Object> list) {
         return getDouble(getLastFromListString(list));
     }
 
+    /**
+     * <p>getDouble.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.Double} object.
+     */
     public static @NotNull Double getDouble(@NotNull List<Object> list) {
         return getdouble(list);
     }
 
+    /**
+     * <p>getString.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static @NotNull String getString(@NotNull List<Object> list) {
         return getLastFromListString(list);
     }
 
+    /**
+     * <p>getObject.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.lang.Object} object.
+     */
     public static @Nullable Object getObject(@NotNull List<Object> list) {
         return getLastFromList(list);
     }
 
+    /**
+     * <p>getList.</p>
+     *
+     * @param list a {@link java.util.List} object.
+     * @return a {@link java.util.List} object.
+     */
     public static @NotNull List<Object> getList(@NotNull List<Object> list) {
         return list;
     }
@@ -214,7 +305,7 @@ public class X8lDataBeanDefaultParser {
      * <p>getInteger.</p>
      *
      * @param settingMap settingMap
-     * @param key        a {@link String} object.
+     * @param key        a {@link java.lang.String} object.
      * @return a boolean.
      */
     public static int getInteger(final Map<String, String> settingMap,
@@ -225,8 +316,8 @@ public class X8lDataBeanDefaultParser {
     /**
      * <p>getInteger.</p>
      *
-     * @param settingMap   a {@link Map} object.
-     * @param key          a {@link String} object.
+     * @param settingMap   a {@link java.util.Map} object.
+     * @param key          a {@link java.lang.String} object.
      * @param defaultValue a boolean.
      * @return a boolean.
      */
@@ -243,7 +334,7 @@ public class X8lDataBeanDefaultParser {
      * <p>getFloat.</p>
      *
      * @param settingMap settingMap
-     * @param key        a {@link String} object.
+     * @param key        a {@link java.lang.String} object.
      * @return a boolean.
      */
     public static float getFloat(final Map<String, String> settingMap,
@@ -254,8 +345,8 @@ public class X8lDataBeanDefaultParser {
     /**
      * <p>getFloat.</p>
      *
-     * @param settingMap   a {@link Map} object.
-     * @param key          a {@link String} object.
+     * @param settingMap   a {@link java.util.Map} object.
+     * @param key          a {@link java.lang.String} object.
      * @param defaultValue a boolean.
      * @return a boolean.
      */
@@ -273,7 +364,7 @@ public class X8lDataBeanDefaultParser {
      * <p>getBoolean.</p>
      *
      * @param settingMap settingMap
-     * @param key        a {@link String} object.
+     * @param key        a {@link java.lang.String} object.
      * @return a boolean.
      */
     public static boolean getBoolean(final Map<String, String> settingMap,
@@ -284,8 +375,8 @@ public class X8lDataBeanDefaultParser {
     /**
      * <p>getBoolean.</p>
      *
-     * @param settingMap   a {@link Map} object.
-     * @param key          a {@link String} object.
+     * @param settingMap   a {@link java.util.Map} object.
+     * @param key          a {@link java.lang.String} object.
      * @param defaultValue a boolean.
      * @return a boolean.
      */
@@ -302,7 +393,7 @@ public class X8lDataBeanDefaultParser {
      * <p>getString.</p>
      *
      * @param settingMap settingMap
-     * @param key        a {@link String} object.
+     * @param key        a {@link java.lang.String} object.
      * @return return
      */
     public static String getString(final Map<String, String> settingMap,
@@ -313,8 +404,8 @@ public class X8lDataBeanDefaultParser {
     /**
      * <p>getString.</p>
      *
-     * @param settingMap   a {@link Map} object.
-     * @param key          a {@link String} object.
+     * @param settingMap   a {@link java.util.Map} object.
+     * @param key          a {@link java.lang.String} object.
      * @param defaultValue defaultValue
      * @return return
      */
