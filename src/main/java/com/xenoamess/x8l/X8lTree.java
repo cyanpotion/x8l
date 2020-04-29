@@ -481,8 +481,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static @NotNull X8lTree load(@NotNull InputStream inputStream, @NotNull LanguageDealer dealer) throws IOException {
         X8lTree x8lTree;
         try (
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                Reader reader = new InputStreamReader(bufferedInputStream)
+                Reader reader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
             x8lTree = load(reader, dealer);
         }
