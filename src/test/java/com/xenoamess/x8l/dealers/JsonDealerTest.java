@@ -60,10 +60,10 @@ public class JsonDealerTest {
             tree3.read();
 
             try (Writer writer =
-                         new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsondemoout.x8l")))) {
+                         new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsonDemoOut.x8l")))) {
                 tree3.write(writer, X8lDealer.INSTANCE);
             }
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsondemoout" +
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsonDemoOut" +
                     ".json")))) {
                 tree3.write(writer, JsonDealer.INSTANCE);
             }
@@ -86,7 +86,7 @@ public class JsonDealerTest {
     public void test2() throws IOException {
         try (Reader reader = new StringReader("{" +
                 "\"a\":\"1\"" +
-                "/*hahaha*/" +
+                "/*here*/" +
                 "}"
         )) {
             X8lTree tree3 = new X8lTree(reader, JsonDealer.INSTANCE);

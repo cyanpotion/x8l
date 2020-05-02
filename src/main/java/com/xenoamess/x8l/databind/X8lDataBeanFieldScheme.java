@@ -34,7 +34,7 @@ package com.xenoamess.x8l.databind;
  */
 public enum X8lDataBeanFieldScheme {
     /**
-     * using x8lpath.
+     * using x8lPath.
      * @see com.xenoamess.x8l.databind.x8lpath.X8lPathUtil
      */
     X8LPATH,

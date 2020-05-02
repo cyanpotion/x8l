@@ -434,7 +434,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                         string, e);
             }
         }
-        throw new X8lGrammarException("Mone of my dealers can parse this. Sorry. details are in the log.");
+        throw new X8lGrammarException("None of my dealers can parse this. Sorry. details are in the log.");
     }
 
     /**
@@ -814,7 +814,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * use this function instead of transcode function when you need to transCode even whiteSpace
      * this is used in key / value in attribute.
      *
-     * @param originalString originalS tring
+     * @param originalString original String
      * @return transCoded String
      */
     public static @NotNull String transcodeKey(@NotNull String originalString) {
@@ -833,7 +833,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * use this function instead of transcode function when you need to transCode even whiteSpace
      * this is used in key / value in attribute.
      *
-     * @param originalString originalS tring
+     * @param originalString original String
      * @return transCoded String
      */
     public static @NotNull String transcodeValue(@NotNull String originalString) {
@@ -852,7 +852,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * use this function instead of transcode function when you need to transCode only &gt;
      * this is used in comment only.
      *
-     * @param originalString originalS tring
+     * @param originalString original String
      * @return transCoded String
      */
     public static @NotNull String transcodeComment(@NotNull String originalString) {

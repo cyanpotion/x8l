@@ -298,7 +298,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
                 return X8lPathUtil.fetch(this, x8lPath, tClass);
             default:
                 throw new NotImplementedException(
-                        "Ritht now, " + x8lDataBeanFieldScheme.name()
+                        "Right now, " + x8lDataBeanFieldScheme.name()
                                 + " is not implemented yet."
                 );
         }

@@ -53,12 +53,12 @@ public class CommentNodeTest {
         assertEquals(tree.toString(), "<<2><<1>");
         System.out.println(tree);
 
-        final X8lTree atree = new X8lTree();
+        final X8lTree aTree = new X8lTree();
         final CommentNode at1 = new CommentNode(tree.getRoot(), "1");
 
         assertThrows(
                 IndexOutOfBoundsException.class,
-                () -> new CommentNode(atree.getRoot(), 2, "2")
+                () -> new CommentNode(aTree.getRoot(), 2, "2")
         );
 
         assertNotEquals(new CommentNode(null, null), new TextNode(null, null));

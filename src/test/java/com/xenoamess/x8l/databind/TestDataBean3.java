@@ -30,17 +30,17 @@ public class TestDataBean3 implements X8lDataBean {
     }
 
     @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
-    private Object nodea;
+    private Object nodeA;
 
     @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
     private String value;
 
-    public Object getNodea() {
-        return nodea;
+    public Object getNodeA() {
+        return nodeA;
     }
 
-    public void setNodea(Object nodea) {
-        this.nodea = nodea;
+    public void setNodeA(Object nodeA) {
+        this.nodeA = nodeA;
     }
 
     public String getValue() {
