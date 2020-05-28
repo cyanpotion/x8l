@@ -71,7 +71,7 @@ public class X8lTest {
                 "    windowHeight=1024\n" +
                 "    scale=2.0\n" +
                 "    fullScreen=0\n" +
-                "    value=valuea% valueb" +
+                "    value=valueA% valueB" +
                 ">>\n" +
                 "<<and it equals to >\n" +
                 "<views windowWidth=1280 windowHeight=1024 scale=2.0 fullScreen=0>>\n" +
@@ -95,7 +95,7 @@ public class X8lTest {
                 "thanks.\n" +
                 "            --XenoAmess\n" +
                 "            \n" +
-                "and here goes some reallife x8l files:\n" +
+                "and here goes some real life x8l files:\n" +
                 "\n" +
                 "<commonSettings\n" +
                 "    titleText=GamepadMassage\n" +
@@ -144,13 +144,13 @@ public class X8lTest {
                 "    <a0001>\n" +
                 "        <en>Thanks!>\n" +
                 "        <<just comment>\n" +
-                "<ch>AAAAA>\n" +
+                "<ch>testA>\n" +
                 "    >\n" +
                 "    <<just comment>\n" +
                 "    <a0002>\n" +
                 "        <en>Hello?>\n" +
                 "<<just comment>\n" +
-                "<ch>BBBBB>\n" +
+                "<ch>testB>\n" +
                 "    >\n" +
                 ">\n" +
                 "\n" +
@@ -158,7 +158,7 @@ public class X8lTest {
                 "    <a0001>\n" +
                 "        <en>Thanks!>\n" +
                 "        <<just comment>\n" +
-                "<ch>CCCCC>\n" +
+                "<ch>testC>\n" +
                 "    >\n" +
                 ">";
 
@@ -205,18 +205,18 @@ public class X8lTest {
 
         try (Reader reader = new StringReader("<note a=\"1\" b=\"2\">\n" +
                 "    <to>Tove</to>\n" +
-                "    <from>Jani</from>\n" +
+                "    <from>Janifer</from>\n" +
                 "    <!-- aaa -->\n" +
                 "    <heading>Reminder</heading>\n" +
                 "    <body>Don't forget me this weekend!</body>\n" +
                 "</note>")) {
             tree2.read(reader, XmlDealer.INSTANCE);
 
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoout.x8l")))) {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoOut.x8l")))) {
                 tree2.write(writer, X8lDealer.INSTANCE);
             }
 
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoout.xml")))) {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoOut.xml")))) {
                 tree2.write(writer, XmlDealer.INSTANCE);
             }
         }

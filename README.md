@@ -28,10 +28,9 @@ when I deal with markup languages I just find that some of them are unnecessaril
 
 They use much more disk than they need.
 
-Of cause some of the reasons might be considering ability of random access or other things,
-
-but in most cases, we just use dom and load the whold tree into our memory,
-and we just want it be smaller.
+Of course some reasons might be considering ability of random access or other things,
+but in most cases, we just use dom and load the whole tree into our memory,
+and we just want it to be smaller.
 
 After all network, or IO, is still a bottle-neck.
 
@@ -39,28 +38,27 @@ So we bring up a new markup language here.
 
 x8l is a variant of xml, and aim to use as small space as possible.
 
-A naive xml (one without XLS or DTD or some things) can be transform into an x8l, and then transform back without losing data.
+A naive xml (one without XLS or DTD or some things) can be transform into a x8l, and then transform back without losing data.
 
-A json file can also be transformed into an x8l or transform back (but every values of every attributes will lost their type information and become pure string).
+A json file can also be transformed into a x8l or transform back (but every value of every attribute will lose their type information and become pure string).
 
 ## bench mark.
 
 We use some data from a wiki mirror to get the xml bench mark.
 
-The average ratio after transform from xml to x8l is around 84%,
+The average ratio after a transform from xml to x8l is around 84%,
 Which means about 16% of the size can be reduced. 
 
 We use some data from a json file to get the xml bench mark.
 
-The average ratio after transform from json to x8l is around 99%,
+The average ratio after a transform from json to x8l is around 99%,
 Which means about 1% of the size can be reduced. 
 
 (Notice that we only do json bench mark for prove of expandability of x8l.
 We want to make sure when a data can be saved as json, it shall be able to be saved to x8l.
-Of course due to x8l's lack of type information, all type information of attributes will lost in this process.
-)
+Of course due to x8l's lack of type information, all type information of attributes will lost in this process)
 
-The details of the bench marks are listed in com.xenoamess.x8l.BenchMark
+The details of the bench marks are in com.xenoamess.x8l.BenchMark
 
 ## basic tutorial of x8l
 
@@ -74,9 +72,9 @@ first,a comment is like this
 ```
 or this
 ```text
-< <or this this>  
+< <or even this>  
 ```
-or even this this. < in a comment need not be transcoded.
+or even this. < in a comment need not be transcoded.
 ```text
 <<<or even this this.< in a comment need not be transcoded.>  
 ```
@@ -95,7 +93,7 @@ the order of attributes is important, and node with different order of same attr
 
 attribute can have = in it.if so, it will be departed into key and value.
 
-key is the part left than the first =,and value is the rest content.
+key is the part left to the first =,and value is the rest content.
 
 for example, "a" is a key and "b" is a value
 ```text
@@ -107,7 +105,7 @@ remember, the first =.
 ```
 that means this node's key is "a" and value is "b=c"
 
-if there is no "=" in a attribute then the whole string is the key,and "" is the value
+if there is no "=" in an attribute then the whole string is the key,and "" is the value
 
 notice that both keys and values in attributes will only be treated string, but not float or double or datetime or something.
 
@@ -121,14 +119,14 @@ which means you can write it like this
     fullScreen=0
 >>
 ```
-and it equals to
+And it equals to
 ```text
 <views windowWidth=1280 windowHeight=1024 scale=2.0 fullScreen=0>>
 ```
 
 ### children
 
-the content between the second < and the %> is treated as "children".
+the content between the second `< and the %>` is treated as "children".
 
 children must be nodes, and children's parent is the node which it in.
 
@@ -157,7 +155,7 @@ that means these are 3 different nodes:
 
 if you want to delete all text node with "empty char" content,you can use X8lTree.trim().
 
-if you want to have several TextNode continuously, use `&` for separator:
+if you want to have several TextNode continuously, use `&` for the separator:
 ```text
 <>textA&textB&textC>
 ```

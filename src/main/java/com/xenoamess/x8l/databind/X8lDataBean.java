@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>X8lDataBean interface.</p>
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public interface X8lDataBean {
     /**
@@ -39,6 +39,7 @@ public interface X8lDataBean {
      *
      * @param tClass class of X8lDataBean
      * @param x8lTree X8lTree
+     * @param <T> class of X8lDataBean
      * @return the built X8lDataBean.
      */
     static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass, @NotNull X8lTree x8lTree) {

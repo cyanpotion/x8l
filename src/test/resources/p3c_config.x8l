@@ -1,4 +1,4 @@
 <com.alibaba.p3c.pmd.config version=0.0.1>
-    <rule_blacklist>rulea>
+    <rule_blacklist>ruleA>
     <class_blacklist>>
 >

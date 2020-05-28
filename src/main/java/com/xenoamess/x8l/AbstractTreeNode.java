@@ -41,7 +41,7 @@ import java.util.List;
  * parent of all TreeNode types.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public abstract class AbstractTreeNode implements AutoCloseable {
     private ContentNode parent;
@@ -298,7 +298,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
                 return X8lPathUtil.fetch(this, x8lPath, tClass);
             default:
                 throw new NotImplementedException(
-                        "Ritht now, " + x8lDataBeanFieldScheme.name()
+                        "Right now, " + x8lDataBeanFieldScheme.name()
                                 + " is not implemented yet."
                 );
         }

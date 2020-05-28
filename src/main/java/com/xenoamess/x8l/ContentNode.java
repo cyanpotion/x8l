@@ -40,7 +40,7 @@ import java.util.function.Function;
  * ContentNode means some nodes with content.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class ContentNode extends AbstractTreeNode {
 

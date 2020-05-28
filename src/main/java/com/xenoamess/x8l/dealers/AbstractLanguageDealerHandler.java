@@ -37,7 +37,7 @@ import java.io.Writer;
  * <p>AbstractLanguageDealerHandler interface.</p>
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public interface AbstractLanguageDealerHandler<T extends AbstractTreeNode> extends Serializable {
 

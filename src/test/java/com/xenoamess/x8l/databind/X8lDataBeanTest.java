@@ -38,7 +38,7 @@ public class X8lDataBeanTest {
         }
 
         @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
-        Object nodea;
+        Object nodeA;
 
         @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
         String value;
@@ -52,7 +52,7 @@ public class X8lDataBeanTest {
 
         assertEquals(
                 "<a>b>",
-                testDataBean1.nodea.toString()
+                testDataBean1.nodeA.toString()
         );
 
         assertEquals(
@@ -69,7 +69,7 @@ public class X8lDataBeanTest {
         }
 
         @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
-        private Object nodea;
+        private Object nodeA;
 
         @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
         private String value;
@@ -80,7 +80,7 @@ public class X8lDataBeanTest {
         X8lTree x8lTree = X8lTree.load("<a>b>");
         TestDataBean2 testDataBean2 = X8lDataBeanUtil.buildFromX8lTree(TestDataBean2.class, x8lTree);
 
-        assertNull(testDataBean2.nodea);
+        assertNull(testDataBean2.nodeA);
 
         assertNull(testDataBean2.value);
     }
@@ -94,7 +94,7 @@ public class X8lDataBeanTest {
 
         assertEquals(
                 "<a>b>",
-                testDataBean3.getNodea().toString()
+                testDataBean3.getNodeA().toString()
         );
 
         assertEquals(

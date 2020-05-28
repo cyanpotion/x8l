@@ -63,7 +63,7 @@ import java.util.Map;
  * If anybody want to refine it, pull request is always welcomed.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public final class JsonDealer extends LanguageDealer implements Serializable {
     /**

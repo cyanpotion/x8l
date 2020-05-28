@@ -1,5 +1,5 @@
 language: java
-sudo: true
+sudo: false
 dist: trusty
 before_install:
   - chmod +x mvnw

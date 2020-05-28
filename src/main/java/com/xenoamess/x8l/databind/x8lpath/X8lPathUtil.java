@@ -60,7 +60,7 @@ import java.util.List;
  * range [a]: equals to range [a-a].
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class X8lPathUtil {
     @SuppressWarnings("rawtypes")
@@ -213,15 +213,15 @@ public class X8lPathUtil {
             name = X8lTree.untranscode(name);
         }
         if (range != null) {
-            int seperatorIndex = range.indexOf(',');
-            if (seperatorIndex == -1) {
+            int separatorIndex = range.indexOf(',');
+            if (separatorIndex == -1) {
                 endIndexInclusive = beginIndexInclusive = Integer.parseInt(range.trim());
             } else {
-                String beginString = range.substring(0, seperatorIndex);
+                String beginString = range.substring(0, separatorIndex);
                 if (StringUtils.isNotBlank(beginString)) {
                     beginIndexInclusive = Integer.parseInt(beginString);
                 }
-                String endString = range.substring(seperatorIndex + 1);
+                String endString = range.substring(separatorIndex + 1);
                 if (StringUtils.isNotBlank(endString)) {
                     endIndexInclusive = Integer.parseInt(endString);
                 }

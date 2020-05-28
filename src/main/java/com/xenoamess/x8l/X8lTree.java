@@ -51,7 +51,7 @@ import java.util.function.Function;
  * X8lTree struct
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class X8lTree implements AutoCloseable, Serializable {
     private static final Logger LOGGER =
@@ -434,7 +434,7 @@ public class X8lTree implements AutoCloseable, Serializable {
                         string, e);
             }
         }
-        throw new X8lGrammarException("Mone of my dealers can parse this. Sorry. details are in the log.");
+        throw new X8lGrammarException("None of my dealers can parse this. Sorry. details are in the log.");
     }
 
     /**
@@ -481,8 +481,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static @NotNull X8lTree load(@NotNull InputStream inputStream, @NotNull LanguageDealer dealer) throws IOException {
         X8lTree x8lTree;
         try (
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                Reader reader = new InputStreamReader(bufferedInputStream)
+                Reader reader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
             x8lTree = load(reader, dealer);
         }
@@ -815,7 +814,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * use this function instead of transcode function when you need to transCode even whiteSpace
      * this is used in key / value in attribute.
      *
-     * @param originalString originalS tring
+     * @param originalString original String
      * @return transCoded String
      */
     public static @NotNull String transcodeKey(@NotNull String originalString) {
@@ -834,7 +833,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * use this function instead of transcode function when you need to transCode even whiteSpace
      * this is used in key / value in attribute.
      *
-     * @param originalString originalS tring
+     * @param originalString original String
      * @return transCoded String
      */
     public static @NotNull String transcodeValue(@NotNull String originalString) {
@@ -853,7 +852,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * use this function instead of transcode function when you need to transCode only &gt;
      * this is used in comment only.
      *
-     * @param originalString originalS tring
+     * @param originalString original String
      * @return transCoded String
      */
     public static @NotNull String transcodeComment(@NotNull String originalString) {

@@ -38,7 +38,7 @@ import java.util.Stack;
  * the dealer to deal with x8l format.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public final class X8lDealer extends LanguageDealer implements Serializable {
     /**

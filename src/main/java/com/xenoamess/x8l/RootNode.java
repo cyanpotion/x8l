@@ -28,7 +28,7 @@ package com.xenoamess.x8l;
  * <p>RootNode class.</p>
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class RootNode extends ContentNode {
     /**

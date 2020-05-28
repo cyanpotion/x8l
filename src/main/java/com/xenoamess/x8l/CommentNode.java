@@ -29,7 +29,7 @@ package com.xenoamess.x8l;
  * CommentNode means some nodes with content.
  *
  * @author XenoAmess
- * @version 2.2.2
+ * @version 2.2.3-SNAPSHOT
  */
 public class CommentNode extends AbstractTreeNode {
     private String textContent;
