@@ -39,6 +39,7 @@ public interface X8lDataBean {
      *
      * @param tClass class of X8lDataBean
      * @param x8lTree X8lTree
+     * @param <T> class of X8lDataBean
      * @return the built X8lDataBean.
      */
     static <T extends X8lDataBean> @NotNull T buildFromX8lTree(@NotNull Class<T> tClass, @NotNull X8lTree x8lTree) {
