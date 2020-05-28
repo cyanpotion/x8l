@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class transcodeAndTranscodeBackTest {
+public class TranscodeAndTranscodeBackTest {
     private static final String[] strictTests = new String[]{
             "<a>b>"
             , "<< ><a>b>"
@@ -48,7 +48,7 @@ public class transcodeAndTranscodeBackTest {
         try {
             loseTests = new String[]{
                     IOUtils.toString(
-                            transcodeAndTranscodeBackTest.class.getResource(
+                            TranscodeAndTranscodeBackTest.class.getResource(
                                     "/RpgModuleDemoSettings.x8l"
                             ),
                             StandardCharsets.UTF_8

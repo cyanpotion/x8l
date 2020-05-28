@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class P3cTest {
+public class P3cConfigFileTest {
     @Test
     public void test() throws IOException {
         X8lTree x8lTree = X8lTree.load(this.getClass().getResourceAsStream("/p3c_config.default.x8l"));
