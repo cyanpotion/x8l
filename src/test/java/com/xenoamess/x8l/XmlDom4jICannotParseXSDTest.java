@@ -24,86 +24,32 @@
 
 package com.xenoamess.x8l;
 
-import com.xenoamess.x8l.dealers.X8lDealer;
-import com.xenoamess.x8l.dealers.XmlDealer;
-import javax.xml.transform.Source;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.xmlunit.builder.Input;
-import org.xmlunit.diff.Comparison;
-import org.xmlunit.diff.ComparisonListener;
-import org.xmlunit.diff.ComparisonResult;
-import org.xmlunit.diff.DOMDifferenceEngine;
-import org.xmlunit.diff.DifferenceEngine;
 
 @Disabled
 public class XmlDom4jICannotParseXSDTest {
+    public static final String XML_STRING = "<?xml version=\"1.0\"?>\n" +
+            "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n" +
+            "           targetNamespace=\"http://www.w3school.com.cn\"\n" +
+            "           xmlns=\"http://www.w3school.com.cn\"\n" +
+            "           elementFormDefault=\"qualified\">\n" +
+            "\n" +
+            "    <xs:element name=\"note\">\n" +
+            "        <xs:complexType>\n" +
+            "            <xs:sequence>\n" +
+            "                <xs:element name=\"to\" type=\"xs:string\"/>\n" +
+            "                <xs:element name=\"from\" type=\"xs:string\"/>\n" +
+            "                <xs:element name=\"heading\" type=\"xs:string\"/>\n" +
+            "                <xs:element name=\"body\" type=\"xs:string\"/>\n" +
+            "            </xs:sequence>\n" +
+            "        </xs:complexType>\n" +
+            "    </xs:element>\n" +
+            "\n" +
+            "</xs:schema>";
+
     @Test
-    public void test() throws DocumentException {
-        String xmlString1 = "<?xml version=\"1.0\"?>\n" +
-                "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n" +
-                "           targetNamespace=\"http://www.w3school.com.cn\"\n" +
-                "           xmlns=\"http://www.w3school.com.cn\"\n" +
-                "           elementFormDefault=\"qualified\">\n" +
-                "\n" +
-                "    <xs:element name=\"note\">\n" +
-                "        <xs:complexType>\n" +
-                "            <xs:sequence>\n" +
-                "                <xs:element name=\"to\" type=\"xs:string\"/>\n" +
-                "                <xs:element name=\"from\" type=\"xs:string\"/>\n" +
-                "                <xs:element name=\"heading\" type=\"xs:string\"/>\n" +
-                "                <xs:element name=\"body\" type=\"xs:string\"/>\n" +
-                "            </xs:sequence>\n" +
-                "        </xs:complexType>\n" +
-                "    </xs:element>\n" +
-                "\n" +
-                "</xs:schema>";
-        int nowNodeCount = 0;
-        Document document = DocumentHelper.parseText(xmlString1);
-
-        X8lTree x8lTree2 = X8lTree.load(xmlString1);
-        x8lTree2.setLanguageDealer(XmlDealer.INSTANCE);
-        String xmlString2 = x8lTree2.toString();
-        x8lTree2.setLanguageDealer(X8lDealer.INSTANCE);
-        String x8lString2 = x8lTree2.toString();
-
-        X8lTree x8lTree3 = X8lTree.load(xmlString1);
-        x8lTree3.setLanguageDealer(XmlDealer.INSTANCE);
-        String xmlString3 = x8lTree3.toString();
-        x8lTree3.setLanguageDealer(X8lDealer.INSTANCE);
-        String x8lString3 = x8lTree3.toString();
-
-        assertEqualXml(xmlString1, xmlString2);
-        assertEqualXml(xmlString1, xmlString3);
-    }
-
-    private void assertEqualXml(final String xmlString1, final String xmlString2) {
-        Source source1 = Input.fromString(xmlString1).build();
-        Source source2 = Input.fromString(xmlString2).build();
-        DifferenceEngine diff = new DOMDifferenceEngine();
-        diff.addDifferenceListener(new ComparisonListener() {
-            public void comparisonPerformed(Comparison comparison, ComparisonResult outcome) {
-                final String result = "--------------------\n"
-                        + "found a difference:\n"
-                        + comparison + "\n"
-                        + "outcome:\n"
-                        + outcome + "\n"
-                        + "source1:\n"
-                        + xmlString1 + "\n"
-                        + "source2:\n"
-                        + xmlString2 + "\n"
-                        + "--------------------\n";
-                if (outcome != ComparisonResult.EQUAL && outcome != ComparisonResult.SIMILAR) {
-                    Assertions.fail(result);
-                } else if (outcome == ComparisonResult.SIMILAR) {
-                    System.out.println(result);
-                }
-            }
-        });
-        diff.compare(source1, source2);
+    public void commonTest() throws Exception {
+        XmlTester.test(XML_STRING);
     }
 }

@@ -29,24 +29,30 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled
 public class XmlDom4jIgnoreEmptyCommentTest {
+    public static final String XML_STRING = "<a>" +
+            "    <!---->" +
+            "    <!-- -->" +
+            "    <!---->" +
+            "    <!-- -->" +
+            "</a>";
+
+    @Test
+    public void commonTest() throws Exception {
+        XmlTester.test(XML_STRING);
+    }
+
     @Test
     public void test() throws DocumentException {
-        System.out.println(System.getProperty("org.xml.sax.driver"));
-        String xmlString = "" +
-                "<a>" +
-                "    <!---->" +
-                "    <!-- -->" +
-                "    <!---->" +
-                "    <!-- -->" +
-                "</a>";
+        Assertions.assertNull(System.getProperty("org.xml.sax.driver"));
         int nowNodeCount = 0;
-        Document document = DocumentHelper.parseText(xmlString);
+        Document document = DocumentHelper.parseText(XML_STRING);
         for (int i = 0; i < document.getRootElement().nodeCount(); i++) {
             Node nowNode = document.getRootElement().node(i);
             System.out.println(nowNode.asXML());
