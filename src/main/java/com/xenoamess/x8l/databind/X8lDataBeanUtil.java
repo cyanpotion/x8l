@@ -26,14 +26,13 @@ package com.xenoamess.x8l.databind;
 
 import com.xenoamess.x8l.X8lGrammarException;
 import com.xenoamess.x8l.X8lTree;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * <p>X8lDataBeanUtil class.</p>

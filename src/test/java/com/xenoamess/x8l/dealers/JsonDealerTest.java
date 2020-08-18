@@ -25,9 +25,15 @@
 package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.X8lTree;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import org.junit.jupiter.api.Test;
-
-import java.io.*;
 
 public class JsonDealerTest {
     @Test

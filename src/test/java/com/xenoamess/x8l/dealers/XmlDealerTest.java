@@ -26,12 +26,10 @@ package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.X8lTest;
 import com.xenoamess.x8l.X8lTree;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class XmlDealerTest {

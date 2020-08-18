@@ -26,10 +26,9 @@ package com.xenoamess.x8l.databind;
 
 
 import com.xenoamess.x8l.X8lTree;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class P3cConfigFileTest {
     @Test

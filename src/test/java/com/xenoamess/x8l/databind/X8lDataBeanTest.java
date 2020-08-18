@@ -27,7 +27,6 @@ package com.xenoamess.x8l.databind;
 
 import com.xenoamess.x8l.X8lTree;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 

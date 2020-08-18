@@ -24,10 +24,13 @@
 
 package com.xenoamess.x8l;
 
-import org.dom4j.*;
+import org.dom4j.Comment;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Node;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled
