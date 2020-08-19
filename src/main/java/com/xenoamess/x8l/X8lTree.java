@@ -58,6 +58,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -117,12 +118,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         return new LinkedList<>(LANGUAGE_DEALER_LIST);
     }
 
-    public static boolean endsWithIgnoreCase(@NotNull String source, @NotNull String target) {
-        final int sourceLength = source.length();
-        final int targetLength = target.length();
-        return source.regionMatches(true, sourceLength - targetLength, target, 0, targetLength);
-    }
-
     /**
      * <p>suspectDealer.</p>
      *
@@ -133,16 +128,16 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static @NotNull List<LanguageDealer> suspectDealer(@NotNull String nameString,
                                                               @NotNull List<LanguageDealer> originalList) {
         List<LanguageDealer> res = new ArrayList<>(originalList);
-        if (endsWithIgnoreCase(nameString, STRING_JSON)) {
+        if (StringUtils.endsWithIgnoreCase(nameString, STRING_JSON)) {
             res.remove(JsonDealer.INSTANCE);
             res.add(0, JsonDealer.INSTANCE);
-        } else if (endsWithIgnoreCase(nameString, STRING_XML) || endsWithIgnoreCase(nameString, STRING_XSD)) {
+        } else if (StringUtils.endsWithIgnoreCase(nameString, STRING_XML) || StringUtils.endsWithIgnoreCase(nameString, STRING_XSD)) {
             res.remove(XmlDealer.INSTANCE);
             res.add(0, XmlDealer.INSTANCE);
-        } else if (endsWithIgnoreCase(nameString, STRING_X8L)) {
+        } else if (StringUtils.endsWithIgnoreCase(nameString, STRING_X8L)) {
             res.remove(X8lDealer.INSTANCE);
             res.add(0, X8lDealer.INSTANCE);
-        } else if (endsWithIgnoreCase(nameString, STRING_JSON)) {
+        } else if (StringUtils.endsWithIgnoreCase(nameString, STRING_JSON)) {
             res.remove(JsonDealer.INSTANCE);
             res.add(0, JsonDealer.INSTANCE);
         } else if (nameString.contains(STRING_XML) || nameString.contains(STRING_XSD)) {
