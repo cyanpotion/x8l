@@ -54,9 +54,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,6 +80,8 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static final String STRING_JSON = "json";
     /** Constant <code>STRING_XML="xml"</code> */
     public static final String STRING_XML = "xml";
+    /** Constant <code>STRING_XSD="xsd"</code> */
+    public static final String STRING_XSD = "xsd";
     /** Constant <code>STRING_X8L="x8l"</code> */
     public static final String STRING_X8L = "x8l";
 
@@ -111,7 +115,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @return a {@link java.util.List} object.
      */
     public static @NotNull List<LanguageDealer> getLanguageDealerListCopy() {
-        return new ArrayList<>(LANGUAGE_DEALER_LIST);
+        return new LinkedList<>(LANGUAGE_DEALER_LIST);
     }
 
     /**
@@ -124,19 +128,19 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static @NotNull List<LanguageDealer> suspectDealer(@NotNull String nameString,
                                                               @NotNull List<LanguageDealer> originalList) {
         List<LanguageDealer> res = new ArrayList<>(originalList);
-        if (nameString.endsWith(STRING_JSON) || nameString.endsWith(STRING_JSON.toUpperCase())) {
+        if (StringUtils.endsWithIgnoreCase(nameString, STRING_JSON)) {
             res.remove(JsonDealer.INSTANCE);
             res.add(0, JsonDealer.INSTANCE);
-        } else if (nameString.endsWith(STRING_XML) || nameString.endsWith(STRING_XML.toUpperCase())) {
+        } else if (StringUtils.endsWithIgnoreCase(nameString, STRING_XML) || StringUtils.endsWithIgnoreCase(nameString, STRING_XSD)) {
             res.remove(XmlDealer.INSTANCE);
             res.add(0, XmlDealer.INSTANCE);
-        } else if (nameString.endsWith(STRING_X8L) || nameString.endsWith(STRING_X8L.toUpperCase())) {
+        } else if (StringUtils.endsWithIgnoreCase(nameString, STRING_X8L)) {
             res.remove(X8lDealer.INSTANCE);
             res.add(0, X8lDealer.INSTANCE);
-        } else if (nameString.contains(STRING_JSON)) {
+        } else if (StringUtils.endsWithIgnoreCase(nameString, STRING_JSON)) {
             res.remove(JsonDealer.INSTANCE);
             res.add(0, JsonDealer.INSTANCE);
-        } else if (nameString.contains(STRING_XML)) {
+        } else if (nameString.contains(STRING_XML) || nameString.contains(STRING_XSD)) {
             res.remove(XmlDealer.INSTANCE);
             res.add(0, XmlDealer.INSTANCE);
         } else if (nameString.contains(STRING_X8L)) {
