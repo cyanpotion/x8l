@@ -117,7 +117,7 @@ public class X8lTree implements AutoCloseable, Serializable {
         return new LinkedList<>(LANGUAGE_DEALER_LIST);
     }
 
-    private static boolean endsWithIgnoreCase(@NotNull String source, @NotNull String target) {
+    public static boolean endsWithIgnoreCase(@NotNull String source, @NotNull String target) {
         final int sourceLength = source.length();
         final int targetLength = target.length();
         return source.regionMatches(true, sourceLength - targetLength, target, 0, targetLength);
