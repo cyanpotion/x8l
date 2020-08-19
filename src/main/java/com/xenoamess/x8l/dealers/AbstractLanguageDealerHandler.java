@@ -26,12 +26,11 @@ package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.AbstractTreeNode;
 import com.xenoamess.x8l.X8lGrammarException;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>AbstractLanguageDealerHandler interface.</p>

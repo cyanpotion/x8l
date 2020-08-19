@@ -28,12 +28,10 @@ import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.LanguageDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TranscodeAndTranscodeBackTest {

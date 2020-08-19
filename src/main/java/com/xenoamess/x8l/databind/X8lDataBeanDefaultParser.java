@@ -25,12 +25,11 @@
 package com.xenoamess.x8l.databind;
 
 import com.xenoamess.commonx.java.lang.IllegalArgumentExceptionUtilsx;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>GameManagerConfig class.</p>

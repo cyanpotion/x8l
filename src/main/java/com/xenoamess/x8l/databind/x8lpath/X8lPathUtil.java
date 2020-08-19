@@ -24,16 +24,20 @@
 
 package com.xenoamess.x8l.databind.x8lpath;
 
-import com.xenoamess.x8l.*;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
+import com.xenoamess.x8l.AbstractTreeNode;
+import com.xenoamess.x8l.CommentNode;
+import com.xenoamess.x8l.ContentNode;
+import com.xenoamess.x8l.TextNode;
+import com.xenoamess.x8l.X8lGrammarException;
+import com.xenoamess.x8l.X8lTree;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * CHILD[nth] -:

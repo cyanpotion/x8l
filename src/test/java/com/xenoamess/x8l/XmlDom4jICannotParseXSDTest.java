@@ -24,42 +24,32 @@
 
 package com.xenoamess.x8l;
 
-import org.dom4j.Comment;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Node;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled
-public class XmlDom4jIgnoreEmptyCommentTest {
-    public static final String XML_STRING = "<a>" +
-            "    <!---->" +
-            "    <!-- -->" +
-            "    <!---->" +
-            "    <!-- -->" +
-            "</a>";
+public class XmlDom4jICannotParseXSDTest {
+    public static final String XML_STRING = "<?xml version=\"1.0\"?>\n" +
+            "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n" +
+            "           targetNamespace=\"http://www.w3school.com.cn\"\n" +
+            "           xmlns=\"http://www.w3school.com.cn\"\n" +
+            "           elementFormDefault=\"qualified\">\n" +
+            "\n" +
+            "    <xs:element name=\"note\">\n" +
+            "        <xs:complexType>\n" +
+            "            <xs:sequence>\n" +
+            "                <xs:element name=\"to\" type=\"xs:string\"/>\n" +
+            "                <xs:element name=\"from\" type=\"xs:string\"/>\n" +
+            "                <xs:element name=\"heading\" type=\"xs:string\"/>\n" +
+            "                <xs:element name=\"body\" type=\"xs:string\"/>\n" +
+            "            </xs:sequence>\n" +
+            "        </xs:complexType>\n" +
+            "    </xs:element>\n" +
+            "\n" +
+            "</xs:schema>";
 
     @Test
     public void commonTest() throws Exception {
         XmlTester.test(XML_STRING);
-    }
-
-    @Test
-    public void test() throws DocumentException {
-        Assertions.assertNull(System.getProperty("org.xml.sax.driver"));
-        int nowNodeCount = 0;
-        Document document = DocumentHelper.parseText(XML_STRING);
-        for (int i = 0; i < document.getRootElement().nodeCount(); i++) {
-            Node nowNode = document.getRootElement().node(i);
-            System.out.println(nowNode.asXML());
-            if (nowNode instanceof Comment) {
-                nowNodeCount++;
-            }
-        }
-        assertEquals(nowNodeCount, 4);
     }
 }

@@ -24,22 +24,33 @@
 
 package com.xenoamess.x8l.dealers;
 
-import com.xenoamess.x8l.*;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.StringUtils;
-import org.dom4j.*;
-import org.dom4j.tree.DefaultComment;
-import org.dom4j.tree.DefaultText;
-import org.jetbrains.annotations.NotNull;
-
+import com.xenoamess.x8l.AbstractTreeNode;
+import com.xenoamess.x8l.CommentNode;
+import com.xenoamess.x8l.ContentNode;
+import com.xenoamess.x8l.RootNode;
+import com.xenoamess.x8l.TextNode;
+import com.xenoamess.x8l.X8lGrammarException;
+import com.xenoamess.x8l.X8lTree;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Attribute;
+import org.dom4j.Branch;
+import org.dom4j.Comment;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.Namespace;
+import org.dom4j.Node;
+import org.dom4j.Text;
+import org.jetbrains.annotations.NotNull;
 import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
 
 /**
@@ -63,6 +74,9 @@ import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
  * @version 2.2.3-SNAPSHOT
  */
 public final class XmlDealer extends LanguageDealer implements Serializable {
+    public static final String STRING_XMLNS = "xmlns";
+    public static final String STRING_XMLNS_COLON = "xmlns:";
+
     /**
      * no need to build more XmlDealer instances.
      * please just use XmlDealer.INSTANCE
@@ -248,6 +262,14 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 continue;
             }
             String value = contentNode.getAttributes().get(key);
+            if (STRING_XMLNS.equals(key)) {
+                element.add(new Namespace("", value));
+                continue;
+            }
+            if (key.startsWith(STRING_XMLNS_COLON)) {
+                element.add(new Namespace(key.substring(6), value));
+                continue;
+            }
 
             if (!StringUtils.isEmpty(value)) {
                 element.addAttribute(key, value);
@@ -280,11 +302,11 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
     }
 
     private static void read(ContentNode contentNode, Element element) {
-        if (!STRING_NAMELESS.equals(element.getName())) {
-            contentNode.addAttribute(element.getName());
+        if (!STRING_NAMELESS.equals(element.getQualifiedName())) {
+            contentNode.addAttribute(element.getQualifiedName());
         }
         for (Attribute attribute : element.attributes()) {
-            contentNode.addAttribute(attribute.getName(), attribute.getValue());
+            contentNode.addAttribute(attribute.getQualifiedName(), attribute.getValue());
         }
         readChildrenArea(contentNode, element);
     }
@@ -295,10 +317,17 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             if (node instanceof Element) {
                 ContentNode childContentNode = new ContentNode(contentNode);
                 read(childContentNode, (Element) node);
-            } else if (node instanceof DefaultText) {
+            } else if (node instanceof Text) {
                 new TextNode(contentNode, node.getText());
-            } else if (node instanceof DefaultComment) {
+            } else if (node instanceof Comment) {
                 new CommentNode(contentNode, node.getText());
+            } else if (node instanceof Namespace) {
+                final Namespace nameSpaceNode = (Namespace) node;
+                final String prefix = nameSpaceNode.getPrefix();
+                contentNode.addAttribute(
+                        prefix.isEmpty() ? STRING_XMLNS : (STRING_XMLNS_COLON + prefix),
+                        nameSpaceNode.getURI()
+                );
             } else {
                 System.err.println("Cannot handle this node type: " + node.getClass().getCanonicalName() + " . Will " +
                         "treat it as TextNode.");

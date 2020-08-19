@@ -27,11 +27,18 @@ package com.xenoamess.x8l;
 import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-
-import java.io.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -170,7 +177,7 @@ public class X8lTest {
     }
 
     @Test
-    public void test() throws IOException {
+    public void test() throws Exception {
         prepare();
 
         X8lTree tree = prepare();
@@ -199,27 +206,13 @@ public class X8lTest {
             tree.write(writer, XmlDealer.INSTANCE);
         }
 
-
-        X8lTree tree2 = new X8lTree();
-
-
-        try (Reader reader = new StringReader("<note a=\"1\" b=\"2\">\n" +
+        XmlTester.test("<note a=\"1\" b=\"2\">\n" +
                 "    <to>Tove</to>\n" +
                 "    <from>Janifer</from>\n" +
                 "    <!-- aaa -->\n" +
                 "    <heading>Reminder</heading>\n" +
                 "    <body>Don't forget me this weekend!</body>\n" +
-                "</note>")) {
-            tree2.read(reader, XmlDealer.INSTANCE);
-
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoOut.x8l")))) {
-                tree2.write(writer, X8lDealer.INSTANCE);
-            }
-
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/demoOut.xml")))) {
-                tree2.write(writer, XmlDealer.INSTANCE);
-            }
-        }
+                "</note>");
 
         X8lTree tree4 = X8lTree.load(new File("out/input.x8l"));
         X8lTree tree41 = X8lTree.load(new File("out/input.x8l"));
