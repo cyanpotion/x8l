@@ -41,5 +41,5 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Build with mvnw
         run: "chmod 777 ./mvnw"
-               "./mvnw install"
+             "./mvnw install"
 
