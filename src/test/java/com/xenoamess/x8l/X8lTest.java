@@ -187,7 +187,7 @@ public class X8lTest {
         //noinspection ResultOfMethodCallIgnored
         new File("out").mkdirs();
 
-        X8lTree.save(new File("out/output.x8l"), tree);
+        X8lTree.save(new File("./out/output.x8l"), tree);
 
 
         tree.trim();
@@ -214,8 +214,8 @@ public class X8lTest {
                 "    <body>Don't forget me this weekend!</body>\n" +
                 "</note>");
 
-        X8lTree tree4 = X8lTree.load(new File("out/input.x8l"));
-        X8lTree tree41 = X8lTree.load(new File("out/input.x8l"));
+        X8lTree tree4 = X8lTree.load(new File("./out/input.x8l"));
+        X8lTree tree41 = X8lTree.load(new File("./out/input.x8l"));
         assertEquals(tree4, tree41);
         assertNotEquals(null, tree4);
         assertEquals(tree4.getLanguageDealer(), X8lDealer.INSTANCE);
