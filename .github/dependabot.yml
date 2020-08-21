@@ -20,7 +20,6 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "develop"
-    versioning-strategy: increase
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
