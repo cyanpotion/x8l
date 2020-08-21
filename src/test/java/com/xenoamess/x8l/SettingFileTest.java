@@ -42,14 +42,14 @@ public class SettingFileTest {
 
         X8lTree jsonTree = originalX8lTree.copy();
         jsonTree.setLanguageDealer(JsonDealer.INSTANCE);
-        X8lTree.save(new File("./out/RpgModuleDemoSettings.json"), jsonTree);
+        X8lTree.save(new File("out/RpgModuleDemoSettings.json"), jsonTree);
 
         X8lTree xmlTree = originalX8lTree.copy();
         xmlTree.setLanguageDealer(XmlDealer.INSTANCE);
-        X8lTree.save(new File("./out/RpgModuleDemoSettings.xml"), xmlTree);
+        X8lTree.save(new File("out/RpgModuleDemoSettings.xml"), xmlTree);
 
-        X8lTree jsonTree2 = X8lTree.load(new File("./out/RpgModuleDemoSettings.json"));
-        X8lTree xmlTree2 = X8lTree.load(new File("./out/RpgModuleDemoSettings.xml"));
+        X8lTree jsonTree2 = X8lTree.load(new File("out/RpgModuleDemoSettings.json"));
+        X8lTree xmlTree2 = X8lTree.load(new File("out/RpgModuleDemoSettings.xml"));
         jsonTree2.setLanguageDealer(X8lDealer.INSTANCE);
         xmlTree2.setLanguageDealer(X8lDealer.INSTANCE);
 
