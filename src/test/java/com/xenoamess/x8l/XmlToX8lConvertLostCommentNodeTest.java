@@ -57,7 +57,7 @@ public class XmlToX8lConvertLostCommentNodeTest {
         assertNotNull(x8lTree);
 
         String getXmlString = x8lTree.toString();
-        new File("./out/testPom.out.xml").createNewFile();
+        new File("out").mkdir();
         try (FileOutputStream fileOutputStream = new FileOutputStream("out/testPom.out.xml");
              OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
         ) {
