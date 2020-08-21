@@ -26,6 +26,7 @@ package com.xenoamess.x8l;
 
 import com.xenoamess.x8l.dealers.XmlDealer;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,6 +57,7 @@ public class XmlToX8lConvertLostCommentNodeTest {
         assertNotNull(x8lTree);
 
         String getXmlString = x8lTree.toString();
+        new File("out/testPom.out.xml").createNewFile();
         try (FileOutputStream fileOutputStream = new FileOutputStream("out/testPom.out.xml");
              OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
         ) {
