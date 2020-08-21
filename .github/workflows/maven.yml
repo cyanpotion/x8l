@@ -43,4 +43,3 @@ jobs:
         run: |
           chmod 777 ./mvnw
           ./mvnw install
-
