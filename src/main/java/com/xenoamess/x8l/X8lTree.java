@@ -32,11 +32,10 @@ import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,6 +63,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.apache.commons.io.IOUtils.buffer;
 
 /**
  * X8lTree
@@ -319,7 +319,6 @@ public class X8lTree implements AutoCloseable, Serializable {
         if (fileObject == null) {
             throw new FileNotFoundException("null");
         }
-
         try (
                 OutputStream outputStream = fileObject.getContent().getOutputStream();
                 Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
@@ -345,9 +344,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
         X8lTree res;
-        try (
-                Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
-        ) {
+        try (Reader reader = buffer(new FileReader(file))) {
             res = load(reader, dealer);
         }
         return res;
@@ -366,9 +363,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             throw new FileNotFoundException(file == null ? "null" : file.getAbsolutePath());
         }
         X8lTree res;
-        try (
-                Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))
-        ) {
+        try (Reader reader = new BufferedReader(new FileReader(file))) {
             res = load(reader, possibleDealerList);
         }
         return res;
@@ -408,15 +403,7 @@ public class X8lTree implements AutoCloseable, Serializable {
             }
         }
 
-        try (
-                Writer writer =
-                        new BufferedWriter(
-                                new OutputStreamWriter(
-                                        new FileOutputStream(file),
-                                        StandardCharsets.UTF_8
-                                )
-                        )
-        ) {
+        try (Writer writer = buffer(new FileWriter(file))) {
             x8lTree.write(writer);
         }
     }
@@ -507,9 +494,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      */
     public static @NotNull X8lTree load(@NotNull InputStream inputStream, @NotNull LanguageDealer dealer) throws IOException {
         X8lTree x8lTree;
-        try (
-                Reader reader = new BufferedReader(new InputStreamReader(inputStream))
-        ) {
+        try (Reader reader = buffer(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             x8lTree = load(reader, dealer);
         }
         return x8lTree;
@@ -969,7 +954,7 @@ public class X8lTree implements AutoCloseable, Serializable {
              */
             this.root = new RootNode(null);
         }
-        try (Reader reader = new InputStreamReader(objectInputStream)) {
+        try (Reader reader = buffer(new InputStreamReader(objectInputStream, StandardCharsets.UTF_8))) {
             this.read(reader);
         }
     }

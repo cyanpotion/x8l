@@ -27,19 +27,17 @@ package com.xenoamess.x8l;
 import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
+import static org.apache.commons.io.IOUtils.buffer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -170,14 +168,7 @@ public class X8lTest {
                 "    >\n" +
                 ">";
 
-        try (Writer writer =
-                     new BufferedWriter(
-                             new OutputStreamWriter(
-                                     new FileOutputStream("out/input.x8l"),
-                                     StandardCharsets.UTF_8
-                             )
-                     )
-        ) {
+        try (Writer writer = buffer(new FileWriter("out/input.x8l"))) {
             writer.write(inputString);
         }
 
@@ -200,38 +191,17 @@ public class X8lTest {
 
         tree.trim();
 
-        try (Writer writer =
-                     new BufferedWriter(
-                             new OutputStreamWriter(
-                                     new FileOutputStream("out/outputTrim.x8l"),
-                                     StandardCharsets.UTF_8
-                             )
-                     )
-        ) {
+        try (Writer writer = buffer(new FileWriter("out/outputTrim.x8l"))) {
             tree.write(writer);
         }
 
         tree.format();
 
-        try (Writer writer =
-                     new BufferedWriter(
-                             new OutputStreamWriter(
-                                     new FileOutputStream("out/outputFormat.x8l"),
-                                     StandardCharsets.UTF_8
-                             )
-                     )
-        ) {
+        try (Writer writer = buffer(new FileWriter("out/outputFormat.x8l"))) {
             tree.write(writer);
         }
 
-        try (Writer writer =
-                     new BufferedWriter(
-                             new OutputStreamWriter(
-                                     new FileOutputStream("out/outputFormat.xml"),
-                                     StandardCharsets.UTF_8
-                             )
-                     )
-        ) {
+        try (Writer writer = buffer(new FileWriter("out/outputFormat.xml"))) {
             tree.write(writer, XmlDealer.INSTANCE);
         }
 

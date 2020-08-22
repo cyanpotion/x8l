@@ -25,16 +25,14 @@
 package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.X8lTree;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
+import static org.apache.commons.io.IOUtils.buffer;
 
 public class JsonDealerTest {
     @Test
@@ -66,25 +64,10 @@ public class JsonDealerTest {
             X8lTree tree3 = new X8lTree(reader, JsonDealer.INSTANCE);
             tree3.read();
 
-            try (Writer writer =
-                         new BufferedWriter(
-                                 new OutputStreamWriter(
-                                         new FileOutputStream("out/jsonDemoOut.x8l"),
-                                         StandardCharsets.UTF_8
-                                 )
-                         )
-            ) {
+            try (Writer writer = buffer(new FileWriter("out/jsonDemoOut.x8l"))) {
                 tree3.write(writer, X8lDealer.INSTANCE);
             }
-            try (Writer writer =
-                         new BufferedWriter(
-                                 new OutputStreamWriter(
-                                         new FileOutputStream(
-                                                 "out/jsonDemoOut.json"),
-                                         StandardCharsets.UTF_8
-                                 )
-                         )
-            ) {
+            try (Writer writer = buffer(new FileWriter("out/jsonDemoOut.json"))) {
                 tree3.write(writer, JsonDealer.INSTANCE);
             }
 
