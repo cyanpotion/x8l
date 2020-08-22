@@ -322,7 +322,7 @@ public class X8lTree implements AutoCloseable, Serializable {
 
         try (
                 OutputStream outputStream = fileObject.getContent().getOutputStream();
-                Writer writer = new OutputStreamWriter(outputStream)
+                Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
         ) {
             x8lTree.write(writer);
         }
@@ -409,7 +409,13 @@ public class X8lTree implements AutoCloseable, Serializable {
         }
 
         try (
-                Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))
+                Writer writer =
+                        new BufferedWriter(
+                                new OutputStreamWriter(
+                                        new FileOutputStream(file),
+                                        StandardCharsets.UTF_8
+                                )
+                        )
         ) {
             x8lTree.write(writer);
         }
@@ -543,7 +549,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     public static void save(@NotNull OutputStream outputStream, @NotNull X8lTree x8lTree) throws IOException {
         try (
                 BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-                Writer writer = new OutputStreamWriter(bufferedOutputStream)
+                Writer writer = new OutputStreamWriter(bufferedOutputStream, StandardCharsets.UTF_8)
         ) {
             x8lTree.write(writer);
         }
@@ -977,7 +983,7 @@ public class X8lTree implements AutoCloseable, Serializable {
     private void writeObject(@NotNull ObjectOutputStream objectOutputStream)
             throws IOException {
         objectOutputStream.defaultWriteObject();
-        try (Writer writer = new OutputStreamWriter(objectOutputStream)) {
+        try (Writer writer = new OutputStreamWriter(objectOutputStream, StandardCharsets.UTF_8)) {
             this.write(writer);
         }
     }

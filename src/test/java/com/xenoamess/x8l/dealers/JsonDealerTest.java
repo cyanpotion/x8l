@@ -33,6 +33,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
 public class JsonDealerTest {
@@ -66,11 +67,24 @@ public class JsonDealerTest {
             tree3.read();
 
             try (Writer writer =
-                         new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsonDemoOut.x8l")))) {
+                         new BufferedWriter(
+                                 new OutputStreamWriter(
+                                         new FileOutputStream("out/jsonDemoOut.x8l"),
+                                         StandardCharsets.UTF_8
+                                 )
+                         )
+            ) {
                 tree3.write(writer, X8lDealer.INSTANCE);
             }
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/jsonDemoOut" +
-                    ".json")))) {
+            try (Writer writer =
+                         new BufferedWriter(
+                                 new OutputStreamWriter(
+                                         new FileOutputStream(
+                                                 "out/jsonDemoOut.json"),
+                                         StandardCharsets.UTF_8
+                                 )
+                         )
+            ) {
                 tree3.write(writer, JsonDealer.INSTANCE);
             }
 

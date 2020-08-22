@@ -59,7 +59,7 @@ public class XmlToX8lConvertLostCommentNodeTest {
         String getXmlString = x8lTree.toString();
         new File("out").mkdir();
         try (FileOutputStream fileOutputStream = new FileOutputStream("out/testPom.out.xml");
-             OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
+             OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
         ) {
             writer.write(getXmlString);
         }

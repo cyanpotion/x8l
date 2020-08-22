@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipInputStream;
 import org.junit.jupiter.api.Test;
 
@@ -107,9 +108,21 @@ public class BenchMark {
             //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".x8l")));
+            writer =
+                    new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream("out/" + filePathString + ".x8l"),
+                                    StandardCharsets.UTF_8
+                            )
+                    );
             tree.write(writer, X8lDealer.INSTANCE);
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".xml")));
+            writer =
+                    new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream("out/" + filePathString + ".xml"),
+                                    StandardCharsets.UTF_8
+                            )
+                    );
             tree.write(writer, XmlDealer.INSTANCE);
         }
     }
@@ -125,11 +138,21 @@ public class BenchMark {
             //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
-                    ".x8l")));
+            writer =
+                    new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream("out/" + filePathString + ".x8l"),
+                                    StandardCharsets.UTF_8
+                            )
+                    );
             tree.write(writer, X8lDealer.INSTANCE);
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
-                    ".json")));
+            writer =
+                    new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream("out/" + filePathString + ".json"),
+                                    StandardCharsets.UTF_8
+                            )
+                    );
             tree.write(writer, JsonDealer.INSTANCE);
         }
     }
