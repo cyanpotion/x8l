@@ -28,16 +28,16 @@ import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
 import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipInputStream;
 import org.junit.jupiter.api.Test;
+import static org.apache.commons.io.IOUtils.buffer;
 
 /**
  * @author XenoAmess
@@ -100,16 +100,16 @@ public class BenchMark {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
              BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
-             Reader reader = new InputStreamReader(bufferedInputStream)
+             Reader reader = new InputStreamReader(bufferedInputStream, StandardCharsets.UTF_8)
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, XmlDealer.INSTANCE, true);
             //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".x8l")));
+            writer = buffer(new FileWriter("out/" + filePathString + ".x8l"));
             tree.write(writer, X8lDealer.INSTANCE);
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString + ".xml")));
+            writer = buffer(new FileWriter("out/" + filePathString + ".xml"));
             tree.write(writer, XmlDealer.INSTANCE);
         }
     }
@@ -118,18 +118,16 @@ public class BenchMark {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
              BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
-             Reader reader = new InputStreamReader(bufferedInputStream)
+             Reader reader = new InputStreamReader(bufferedInputStream, StandardCharsets.UTF_8)
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);
             //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
-                    ".x8l")));
+            writer = buffer(new FileWriter("out/" + filePathString + ".x8l"));
             tree.write(writer, X8lDealer.INSTANCE);
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("out/" + filePathString +
-                    ".json")));
+            writer = buffer(new FileWriter("out/" + filePathString + ".json"));
             tree.write(writer, JsonDealer.INSTANCE);
         }
     }

@@ -26,12 +26,15 @@ package com.xenoamess.x8l;
 
 import com.xenoamess.x8l.dealers.XmlDealer;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import static org.apache.commons.io.IOUtils.buffer;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -55,8 +58,9 @@ public class XmlToX8lConvertLostCommentNodeTest {
         assertNotNull(x8lTree);
 
         String getXmlString = x8lTree.toString();
-        try (FileWriter fileWriter = new FileWriter("out/testPom.out.xml")) {
-            fileWriter.write(getXmlString);
+        new File("out").mkdir();
+        try (Writer writer = buffer(new FileWriter("out/testPom.out.xml"))) {
+            writer.write(getXmlString);
         }
         assertNotEquals(originalXmlString, getXmlString);
     }
