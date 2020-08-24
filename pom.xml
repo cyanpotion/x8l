@@ -434,6 +434,19 @@
                     </source>
                     <!--                    <javadocExecutable>${java.home}/bin/javadoc.exe-->
                     <!--                    </javadocExecutable>-->
+
+                    <defaultSince>${project.version}</defaultSince>
+                    <encoding>UTF-8</encoding>
+                    <fixTags>all</fixTags>
+                    <fixClassComment>true</fixClassComment>
+                    <fixFieldComment>true</fixFieldComment>
+                    <fixMethodComment>true</fixMethodComment>
+                    <force>true</force>
+                    <ignoreClirr>false</ignoreClirr>
+                    <comparisonVersion>1.0</comparisonVersion>
+                    <includes>**/*.java</includes>
+                    <level>protected</level>
+                    <defaultAuthor>XenoAmess</defaultAuthor>
                 </configuration>
 
                 <executions>
