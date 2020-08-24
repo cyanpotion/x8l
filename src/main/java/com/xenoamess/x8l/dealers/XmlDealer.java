@@ -74,7 +74,9 @@ import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
  * @version 2.2.3-SNAPSHOT
  */
 public final class XmlDealer extends LanguageDealer implements Serializable {
+    /** Constant <code>STRING_XMLNS="xmlns"</code> */
     public static final String STRING_XMLNS = "xmlns";
+    /** Constant <code>STRING_XMLNS_COLON="xmlns:"</code> */
     public static final String STRING_XMLNS_COLON = "xmlns:";
 
     /**
