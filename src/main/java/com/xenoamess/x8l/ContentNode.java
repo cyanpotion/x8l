@@ -150,10 +150,6 @@ public class ContentNode extends AbstractTreeNode {
                 case '%':
                     index1++;
                     break;
-                case ' ':
-                case '\t':
-                case '\r':
-                case '\n':
                 case '=':
                     break out1;
                 default:
@@ -161,44 +157,17 @@ public class ContentNode extends AbstractTreeNode {
             }
         }
 
-        int index2 = index1 + 1;
-
-        out2:
-        for (; index2 < len; index2++) {
-            char nowChar = attributeExpressionString.charAt(index2);
-            switch (nowChar) {
-                case ' ':
-                case '\t':
-                case '\r':
-                case '\n':
-                    break;
-                default:
-                    break out2;
-            }
-        }
-
-        int index3 = index2 + 1;
-
-        out3:
-        for (; index3 < len; index3++) {
-            char nowChar = attributeExpressionString.charAt(index3);
-            switch (nowChar) {
-                case '%':
-                    index3++;
-                    break;
-                case ' ':
-                case '\t':
-                case '\r':
-                case '\n':
-                    break out3;
-                default:
-                    break;
-            }
-        }
-
         this.addAttribute(
-                X8lTree.transcodeKey(StringUtils.substring(attributeExpressionString, 0, index1)),
-                X8lTree.transcodeValue(StringUtils.substring(attributeExpressionString, index2, index3))
+                StringUtils.substring(
+                        attributeExpressionString,
+                        0,
+                        index1
+                ),
+                StringUtils.substring(
+                        attributeExpressionString,
+                        index1 + 1,
+                        attributeExpressionString.length()
+                )
         );
     }
 

@@ -36,19 +36,20 @@ import org.xmlunit.diff.ComparisonListener;
 import org.xmlunit.diff.ComparisonResult;
 import org.xmlunit.diff.DOMDifferenceEngine;
 import org.xmlunit.diff.DifferenceEngine;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XmlTester {
     public static void test(String xmlString1) throws Exception {
         int nowNodeCount = 0;
         Document document = DocumentHelper.parseText(xmlString1);
 
-        X8lTree x8lTree2 = X8lTree.load(xmlString1);
+        X8lTree x8lTree2 = X8lTree.load(xmlString1, XmlDealer.INSTANCE);
         x8lTree2.setLanguageDealer(XmlDealer.INSTANCE);
         String xmlString2 = x8lTree2.toString();
         x8lTree2.setLanguageDealer(X8lDealer.INSTANCE);
         String x8lString2 = x8lTree2.toString();
 
-        X8lTree x8lTree3 = X8lTree.load(x8lString2);
+        X8lTree x8lTree3 = X8lTree.load(x8lString2, X8lDealer.INSTANCE);
         x8lTree3.setLanguageDealer(XmlDealer.INSTANCE);
         String xmlString3 = x8lTree3.toString();
         x8lTree3.setLanguageDealer(X8lDealer.INSTANCE);
@@ -56,6 +57,7 @@ public class XmlTester {
 
         assertEqualXml(xmlString1, xmlString2);
         assertEqualXml(xmlString1, xmlString3);
+        assertEquals(x8lString2, x8lString3);
     }
 
     private static void assertEqualXml(final String xmlString1, final String xmlString2) {

@@ -30,16 +30,17 @@ import com.xenoamess.x8l.ContentNode;
 import com.xenoamess.x8l.RootNode;
 import com.xenoamess.x8l.TextNode;
 import com.xenoamess.x8l.X8lGrammarException;
-import com.xenoamess.x8l.X8lTree;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Branch;
 import org.dom4j.Comment;
@@ -50,6 +51,7 @@ import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.Node;
 import org.dom4j.Text;
+import org.dom4j.dom.DOMComment;
 import org.jetbrains.annotations.NotNull;
 import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
 
@@ -74,7 +76,9 @@ import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
  * @version 2.2.3-SNAPSHOT
  */
 public final class XmlDealer extends LanguageDealer implements Serializable {
+    /** Constant <code>STRING_XMLNS="xmlns"</code> */
     public static final String STRING_XMLNS = "xmlns";
+    /** Constant <code>STRING_XMLNS_COLON="xmlns:"</code> */
     public static final String STRING_XMLNS_COLON = "xmlns:";
 
     /**
@@ -92,11 +96,12 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                             X8lGrammarException {
                         try {
                             Document document = DocumentHelper.parseText(IOUtils.toString(reader));
-                            if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node(0).getName().equals(STRING_NAMELESS)) {
-                                readChildrenArea(rootNode, (Element) document.node(0));
-                            } else {
-                                readChildrenArea(rootNode, document);
-                            }
+//                            if (document.nodeCount() == 1 && document.node(0) instanceof Element && document.node
+//                            (0).getName().equals(STRING_NAMELESS)) {
+//                                readChildrenArea(rootNode, (Element) document.node(0));
+//                            } else {
+                            readChildrenArea(rootNode, document);
+//                            }
                         } catch (DocumentException e) {
                             throw new IOException(e);
                         }
@@ -106,27 +111,33 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean write(@NotNull Writer writer, @NotNull RootNode rootNode) throws IOException,
                             X8lGrammarException {
-                        Document document = DocumentHelper.createDocument();
-                        List<ContentNode> contentNodes = rootNode.getContentNodesFromChildren();
-                        if (ifSingleRootNode(rootNode) != null) {
-                            for (AbstractTreeNode au : rootNode.getChildren()) {
-                                if (au instanceof ContentNode) {
-                                    XmlDealer.write((ContentNode) au, document.addElement(STRING_NAMELESS));
-                                } else //noinspection StatementWithEmptyBody
-                                    if (au instanceof TextNode) {
-                                        //do nothing
-                                    } else if (au instanceof CommentNode) {
-                                        CommentNode commentNode = (CommentNode) au;
-                                        document.addComment(commentNode.getTextContent());
-                                    } else {
-                                        throw new NotImplementedException("not implemented for this class : " + au.getClass());
-                                    }
-                            }
-                        } else {
-                            Element element = document.addElement(STRING_NAMELESS);
-                            XmlDealer.write(rootNode, element);
+//                        Document document = DocumentHelper.createDocument();
+//                        List<ContentNode> contentNodes = rootNode.getContentNodesFromChildren();
+//                        if (ifSingleRootNode(rootNode) != null) {
+//                            for (AbstractTreeNode au : rootNode.getChildren()) {
+//                                if (au instanceof ContentNode) {
+//                                    XmlDealer.write((ContentNode) au, document.addElement(STRING_NAMELESS));
+//                                } else //noinspection StatementWithEmptyBody
+//                                    if (au instanceof TextNode) {
+//                                        //do nothing
+//                                    } else if (au instanceof CommentNode) {
+//                                        CommentNode commentNode = (CommentNode) au;
+//                                        document.addComment(commentNode.getTextContent());
+//                                    } else {
+//                                        throw new NotImplementedException("not implemented for this class : " + au
+//                                        .getClass());
+//                                    }
+//                            }
+//                        } else {
+//                            Element element = document.addElement(STRING_NAMELESS);
+//                            XmlDealer.write(rootNode, element);
+//                        }
+//                        document.write(writer);
+//                        return true;
+                        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+                        for (AbstractTreeNode au : rootNode.getChildren()) {
+                            naiveWrite(writer, au);
                         }
-                        document.write(writer);
                         return true;
                     }
                 }
@@ -151,10 +162,11 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean write(@NotNull Writer writer, @NotNull ContentNode contentNode) throws
                             IOException, X8lGrammarException {
-                        Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_NAMELESS);
-                        XmlDealer.write(contentNode, element);
-                        document.write(writer);
+//                        Document document = DocumentHelper.createDocument();
+//                        Element element = document.addElement(STRING_NAMELESS);
+//                        XmlDealer.write(contentNode, element);
+//                        document.write(writer);
+                        naiveWrite(writer, contentNode);
                         return true;
                     }
                 }
@@ -171,10 +183,10 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean write(@NotNull Writer writer, @NotNull TextNode textNode) throws IOException,
                             X8lGrammarException {
-                        Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_NAMELESS);
-                        element.addText(textNode.getTextContent());
-                        document.write(writer);
+//                        Document document = DocumentHelper.createDocument();
+//                        Element element = document.addElement(STRING_NAMELESS);
+//                        element.addText(textNode.getTextContent());
+                        naiveWrite(writer, textNode);
                         return true;
                     }
                 }
@@ -192,10 +204,12 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                     @Override
                     public boolean write(@NotNull Writer writer, @NotNull CommentNode commentNode) throws
                             IOException, X8lGrammarException {
-                        Document document = DocumentHelper.createDocument();
-                        Element element = document.addElement(STRING_NAMELESS);
-                        element.addComment(commentNode.getTextContent());
-                        document.write(writer);
+//                        Document document = DocumentHelper.createDocument();
+//                        Element element = document.addElement(STRING_NAMELESS);
+//                        element.addComment(commentNode.getTextContent());
+//                        document.write(writer);
+//                        return true;
+                        naiveWrite(writer, commentNode);
                         return true;
                     }
                 }
@@ -305,7 +319,20 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         if (!STRING_NAMELESS.equals(element.getQualifiedName())) {
             contentNode.addAttribute(element.getQualifiedName());
         }
-        for (Attribute attribute : element.attributes()) {
+        for (int i = 0, size = element.nodeCount(); i < size; i++) {
+            final Node node = element.node(i);
+            if (node instanceof Namespace) {
+                final Namespace nameSpaceNode = (Namespace) node;
+                final String prefix = nameSpaceNode.getPrefix();
+                contentNode.addAttribute(
+                        prefix.isEmpty() ? STRING_XMLNS : (STRING_XMLNS_COLON + prefix),
+                        nameSpaceNode.getURI()
+                );
+            }
+        }
+        List<Attribute> attributeList = element.attributes();
+        Collections.reverse(attributeList);
+        for (Attribute attribute : attributeList) {
             contentNode.addAttribute(attribute.getQualifiedName(), attribute.getValue());
         }
         readChildrenArea(contentNode, element);
@@ -313,7 +340,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
 
     private static void readChildrenArea(ContentNode contentNode, Branch branch) {
         for (int i = 0, size = branch.nodeCount(); i < size; i++) {
-            Node node = branch.node(i);
+            final Node node = branch.node(i);
             if (node instanceof Element) {
                 ContentNode childContentNode = new ContentNode(contentNode);
                 read(childContentNode, (Element) node);
@@ -322,12 +349,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             } else if (node instanceof Comment) {
                 new CommentNode(contentNode, node.getText());
             } else if (node instanceof Namespace) {
-                final Namespace nameSpaceNode = (Namespace) node;
-                final String prefix = nameSpaceNode.getPrefix();
-                contentNode.addAttribute(
-                        prefix.isEmpty() ? STRING_XMLNS : (STRING_XMLNS_COLON + prefix),
-                        nameSpaceNode.getURI()
-                );
+                //do nothing.
             } else {
                 System.err.println("Cannot handle this node type: " + node.getClass().getCanonicalName() + " . Will " +
                         "treat it as TextNode.");
@@ -352,15 +374,13 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
     }
 
     /**
-     * My naive implement to read xml file.
-     * It is outdated and far limited,
-     * and should not be used anymore now.
+     * My naive implement to write xml file.
+     * I am surprised that it is really, useful.
      *
      * @param writer   writer
      * @param treeNode treeNode
      * @throws java.io.IOException java.io.IOException
      */
-    @Deprecated
     public void naiveWrite(Writer writer, AbstractTreeNode treeNode) throws IOException {
         if (treeNode instanceof ContentNode) {
             ContentNode contentNode = (ContentNode) treeNode;
@@ -387,16 +407,19 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             }
 
             for (String key : contentNode.getAttributesKeyList()) {
+                if (ARRAY_ID_ATTRIBUTE.equals(key)) {
+                    continue;
+                }
                 if (!firstAttribute) {
                     writer.append(' ');
                 }
-                writer.append(X8lTree.transcodeKey(key));
+                writer.append(StringEscapeUtils.escapeXml11(key));
                 String value = contentNode.getAttributes().get(key);
 
                 if (!StringUtils.isEmpty(value)) {
                     writer.append('=');
                     writer.append('"');
-                    writer.append(X8lTree.transcodeValue(value));
+                    writer.append(StringEscapeUtils.escapeXml11(value));
                     writer.append('"');
                 } else {
                     if (!firstAttribute) {
@@ -421,12 +444,17 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             }
         } else if (treeNode instanceof TextNode) {
             TextNode textNode = (TextNode) treeNode;
-            writer.append(X8lTree.transcodeText(textNode.getTextContent()));
+            writer.append(StringEscapeUtils.escapeXml11(textNode.getTextContent()));
         } else if (treeNode instanceof CommentNode) {
             CommentNode commentNode = (CommentNode) treeNode;
-            writer.append("<!--");
-            writer.append(X8lTree.transcodeComment(commentNode.getTextContent()));
-            writer.append("-->");
+            final String commentString = commentNode.getTextContent();
+            if (!commentString.isEmpty()) {
+                new DOMComment(commentNode.getTextContent()).write(writer);
+            } else {
+                writer.append("<!--");
+                writer.append(StringEscapeUtils.escapeXml11(commentString));
+                writer.append("-->");
+            }
         } else {
             throw new NotImplementedException("not implemented for this class : " + treeNode.getClass());
         }

@@ -38,7 +38,7 @@ public class TranscodeAndTranscodeBackTest {
     private static final String[] strictTests = new String[]{
             "<a>b>"
             , "<< ><a>b>"
-            , "a<a>b>"
+            , "<>a<a>b>>"
     };
     private static String[] loseTests;
 

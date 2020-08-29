@@ -221,12 +221,11 @@ public class X8lTest {
         System.out.println(tree4.toString());
         tree4.setLanguageDealer(JsonDealer.INSTANCE);
         System.out.println(tree4.toString());
-        tree4.setLanguageDealer(XmlDealer.INSTANCE);
+        tree4.setLanguageDealer(X8lDealer.INSTANCE);
         System.out.println(tree4.toString());
         System.out.println(tree4.hashCode());
         tree4.append(tree4);
         System.out.println(tree4.toString());
-        tree4.close();
         assertEquals(new X8lTree(tree4), tree4);
     }
 
