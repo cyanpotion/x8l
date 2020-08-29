@@ -35,6 +35,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
@@ -133,7 +134,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
 //                        }
 //                        document.write(writer);
 //                        return true;
-                        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
                         for (AbstractTreeNode au : rootNode.getChildren()) {
                             naiveWrite(writer, au);
                         }
@@ -318,7 +319,20 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
         if (!STRING_NAMELESS.equals(element.getQualifiedName())) {
             contentNode.addAttribute(element.getQualifiedName());
         }
-        for (Attribute attribute : element.attributes()) {
+        for (int i = 0, size = element.nodeCount(); i < size; i++) {
+            final Node node = element.node(i);
+            if (node instanceof Namespace) {
+                final Namespace nameSpaceNode = (Namespace) node;
+                final String prefix = nameSpaceNode.getPrefix();
+                contentNode.addAttribute(
+                        prefix.isEmpty() ? STRING_XMLNS : (STRING_XMLNS_COLON + prefix),
+                        nameSpaceNode.getURI()
+                );
+            }
+        }
+        List<Attribute> attributeList = element.attributes();
+        Collections.reverse(attributeList);
+        for (Attribute attribute : attributeList) {
             contentNode.addAttribute(attribute.getQualifiedName(), attribute.getValue());
         }
         readChildrenArea(contentNode, element);
@@ -326,7 +340,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
 
     private static void readChildrenArea(ContentNode contentNode, Branch branch) {
         for (int i = 0, size = branch.nodeCount(); i < size; i++) {
-            Node node = branch.node(i);
+            final Node node = branch.node(i);
             if (node instanceof Element) {
                 ContentNode childContentNode = new ContentNode(contentNode);
                 read(childContentNode, (Element) node);
@@ -335,12 +349,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
             } else if (node instanceof Comment) {
                 new CommentNode(contentNode, node.getText());
             } else if (node instanceof Namespace) {
-                final Namespace nameSpaceNode = (Namespace) node;
-                final String prefix = nameSpaceNode.getPrefix();
-                contentNode.addAttribute(
-                        prefix.isEmpty() ? STRING_XMLNS : (STRING_XMLNS_COLON + prefix),
-                        nameSpaceNode.getURI()
-                );
+                //do nothing.
             } else {
                 System.err.println("Cannot handle this node type: " + node.getClass().getCanonicalName() + " . Will " +
                         "treat it as TextNode.");
