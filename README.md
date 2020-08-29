@@ -15,6 +15,7 @@
       See <a href="https://plugins.jetbrains.com/plugin/13915-x8l">plugin on Jetbrains plugin storage</a><br/>
       See <a href="https://github.com/XenoAmess/x8l_idea_plugin">plugin on github</a><br/>
       See <a href="https://github.com/cyanpotion/x8l">X8l Grammar/SDK</a><br/>
+      See <a href="https://github.com/XenoAmess/x8l_spring_context">X8l Spring Context</a><br/>
   </b>
 </p>
 <br/>
