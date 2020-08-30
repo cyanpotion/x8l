@@ -35,7 +35,6 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
@@ -330,9 +329,7 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 );
             }
         }
-        List<Attribute> attributeList = element.attributes();
-        Collections.reverse(attributeList);
-        for (Attribute attribute : attributeList) {
+        for (Attribute attribute : element.attributes()) {
             contentNode.addAttribute(attribute.getQualifiedName(), attribute.getValue());
         }
         readChildrenArea(contentNode, element);
