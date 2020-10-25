@@ -28,6 +28,7 @@ import com.xenoamess.x8l.X8lGrammarException;
 import com.xenoamess.x8l.X8lTree;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +76,6 @@ public class X8lDataBeanUtil {
         for (Field field : fields) {
             X8lDataBeanFieldMark x8lDataBeanFieldMark = field.getAnnotation(X8lDataBeanFieldMark.class);
             X8lDataBeanFieldScheme x8lDataBeanFieldScheme = x8lDataBeanFieldMark.scheme();
-            String path = x8lDataBeanFieldMark.path();
 
             //noinspection rawtypes
             Class parserClass = x8lDataBeanFieldMark.parser();
@@ -83,7 +83,17 @@ public class X8lDataBeanUtil {
             //noinspection rawtypes
             Class fieldClass = field.getType();
 
-            List<Object> list = x8lTree.fetch(x8lDataBeanFieldScheme, path);
+            List<Object> list = new ArrayList<>();
+
+            String path = x8lDataBeanFieldMark.path();
+            list.addAll(
+                    x8lTree.fetch(x8lDataBeanFieldScheme, path)
+            );
+            String[] paths = x8lDataBeanFieldMark.paths();
+            list.addAll(
+                    x8lTree.fetch(x8lDataBeanFieldScheme, paths)
+            );
+
 
             String functionName = x8lDataBeanFieldMark.functionName();
             if (StringUtils.isBlank(functionName)) {

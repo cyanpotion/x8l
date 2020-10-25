@@ -1086,16 +1086,28 @@ public class X8lTree implements AutoCloseable, Serializable {
      * <p>fetch.</p>
      *
      * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
-     * @param x8lPath a {@link java.lang.String} object.
+     * @param x8lPaths an array of x8lPath
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+                                       @NotNull String[] x8lPaths) {
+        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPaths);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPaths an array of x8lPath
      * @param tClass a {@link java.lang.Class} object.
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
     public <T> @NotNull List<T> fetch(
             @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
-            @NotNull String x8lPath,
+            @NotNull String[] x8lPaths,
             @NotNull Class<T> tClass
     ) {
-        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPath, tClass);
+        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPaths, tClass);
     }
 }

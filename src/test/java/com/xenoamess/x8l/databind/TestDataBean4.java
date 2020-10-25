@@ -24,41 +24,41 @@
 
 package com.xenoamess.x8l.databind;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+public class TestDataBean4 implements X8lDataBean {
+    public TestDataBean4() {
 
-/**
- * <p>X8lDataBeanFieldMark class.</p>
- *
- * @author XenoAmess
- * @version 2.2.3-SNAPSHOT
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface X8lDataBeanFieldMark {
-    @NotNull
-    X8lDataBeanFieldScheme scheme() default X8lDataBeanFieldScheme.X8LPATH;
+    }
 
-    @Nullable
-    String functionName() default "";
+    @X8lDataBeanFieldMark(paths = "CONTENT_NODE(a)")
+    private Object nodeA;
 
-    /**
-     * suggest use paths instead
-     * @return
-     * @see #paths()
-     */
-    @Deprecated
-    @NotNull
-    String path() default "";
+    @X8lDataBeanFieldMark(paths = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
+    private String value;
 
-    @NotNull
-    String[] paths() default "";
+    @X8lDataBeanFieldMark(paths = "")
+    private Object testEmpty;
 
-    @SuppressWarnings("rawtypes") @NotNull
-    Class parser() default X8lDataBeanDefaultParser.class;
+    public Object getNodeA() {
+        return nodeA;
+    }
+
+    public void setNodeA(Object nodeA) {
+        this.nodeA = nodeA;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Object getTestEmpty() {
+        return testEmpty;
+    }
+
+    public void setTestEmpty(Object testEmpty) {
+        this.testEmpty = testEmpty;
+    }
 }
-

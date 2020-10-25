@@ -100,5 +100,29 @@ public class X8lDataBeanTest {
                 "b",
                 testDataBean3.getValue()
         );
+
+        assertNull(
+                testDataBean3.getTestEmpty()
+        );
+    }
+
+    @Test
+    public void testTestDataBean4() {
+        X8lTree x8lTree = X8lTree.load("<a>b>");
+        TestDataBean4 testDataBean4 = X8lDataBeanUtil.buildFromX8lTree(TestDataBean4.class, x8lTree);
+
+        assertEquals(
+                "<a>b>",
+                testDataBean4.getNodeA().toString()
+        );
+
+        assertEquals(
+                "b",
+                testDataBean4.getValue()
+        );
+
+        assertNull(
+                testDataBean4.getTestEmpty()
+        );
     }
 }
