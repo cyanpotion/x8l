@@ -79,7 +79,7 @@ public class X8lPathUtil {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public static <T> @NotNull List<T> fetch(
+    public static @NotNull <T> List<T> fetch(
             @NotNull AbstractTreeNode originalNode,
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
@@ -96,7 +96,7 @@ public class X8lPathUtil {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public static <T> @NotNull List<T> fetch(
+    public static @NotNull <T> List<T> fetch(
             @NotNull AbstractTreeNode originalNode,
             @NotNull String[] x8lPaths,
             @NotNull Class<T> tClass
@@ -390,7 +390,7 @@ public class X8lPathUtil {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public static <T> @NotNull List<T> subList(
+    public static @NotNull <T> List<T> subList(
             @NotNull List<T> original,
             int beginIndexInclusive,
             int endIndexInclusive

@@ -265,7 +265,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
+    public @NotNull <T> List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
         return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPath, tClass);
     }
 
@@ -277,7 +277,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(@NotNull String[] x8lPaths, @NotNull Class<T> tClass) {
+    public @NotNull <T> List<T> fetch(@NotNull String[] x8lPaths, @NotNull Class<T> tClass) {
         return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPaths, tClass);
     }
 
@@ -326,7 +326,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(
+    public @NotNull <T> List<T> fetch(
             @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
@@ -352,7 +352,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(
+    public @NotNull <T> List<T> fetch(
             @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
             @NotNull String[] x8lPaths,
             @NotNull Class<T> tClass
