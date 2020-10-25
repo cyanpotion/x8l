@@ -79,13 +79,30 @@ public class X8lPathUtil {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public static <T> @NotNull List<T> fetch(
+    public static @NotNull <T> List<T> fetch(
             @NotNull AbstractTreeNode originalNode,
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
     ) {
+        return fetch(originalNode, new String[]{x8lPath}, tClass);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param originalNode a {@link com.xenoamess.x8l.AbstractTreeNode} object.
+     * @param x8lPaths an array of x8lPath
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
+    public static @NotNull <T> List<T> fetch(
+            @NotNull AbstractTreeNode originalNode,
+            @NotNull String[] x8lPaths,
+            @NotNull Class<T> tClass
+    ) {
         //noinspection rawtypes
-        List fetched = fetch(originalNode, x8lPath);
+        List fetched = fetch(originalNode, x8lPaths);
         List<T> res = new ArrayList<>(fetched.size());
         for (Object object : fetched) {
             if (tClass.isInstance(object)) {
@@ -110,6 +127,24 @@ public class X8lPathUtil {
         List<AbstractTreeNode> list = new LinkedList<>();
         list.add(originalNode);
         return fetch(list, x8lPath);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param originalNode a {@link com.xenoamess.x8l.AbstractTreeNode} object.
+     * @param x8lPaths an array of x8lPath
+     * @return a {@link java.util.List} object.
+     */
+    public static @NotNull List<Object> fetch(
+            @NotNull AbstractTreeNode originalNode,
+            @NotNull String[] x8lPaths
+    ) {
+        List<Object> list = new LinkedList<>();
+        for (String x8lPath : x8lPaths) {
+            list.addAll(fetch(originalNode, x8lPath));
+        }
+        return list;
     }
 
     /**
@@ -355,7 +390,7 @@ public class X8lPathUtil {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public static <T> @NotNull List<T> subList(
+    public static @NotNull <T> List<T> subList(
             @NotNull List<T> original,
             int beginIndexInclusive,
             int endIndexInclusive

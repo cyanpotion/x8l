@@ -995,7 +995,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @return a {@link java.util.List} object.
      */
     @SuppressWarnings("UnusedReturnValue")
-    public <T> @NotNull List<T> applyToAllNodes(@NotNull Function<AbstractTreeNode, T> function) {
+    public @NotNull <T> List<T> applyToAllNodes(@NotNull Function<AbstractTreeNode, T> function) {
         ArrayList<T> res = new ArrayList<>();
         this.getRoot().applyToAllNodes(res, function);
         return res;
@@ -1066,7 +1066,7 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
+    public @NotNull <T> List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
         return this.getRoot().fetch(x8lPath, tClass);
     }
 
@@ -1086,16 +1086,45 @@ public class X8lTree implements AutoCloseable, Serializable {
      * <p>fetch.</p>
      *
      * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPaths an array of x8lPath
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+                                       @NotNull String[] x8lPaths) {
+        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPaths);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
      * @param x8lPath a {@link java.lang.String} object.
      * @param tClass a {@link java.lang.Class} object.
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(
+    public @NotNull <T> List<T> fetch(
             @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
     ) {
         return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPath, tClass);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPaths an array of x8lPath
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull <T> List<T> fetch(
+            @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+            @NotNull String[] x8lPaths,
+            @NotNull Class<T> tClass
+    ) {
+        return this.getRoot().fetch(x8lDataBeanFieldScheme, x8lPaths, tClass);
     }
 }

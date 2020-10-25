@@ -24,7 +24,6 @@
 
 package com.xenoamess.x8l.databind;
 
-import com.xenoamess.commonx.java.lang.IllegalArgumentExceptionUtilsx;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -320,9 +319,8 @@ public class X8lDataBeanDefaultParser {
      * @param defaultValue a boolean.
      * @return a boolean.
      */
-    public static int getInteger(final Map<String, String> settingMap,
-                                 final String key, int defaultValue) {
-        IllegalArgumentExceptionUtilsx.isAnyNullInParamsThenThrowIllegalArgumentException(settingMap, key);
+    public static int getInteger(@NotNull final Map<String, String> settingMap,
+                                 @NotNull final String key, int defaultValue) {
         if (!settingMap.containsKey(key)) {
             return defaultValue;
         }
@@ -349,9 +347,8 @@ public class X8lDataBeanDefaultParser {
      * @param defaultValue a boolean.
      * @return a boolean.
      */
-    public static float getFloat(final Map<String, String> settingMap,
-                                 final String key, float defaultValue) {
-        IllegalArgumentExceptionUtilsx.isAnyNullInParamsThenThrowIllegalArgumentException(settingMap, key);
+    public static float getFloat(@NotNull final Map<String, String> settingMap,
+                                 @NotNull final String key, float defaultValue) {
         if (!settingMap.containsKey(key)) {
             return defaultValue;
         }
@@ -379,9 +376,8 @@ public class X8lDataBeanDefaultParser {
      * @param defaultValue a boolean.
      * @return a boolean.
      */
-    public static boolean getBoolean(final Map<String, String> settingMap,
-                                     final String key, boolean defaultValue) {
-        IllegalArgumentExceptionUtilsx.isAnyNullInParamsThenThrowIllegalArgumentException(settingMap, key);
+    public static boolean getBoolean(@NotNull final Map<String, String> settingMap,
+                                     @NotNull final String key, boolean defaultValue) {
         if (!settingMap.containsKey(key)) {
             return defaultValue;
         }
@@ -408,10 +404,9 @@ public class X8lDataBeanDefaultParser {
      * @param defaultValue defaultValue
      * @return return
      */
-    public static String getString(final Map<String, String> settingMap,
-                                   final String key,
+    public static String getString(@NotNull final Map<String, String> settingMap,
+                                   @NotNull final String key,
                                    final String defaultValue) {
-        IllegalArgumentExceptionUtilsx.isAnyNullInParamsThenThrowIllegalArgumentException(settingMap, key);
         if (!settingMap.containsKey(key)) {
             return defaultValue;
         }

@@ -250,13 +250,35 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     /**
      * <p>fetch.</p>
      *
+     * @param x8lPaths an array of x8lPath
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull List<Object> fetch(@NotNull String[] x8lPaths) {
+        return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPaths);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
      * @param x8lPath a {@link java.lang.String} object.
      * @param tClass a {@link java.lang.Class} object.
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
+    public @NotNull <T> List<T> fetch(@NotNull String x8lPath, @NotNull Class<T> tClass) {
         return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPath, tClass);
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lPaths an array of x8lPath
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull <T> List<T> fetch(@NotNull String[] x8lPaths, @NotNull Class<T> tClass) {
+        return this.fetch(X8lDataBeanFieldScheme.X8LPATH, x8lPaths, tClass);
     }
 
     /**
@@ -281,12 +303,30 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      * <p>fetch.</p>
      *
      * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPaths an array of x8lPath
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull List<Object> fetch(@NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+                                       @NotNull String[] x8lPaths) {
+        //noinspection SwitchStatementWithTooFewBranches
+        switch (x8lDataBeanFieldScheme) {
+            case X8LPATH:
+                return X8lPathUtil.fetch(this, x8lPaths);
+            default:
+                throw new NotImplementedException("" + x8lDataBeanFieldScheme.name() + " is not implemented yet");
+        }
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
      * @param x8lPath a {@link java.lang.String} object.
      * @param tClass a {@link java.lang.Class} object.
      * @param <T> a T object.
      * @return a {@link java.util.List} object.
      */
-    public <T> @NotNull List<T> fetch(
+    public @NotNull <T> List<T> fetch(
             @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
             @NotNull String x8lPath,
             @NotNull Class<T> tClass
@@ -295,6 +335,32 @@ public abstract class AbstractTreeNode implements AutoCloseable {
         switch (x8lDataBeanFieldScheme) {
             case X8LPATH:
                 return X8lPathUtil.fetch(this, x8lPath, tClass);
+            default:
+                throw new NotImplementedException(
+                        "Right now, " + x8lDataBeanFieldScheme.name()
+                                + " is not implemented yet."
+                );
+        }
+    }
+
+    /**
+     * <p>fetch.</p>
+     *
+     * @param x8lDataBeanFieldScheme a {@link com.xenoamess.x8l.databind.X8lDataBeanFieldScheme} object.
+     * @param x8lPaths an array of x8lPath
+     * @param tClass a {@link java.lang.Class} object.
+     * @param <T> a T object.
+     * @return a {@link java.util.List} object.
+     */
+    public @NotNull <T> List<T> fetch(
+            @NotNull X8lDataBeanFieldScheme x8lDataBeanFieldScheme,
+            @NotNull String[] x8lPaths,
+            @NotNull Class<T> tClass
+    ) {
+        //noinspection SwitchStatementWithTooFewBranches
+        switch (x8lDataBeanFieldScheme) {
+            case X8LPATH:
+                return X8lPathUtil.fetch(this, x8lPaths, tClass);
             default:
                 throw new NotImplementedException(
                         "Right now, " + x8lDataBeanFieldScheme.name()
