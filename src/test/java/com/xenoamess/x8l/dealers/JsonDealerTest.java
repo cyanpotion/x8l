@@ -25,6 +25,7 @@
 package com.xenoamess.x8l.dealers;
 
 import com.xenoamess.x8l.X8lTree;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -63,7 +64,7 @@ public class JsonDealerTest {
 
             X8lTree tree3 = new X8lTree(reader, JsonDealer.INSTANCE);
             tree3.read();
-
+            new File("out").mkdirs();
             try (Writer writer = buffer(new FileWriter("out/jsonDemoOut.x8l"))) {
                 tree3.write(writer, X8lDealer.INSTANCE);
             }
