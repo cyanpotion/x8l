@@ -27,7 +27,6 @@ package com.xenoamess.x8l;
 import com.xenoamess.x8l.dealers.JsonDealer;
 import com.xenoamess.x8l.dealers.X8lDealer;
 import com.xenoamess.x8l.dealers.XmlDealer;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -99,8 +98,8 @@ public class BenchMark {
     public void testXml(String filePathString) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
-             Reader reader = new InputStreamReader(bufferedInputStream, StandardCharsets.UTF_8)
+             InputStreamReader inputStreamReader = new InputStreamReader(zipInputStream, StandardCharsets.UTF_8);
+             Reader reader = buffer(inputStreamReader);
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, XmlDealer.INSTANCE, true);
@@ -117,8 +116,8 @@ public class BenchMark {
     public void testJson(String filePathString) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(
                 this.getClass().getResourceAsStream("/" + filePathString + ".zip"));
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
-             Reader reader = new InputStreamReader(bufferedInputStream, StandardCharsets.UTF_8)
+             InputStreamReader inputStreamReader = new InputStreamReader(zipInputStream, StandardCharsets.UTF_8);
+             Reader reader = buffer(inputStreamReader);
         ) {
             zipInputStream.getNextEntry();
             X8lTree tree = new X8lTree(reader, JsonDealer.INSTANCE, true);
