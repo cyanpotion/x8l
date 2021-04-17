@@ -232,14 +232,7 @@ public final class JsonDealer extends LanguageDealer implements Serializable {
                     ArrayNode arrayNode2 = getObjectMapper().createArrayNode();
                     objectNode.set(contentNode2.getName(), arrayNode2);
                     nowIndex = writeInner(contentNode2, arrayNode2, nowIndex);
-                }
-//                else if (isSingleNameTextPair(contentNode2)) {
-//                    objectNode.put(
-//                            contentNode2.getName(),
-//                            ((TextNode) contentNode2.getChildren().get(0)).getTextContent()
-//                    );
-//                }
-                else {
+                } else {
                     ObjectNode objectNode2 = getObjectMapper().createObjectNode();
                     objectNode.set(contentNode2.getName(), objectNode2);
                     nowIndex = writeInner(contentNode2, objectNode2, nowIndex);

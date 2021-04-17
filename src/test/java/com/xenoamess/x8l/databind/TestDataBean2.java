@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 XenoAmess
+ * Copyright (c) 2021 XenoAmess
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,41 +24,30 @@
 
 package com.xenoamess.x8l.databind;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+public class TestDataBean2 implements X8lDataBean {
+    public TestDataBean2() {
 
-/**
- * <p>X8lDataBeanFieldMark class.</p>
- *
- * @author XenoAmess
- * @version 2.2.3-SNAPSHOT
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface X8lDataBeanFieldMark {
-    @NotNull
-    X8lDataBeanFieldScheme scheme() default X8lDataBeanFieldScheme.X8LPATH;
+    }
 
-    @Nullable
-    String functionName() default "";
+    @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
+    private Object nodeA;
 
-    /**
-     * suggest use paths instead
-     * @return the path
-     * @see #paths()
-     */
-    @Deprecated
-    @NotNull
-    String path() default "";
+    @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
+    private String value;
 
-    @NotNull
-    String[] paths() default "";
+    protected Object getNodeA() {
+        return nodeA;
+    }
 
-    @SuppressWarnings("rawtypes") @NotNull
-    Class parser() default X8lDataBeanDefaultParser.class;
+    protected void setNodeA(Object nodeA) {
+        this.nodeA = nodeA;
+    }
+
+    protected String getValue() {
+        return value;
+    }
+
+    protected void setValue(String value) {
+        this.value = value;
+    }
 }
-
