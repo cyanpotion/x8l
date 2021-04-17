@@ -31,23 +31,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class X8lDataBeanTest {
-    static class TestDataBean1 implements X8lDataBean {
-        public TestDataBean1() {
 
-        }
-
-        @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
-        Object nodeA;
-
-        @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
-        String value;
-    }
 
     @Test
     public void testTestDataBean1() {
         X8lTree x8lTree = X8lTree.load("<a>b>");
         TestDataBean1 testDataBean1 = X8lDataBeanUtil.buildFromX8lTree(TestDataBean1.class, x8lTree);
-
 
         assertEquals(
                 "<a>b>",
@@ -62,26 +51,14 @@ public class X8lDataBeanTest {
 
     //-----
 
-    static class TestDataBean2 implements X8lDataBean {
-        public TestDataBean2() {
-
-        }
-
-        @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)")
-        private Object nodeA;
-
-        @X8lDataBeanFieldMark(path = "CONTENT_NODE(a)>TEXT_NODE[0]>TEXT_CONTENT")
-        private String value;
-    }
-
     @Test
     public void testTestDataBean2() {
         X8lTree x8lTree = X8lTree.load("<a>b>");
         TestDataBean2 testDataBean2 = X8lDataBeanUtil.buildFromX8lTree(TestDataBean2.class, x8lTree);
 
-        assertNull(testDataBean2.nodeA);
+        assertNull(testDataBean2.getNodeA());
 
-        assertNull(testDataBean2.value);
+        assertNull(testDataBean2.getValue());
     }
 
     //-----

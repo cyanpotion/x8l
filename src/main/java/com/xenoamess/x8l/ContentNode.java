@@ -226,8 +226,8 @@ public class ContentNode extends AbstractTreeNode {
         }
         if (!this.getAttributeSegments().isEmpty()) {
             this.getAttributeSegments().set(
-                    this.getAttributeSegments().size() - 1
-                    , ""
+                    this.getAttributeSegments().size() - 1,
+                    ""
             );
         }
     }
