@@ -396,7 +396,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.19</version>
+                <version>1.21</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains</groupId>
@@ -507,7 +507,7 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlet</artifactId>
-                <version>9.4.40.v20210413</version>
+                <version>11.0.7</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
