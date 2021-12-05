@@ -502,7 +502,7 @@
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
-                <version>9.8.1</version>
+                <version>9.16-preview.1</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
@@ -512,7 +512,7 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
-                <version>9.4.40.v20210413</version>
+                <version>11.0.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
