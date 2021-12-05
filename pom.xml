@@ -55,6 +55,8 @@
         <jackson.version>2.13.0</jackson.version>
         <log4j.version>2.14.1</log4j.version>
         <slf4j.version>1.7.32</slf4j.version>
+        <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
+        <jetty.version>11.0.7</jetty.version>
         <!---->
         <!---->
         <!--home made libraries versions-->
@@ -492,12 +494,12 @@
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-mapper-asl</artifactId>
-                <version>1.9.13</version>
+                <version>${org.codehaus.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-core-asl</artifactId>
-                <version>1.9.13</version>
+                <version>${org.codehaus.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
@@ -507,12 +509,17 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlet</artifactId>
-                <version>11.0.7</version>
+                <version>${jetty.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
-                <version>11.0.7</version>
+                <version>${jetty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-util</artifactId>
+                <version>${jetty.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
