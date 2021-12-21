@@ -60,7 +60,7 @@
         <!---->
         <!---->
         <!--home made libraries versions-->
-        <commonx.version>0.13.0</commonx.version>
+        <commonx.version>0.13.1</commonx.version>
         <!---->
         <!---->
         <!--maven plugins versions-->
