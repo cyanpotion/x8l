@@ -55,7 +55,6 @@
         <jackson.version>2.13.1</jackson.version>
         <log4j.version>2.17.1</log4j.version>
         <slf4j.version>1.7.33</slf4j.version>
-        <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
         <!---->
         <!---->
         <!--home made libraries versions-->
@@ -489,16 +488,6 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
-                <version>${org.codehaus.jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-core-asl</artifactId>
-                <version>${org.codehaus.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
