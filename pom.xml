@@ -56,7 +56,6 @@
         <log4j.version>2.17.1</log4j.version>
         <slf4j.version>1.7.33</slf4j.version>
         <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
-        <jetty.version>11.0.7</jetty.version>
         <!---->
         <!---->
         <!--home made libraries versions-->
@@ -505,21 +504,6 @@
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>9.16-preview.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-util</artifactId>
-                <version>${jetty.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
