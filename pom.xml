@@ -52,11 +52,11 @@
         <commons-text.version>1.9</commons-text.version>
         <commons-vfs2.version>2.9.0</commons-vfs2.version>
         <dom4j.version>2.1.3</dom4j.version>
-        <jackson.version>2.13.1</jackson.version>
-        <log4j.version>2.17.1</log4j.version>
-        <slf4j.version>1.7.35</slf4j.version>
+        <jackson.version>2.13.2.20220328</jackson.version>
+        <log4j.version>2.17.2</log4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
-        <jetty.version>11.0.7</jetty.version>
+        <jetty.version>11.0.9</jetty.version>
         <!---->
         <!---->
         <!--home made libraries versions-->
@@ -65,22 +65,22 @@
         <!---->
         <!--maven plugins versions-->
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
-        <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M2</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
-        <maven-project-info-reports-plugin.version>3.1.2</maven-project-info-reports-plugin.version>
-        <maven-site-plugin.version>3.10.0</maven-site-plugin.version>
+        <maven-javadoc-plugin.version>3.3.2</maven-javadoc-plugin.version>
+        <maven-project-info-reports-plugin.version>3.2.2</maven-project-info-reports-plugin.version>
+        <maven-site-plugin.version>3.11.0</maven-site-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <versions-maven-plugin.version>2.9.0</versions-maven-plugin.version>
-        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
+        <versions-maven-plugin.version>2.10.0</versions-maven-plugin.version>
+        <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <!--enforce-->
         <enforce.activate>true</enforce.activate>
         <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
         <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
-        <checkstyle.version>9.2.1</checkstyle.version>
+        <checkstyle.version>9.3</checkstyle.version>
         <checkstyle.configdir>src/site/resources/checkstyle
         </checkstyle.configdir>
     </properties>
@@ -420,34 +420,11 @@
             </dependency>
 
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
                 <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-parameter-names</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jdk8</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${jackson.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.woodstox</groupId>
@@ -457,7 +434,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>31.0.1-jre</version>
+                <version>31.1-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -517,7 +494,7 @@
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
-                <version>9.16.1</version>
+                <version>9.21</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
@@ -537,7 +514,7 @@
             <dependency>
                 <groupId>jakarta.activation</groupId>
                 <artifactId>jakarta.activation-api</artifactId>
-                <version>2.0.1</version>
+                <version>2.1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
