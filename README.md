@@ -6,7 +6,7 @@
 
 <p>
   <b>
-      X8l format is a type of data format, it is designed to be replace of xml/json in most cases when you need the data be shorter(while remains readability).
+      X8l format is a type of data format, it is designed to be a replacement of xml/json in most cases when you need the data be shorter(while remains readability).
   </b>
 </p>
 <br/>
