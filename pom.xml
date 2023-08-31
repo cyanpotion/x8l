@@ -56,7 +56,7 @@
         <log4j.version>2.20.0</log4j.version>
         <slf4j.version>1.7.36</slf4j.version>
         <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
-        <jetty.version>11.0.15</jetty.version>
+        <jetty.version>11.0.16</jetty.version>
         <!---->
         <!---->
         <!--home made libraries versions-->
