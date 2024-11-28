@@ -52,7 +52,7 @@
         <commons-text.version>1.12.0</commons-text.version>
         <commons-vfs2.version>2.9.0</commons-vfs2.version>
         <dom4j.version>2.1.4</dom4j.version>
-        <jackson.version>2.18.1</jackson.version>
+        <jackson.version>2.18.2</jackson.version>
         <log4j.version>2.24.2</log4j.version>
         <slf4j.version>1.7.36</slf4j.version>
         <org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
