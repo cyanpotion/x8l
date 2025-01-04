@@ -46,7 +46,7 @@
         <!--libraries versions-->
         <xmlunit.version>2.10.0</xmlunit.version>
         <spring-core.version>5.2.8.RELEASE</spring-core.version>
-        <annotations.version>25.0.0</annotations.version>
+        <annotations.version>26.0.1</annotations.version>
         <commons-io.version>2.18.0</commons-io.version>
         <commons-lang3.version>3.17.0</commons-lang3.version>
         <commons-text.version>1.13.0</commons-text.version>
