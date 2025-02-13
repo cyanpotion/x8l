@@ -75,7 +75,7 @@
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
         <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
-        <commons-beanutils.version>1.10.0</commons-beanutils.version>
+        <commons-beanutils.version>1.10.1</commons-beanutils.version>
         <!--enforce-->
         <enforce.activate>true</enforce.activate>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
