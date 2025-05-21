@@ -1,7 +1,7 @@
 # x8l
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.xenoamess/x8l/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.xenoamess/x8l)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cyanpotion_x8l&metric=alert_status)](https://sonarcloud.io/dashboard?id=cyanpotion_x8l)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/cyanpotion/x8l)
 <!--[![Build status](https://ci.appveyor.com/api/projects/status/594i6j3y8w8o2a69?svg=true)](https://ci.appveyor.com/project/XenoAmess/x8l)-->
 
 <p>
