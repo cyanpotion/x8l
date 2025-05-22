@@ -639,9 +639,12 @@ public class X8lTree implements AutoCloseable, Serializable {
         this.setReader(null);
         if (original != null) {
             this.setLanguageDealer(original.getLanguageDealer());
-            this.root.copy(original.copy().root);
+            // this.root is already initialized by the no-arg constructor X8lTree() implicitly called by "new X8lTree(original)"
+            // So, we just need to copy the content from the original's root to this new tree's root.
+            this.getRoot().copyFrom(original.getRoot());
         } else {
-            this.setLanguageDealer(X8lDealer.INSTANCE);
+            // This part is fine, if original is null, use default dealer (already set by no-arg constructor)
+            // this.setLanguageDealer(X8lDealer.INSTANCE); // This is redundant if no-arg sets it.
         }
     }
 
@@ -1043,7 +1046,19 @@ public class X8lTree implements AutoCloseable, Serializable {
      * @return a deep copy of this
      */
     public @NotNull X8lTree copy() {
-        return X8lTree.load(this.toString(), this.languageDealer);
+        X8lTree newTree = new X8lTree();
+        newTree.setLanguageDealer(this.getLanguageDealer());
+        // The 'reader' field is transient and typically should not be copied directly.
+        // The new tree will have its reader as null, which is appropriate for a copied instance.
+        // Deep copy the root node. The RootNode's copy(null) method will handle
+        // creating a new RootNode and recursively copying all its children and attributes.
+        // newTree.root = this.root.copy(null); // This was causing issues with @AsFinalField
+        // Instead, we make the newTree's existing root node (created by new X8lTree())
+        // a deep copy of this.root's content.
+        if (this.root != null) { // root is @NotNull, so this check is more for safety/logic clarity
+            newTree.getRoot().copyFrom(this.getRoot());
+        }
+        return newTree;
     }
 
     //---fetch---

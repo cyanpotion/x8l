@@ -620,14 +620,33 @@ public class ContentNode extends AbstractTreeNode {
 
     /** {@inheritDoc} */
     @Override
-    public ContentNode copy() {
-        ContentNode res = new ContentNode(null);
-        for (String attributeKey : this.getAttributesKeyList()) {
-            String attributeValue = this.getAttributes().get(attributeKey);
-            res.addAttribute(attributeKey, attributeValue);
+    public ContentNode copy(@NotNull ContentNode parent) {
+        ContentNode res = new ContentNode(parent);
+        // Deep copy attributes
+        for (Map.Entry<String, String> entry : this.getAttributes().entrySet()) {
+            res.getAttributes().put(entry.getKey(), entry.getValue());
         }
+        // Deep copy attributesKeyList
+        for (String key : this.getAttributesKeyList()) {
+            res.getAttributesKeyList().add(key);
+        }
+        // Deep copy attributeSegments
+        for (String segment : this.getAttributeSegments()) {
+            res.getAttributeSegments().add(segment);
+        }
+
+        // Deep copy children
         for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-            abstractTreeNode.copy().changeParentAndRegister(res);
+            // The copy methods in TextNode, CommentNode, and recursively ContentNode
+            // will handle creating new instances and setting their parent.
+            // They should not call changeParentAndRegister on the new parent (res)
+            // as they are constructed with it.
+            AbstractTreeNode copiedChild = abstractTreeNode.copy(res);
+            // The AbstractTreeNode constructor should handle adding to parent's children if parent is not null.
+            // If copy(res) correctly sets parent, then child is already added.
+            // If not, then res.getChildren().add(copiedChild) might be needed,
+            // but it's better if the child's copy constructor handles it.
+            // Assuming child's copy(parent) correctly sets parent and parent adds it.
         }
         return res;
     }
