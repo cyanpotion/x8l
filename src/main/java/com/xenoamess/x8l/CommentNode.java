@@ -84,8 +84,8 @@ public class CommentNode extends AbstractTreeNode {
 
     /** {@inheritDoc} */
     @Override
-    public CommentNode copy() {
-        return new CommentNode(null, this.textContent);
+    public CommentNode copy(ContentNode parent) {
+        return new CommentNode(parent, this.textContent);
     }
 
     /** {@inheritDoc} */

@@ -34,6 +34,7 @@ import java.io.Writer;
 import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * AbstractTreeNode
@@ -215,7 +216,19 @@ public abstract class AbstractTreeNode implements AutoCloseable {
      *
      * @return a deep copy of this
      */
-    public abstract AbstractTreeNode copy();
+    @NotNull
+    public abstract AbstractTreeNode copy(@Nullable ContentNode parent);
+
+    /**
+     * make a deep copy of this node, and set new parent to null.
+     *
+     * @return a deep copy of this
+     * @see #copy(ContentNode)
+     */
+    @NotNull
+    public final AbstractTreeNode copy() {
+        return copy(null);
+    }
 
     /**
      * <p>Getter for the field <code>parent</code>.</p>

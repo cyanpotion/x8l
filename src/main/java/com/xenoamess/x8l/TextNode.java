@@ -85,8 +85,8 @@ public class TextNode extends AbstractTreeNode {
 
     /** {@inheritDoc} */
     @Override
-    public TextNode copy() {
-        return new TextNode(null, this.textContent);
+    public TextNode copy(ContentNode parent) {
+        return new TextNode(parent, this.textContent);
     }
 
     /** {@inheritDoc} */
