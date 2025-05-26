@@ -106,10 +106,18 @@ public class BenchMark {
             //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
+
+            // Time X8L Serialization
             writer = buffer(new FileWriter("out/" + filePathString + ".x8l"));
+            long startTimeX8l = System.nanoTime();
             tree.write(writer, X8lDealer.INSTANCE);
+            long endTimeX8l = System.nanoTime();
+            System.out.println("Time to serialize " + filePathString + " to X8L: " + (endTimeX8l - startTimeX8l) / 1000000 + " ms");
+            writer.close(); // Close it as it's done.
+
             writer = buffer(new FileWriter("out/" + filePathString + ".xml"));
             tree.write(writer, XmlDealer.INSTANCE);
+            // writer.close(); // This will be closed by try-with-resources if not explicitly closed before
         }
     }
 
@@ -124,10 +132,18 @@ public class BenchMark {
             //noinspection ResultOfMethodCallIgnored
             new File("out").mkdirs();
             Writer writer;
+
+            // Time X8L Serialization
             writer = buffer(new FileWriter("out/" + filePathString + ".x8l"));
+            long startTimeX8l = System.nanoTime();
             tree.write(writer, X8lDealer.INSTANCE);
+            long endTimeX8l = System.nanoTime();
+            System.out.println("Time to serialize " + filePathString + " to X8L: " + (endTimeX8l - startTimeX8l) / 1000000 + " ms");
+            writer.close(); // Close it as it's done.
+
             writer = buffer(new FileWriter("out/" + filePathString + ".json"));
             tree.write(writer, JsonDealer.INSTANCE);
+            // writer.close(); // This will be closed by try-with-resources if not explicitly closed before
         }
     }
 }

@@ -24,6 +24,11 @@
 
 package com.xenoamess.x8l;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * <p>RootNode class.</p>
  *
@@ -52,16 +57,83 @@ public class RootNode extends ContentNode {
 
     /** {@inheritDoc} */
     @Override
-    public RootNode copy() {
-        RootNode res = new RootNode(null);
-        for (String attributeKey : this.getAttributesKeyList()) {
-            String attributeValue = this.getAttributes().get(attributeKey);
-            res.addAttribute(attributeKey, attributeValue);
+    public RootNode copy(ContentNode parent) {
+        // A RootNode's copy should always be a RootNode and typically won't have a parent from another tree.
+        // If a parent is provided (e.g. during a recursive copy where a RootNode is unexpectedly a child),
+        // it's an anomaly or misuse, but we'll respect it. Normally, for copying a tree, parent will be null.
+        if (parent != null) {
+            // This case is unusual for RootNode, log a warning or handle as an error if appropriate.
+            // For now, we'll proceed as if it's a general ContentNode copy into a RootNode structure.
         }
+        RootNode res = new RootNode(null); // RootNode typically has a null parent.
+
+        // Deep copy attributes from this (which is a RootNode, extending ContentNode)
+        for (Map.Entry<String, String> entry : this.getAttributes().entrySet()) {
+            res.getAttributes().put(entry.getKey(), entry.getValue());
+        }
+        // Deep copy attributesKeyList
+        for (String key : this.getAttributesKeyList()) {
+            res.getAttributesKeyList().add(key);
+        }
+        // Deep copy attributeSegments
+        for (String segment : this.getAttributeSegments()) {
+            res.getAttributeSegments().add(segment);
+        }
+
+        // Deep copy children
         for (AbstractTreeNode abstractTreeNode : this.getChildren()) {
-            abstractTreeNode.copy().changeParentAndRegister(res);
+            // Children are added to 'res' (the new RootNode) during their copy(res) call.
+            abstractTreeNode.copy(res);
         }
         return res;
+    }
+
+    /**
+     * Makes this RootNode a deep copy of the original RootNode.
+     * Attributes and children are cleared and then populated from the original.
+     *
+     * @param original The RootNode to copy from.
+     */
+    public void copyFrom(@NotNull RootNode original) {
+        // Clear current state of this RootNode
+        this.getAttributes().clear();
+        this.getAttributesKeyList().clear();
+        this.getAttributeSegments().clear();
+        // Clear children, ensuring they are detached from this node first
+        List<AbstractTreeNode> childrenToDetach = new ArrayList<>(this.getChildren());
+        for (AbstractTreeNode child : childrenToDetach) {
+            child.setParent(null); // Detach from this node
+        }
+        this.getChildren().clear();
+
+        // Deep copy attributes from original
+        // Ensure segments are copied correctly, matching the logic in ContentNode's addAttribute
+        for (int i = 0; i < original.getAttributesKeyList().size(); i++) {
+            String key = original.getAttributesKeyList().get(i);
+            String value = original.getAttributes().get(key);
+            String segment = "";
+            if (i < original.getAttributeSegments().size()) {
+                segment = original.getAttributeSegments().get(i);
+            }
+            // Use the existing addAttribute that handles map, keyList, and segments
+            this.addAttribute(key, value, segment);
+        }
+        // Ensure the last segment is correctly set if it was empty in the original
+        if (!original.getAttributesKeyList().isEmpty() && original.getAttributeSegments().size() == original.getAttributesKeyList().size()) {
+            if (original.getAttributeSegments().get(original.getAttributeSegments().size() - 1).isEmpty()) {
+                 if (!this.getAttributeSegments().isEmpty()) {
+                    this.getAttributeSegments().set(this.getAttributeSegments().size() - 1, "");
+                 }
+            }
+        }
+
+
+        // Deep copy children
+        for (AbstractTreeNode abstractTreeNode : original.getChildren()) {
+            // The child's copy method will create a new node and
+            // its constructor (via super(parent)) will add it to `this` (the new parent).
+            abstractTreeNode.copy(this);
+        }
     }
 
     /**
