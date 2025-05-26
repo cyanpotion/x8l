@@ -24,14 +24,15 @@
 
 package com.xenoamess.x8l;
 
-import com.xenoamess.x8l.databind.X8lDataBeanFieldScheme;
-import com.xenoamess.x8l.databind.x8lpath.X8lPathUtil;
-import com.xenoamess.x8l.dealers.LanguageDealer;
-import com.xenoamess.x8l.dealers.X8lDealer;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
+
+import com.xenoamess.x8l.databind.X8lDataBeanFieldScheme;
+import com.xenoamess.x8l.databind.x8lpath.X8lPathUtil;
+import com.xenoamess.x8l.dealers.LanguageDealer;
+import com.xenoamess.x8l.dealers.X8lDealer;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -214,6 +215,7 @@ public abstract class AbstractTreeNode implements AutoCloseable {
     /**
      * make a deep copy of this node.
      *
+     * @param parent the new parent of the copied node.
      * @return a deep copy of this
      */
     @NotNull
