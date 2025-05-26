@@ -24,18 +24,19 @@
 
 package com.xenoamess.x8l.dealers;
 
-import com.xenoamess.x8l.AbstractTreeNode;
-import com.xenoamess.x8l.CommentNode;
-import com.xenoamess.x8l.ContentNode;
-import com.xenoamess.x8l.RootNode;
-import com.xenoamess.x8l.TextNode;
-import com.xenoamess.x8l.X8lGrammarException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.xenoamess.x8l.AbstractTreeNode;
+import com.xenoamess.x8l.CommentNode;
+import com.xenoamess.x8l.ContentNode;
+import com.xenoamess.x8l.RootNode;
+import com.xenoamess.x8l.TextNode;
+import com.xenoamess.x8l.X8lGrammarException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +53,7 @@ import org.dom4j.Node;
 import org.dom4j.Text;
 import org.dom4j.dom.DOMComment;
 import org.jetbrains.annotations.NotNull;
+
 import static com.xenoamess.x8l.dealers.JsonDealer.ARRAY_ID_ATTRIBUTE;
 
 /**
@@ -329,7 +331,8 @@ public final class XmlDealer extends LanguageDealer implements Serializable {
                 );
             }
         }
-        for (Attribute attribute : element.attributes()) {
+        for (Object attributeObject : element.attributes()) {
+            Attribute attribute = (Attribute) attributeObject;
             contentNode.addAttribute(attribute.getQualifiedName(), attribute.getValue());
         }
         readChildrenArea(contentNode, element);
