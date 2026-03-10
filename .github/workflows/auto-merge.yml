@@ -28,16 +28,6 @@ jobs:
             echo "should_merge=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Wait for all checks
-        if: steps.check.outputs.should_merge == 'true'
-        run: |
-          echo "Waiting for all checks to pass..."
-          gh pr checks "$PR_URL" --watch --interval 30
-          echo "All checks passed!"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Approve dependabot PR
         if: steps.check.outputs.should_merge == 'true'
         run: gh pr review --approve "$PR_URL"
