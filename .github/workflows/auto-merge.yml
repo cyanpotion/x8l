@@ -28,14 +28,15 @@ jobs:
             echo "should_merge=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Wait for CI checks
+      - name: Wait for all checks
         if: steps.check.outputs.should_merge == 'true'
-        uses: lewagon/wait-on-check-action@v1.3.4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          check-name: 'build'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
+        run: |
+          echo "Waiting for all checks to pass..."
+          gh pr checks "$PR_URL" --watch --interval 30
+          echo "All checks passed!"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Approve dependabot PR
         if: steps.check.outputs.should_merge == 'true'
