@@ -2,6 +2,11 @@ name: Dependabot auto-merge
 
 on:
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 permissions:
   pull-requests: write
@@ -9,41 +14,36 @@ permissions:
 
 jobs:
   dependabot:
+    runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]'
-    runs-on: ubuntu-22.04
     steps:
-      - name: Comment to recreate PR
-        run: gh pr comment "$PR_URL" --body "@dependabot recreate"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Dependabot metadata
-        id: meta
+        id: metadata
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Check if auto-merge applicable
-        id: check
+      - name: Check update type (minor or patch only)
+        id: check-semver
         run: |
-          if [[ "${{ steps.meta.outputs.update-type }}" == "version-update:semver-patch" ]] || \
-             [[ "${{ steps.meta.outputs.update-type }}" == "version-update:semver-minor" ]]; then
-            echo "should_merge=true" >> $GITHUB_OUTPUT
+          UPDATE_TYPE="${{ steps.metadata.outputs.update-type }}"
+          echo "Update type: $UPDATE_TYPE"
+          if [[ "$UPDATE_TYPE" == "version-update:semver-minor" ]] || [[ "$UPDATE_TYPE" == "version-update:semver-patch" ]]; then
+            echo "should_auto_merge=true" >> $GITHUB_OUTPUT
           else
-            echo "should_merge=false" >> $GITHUB_OUTPUT
+            echo "should_auto_merge=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Approve dependabot PR
-        if: steps.check.outputs.should_merge == 'true'
+      - name: Approve PR
+        if: steps.check-semver.outputs.should_auto_merge == 'true'
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Enable auto-merge with rebase
-        if: steps.check.outputs.should_merge == 'true'
-        run: gh pr merge --auto --rebase "$PR_URL"
+      - name: Enable auto-merge (wait for CI then squash)
+        if: steps.check-semver.outputs.should_auto_merge == 'true'
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
