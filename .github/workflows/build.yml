@@ -1,9 +1,14 @@
 name: Java CI
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
   build:
+    name: build (${{ matrix.os }}, ${{ matrix.java }}, ${{ matrix.experimental }})
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
